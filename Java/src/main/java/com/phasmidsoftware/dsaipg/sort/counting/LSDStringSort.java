@@ -65,7 +65,6 @@ public class LSDStringSort extends ClassificationSorter<String, Integer> {
      *
      * @param xs the elements to be pre-processed.
      */
-    @Override
     public String[] preProcess(String[] xs) {
         String[] strings = super.preProcess(xs);
         for (int i = 0; i < strings.length; i++) strings[i] = strings[i].toLowerCase();

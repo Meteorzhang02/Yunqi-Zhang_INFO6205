@@ -26,7 +26,6 @@ public class GeoKruskal<V extends GeoPoint, X extends Comparable<X> & Sequenced>
      * @param geoGraph an empty GeoGraph which will be filled with edges before being returned.
      * @return the geoGraph that was passed as the parameter, but filled with the MST edges.
      */
-    @Override
     public Geo<V, X> getGeoMST(Geo<V, X> geoGraph) {
         EdgeGraph<V, X> mst = super.getMST();
         for (Edge<V, X> e : mst.edges())

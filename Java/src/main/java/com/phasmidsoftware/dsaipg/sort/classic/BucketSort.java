@@ -27,11 +27,30 @@ import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.getRu
  */
 public class BucketSort<X extends Comparable<X>> extends ClassificationSorter<X, Void> {
 
+    /**
+     * A constant string representing the sorting algorithm name "Bucket sort".
+     */
     public static final String DESCRIPTION = "Bucket sort";
+    /**
+     * A constant string representing the alphabet, including a leading space.
+     * The string contains all lowercase English letters in sequential order,
+     * prefixed with a single space character. This can be used for operations
+     * requiring a defined sequence of characters, such as indexing or character
+     * mapping.
+     */
     public static final String ALPHABET = " abcdefghijklmnopqrstuvwxyz";
+    /**
+     * Represents the size of the alphabet*/
     public static final int ALPHABET_SIZE = ALPHABET.length();
 
+    /**
+     * An array of strings representing digraphs.
+     * Digraphs are two-character combinations commonly used for specific purposes,
+     * such as abbreviations, linguistic representations, encoding formats, or*/
     public static String[] DIGRAPHS;
+    /**
+     * Represents the total number of possible two-letter combinations (digraphs)
+     * that can be formed using the defined alphabet.*/
     public static final int DIGRAPHS_SIZE = ALPHABET_SIZE * ALPHABET_SIZE;
 
     /**

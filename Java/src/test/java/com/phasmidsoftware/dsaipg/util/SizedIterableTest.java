@@ -24,12 +24,10 @@ public class SizedIterableTest {
     @Test
     public void testSizeWithEmptyIterable() {
         SizedIterable<Integer> emptyIterable = new SizedIterable<>() {
-            @Override
             public int size() {
                 return 0;
             }
 
-            @Override
             public Iterator<Integer> iterator() {
                 return Collections.emptyIterator();
             }
@@ -41,12 +39,10 @@ public class SizedIterableTest {
     @Test
     public void testSizeWithNonEmptyIterable() {
         SizedIterable<Integer> nonEmptyIterable = new SizedIterable<>() {
-            @Override
             public int size() {
                 return 3;
             }
 
-            @Override
             public Iterator<Integer> iterator() {
                 return Arrays.asList(1, 2, 3).iterator();
             }
@@ -58,12 +54,10 @@ public class SizedIterableTest {
     @Test
     public void testSizeWithSingleElementIterable() {
         SizedIterable<String> singleElementIterable = new SizedIterable<String>() {
-            @Override
             public int size() {
                 return 1;
             }
 
-            @Override
             public Iterator<String> iterator() {
                 return List.of("element").iterator();
             }

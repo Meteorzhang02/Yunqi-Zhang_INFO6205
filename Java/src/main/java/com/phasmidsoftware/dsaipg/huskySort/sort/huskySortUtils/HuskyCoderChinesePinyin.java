@@ -24,7 +24,6 @@ public class HuskyCoderChinesePinyin implements HuskyCoder<String> {
      *
      * @return true.
      */
-    @Override
     public boolean perfect() {
         // NOTE: in Hanyu, we can accommodate 10 pinyin characters with perfect encoding.
         if (dialect.equalsIgnoreCase("Hanyu")) return true;

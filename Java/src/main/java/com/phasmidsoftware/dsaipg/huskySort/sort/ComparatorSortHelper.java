@@ -12,7 +12,6 @@ import java.util.Random;
  */
 public class ComparatorSortHelper<X> extends AbstractComparableSortHelper<X> {
 
-    @Override
     public boolean inverted(final X v, final X w) {
         return compare(v, w) > 0;
     }

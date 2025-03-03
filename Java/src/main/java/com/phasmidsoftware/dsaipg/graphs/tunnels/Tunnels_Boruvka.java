@@ -42,7 +42,6 @@ public class Tunnels_Boruvka implements Iterable<Edge<Building, TunnelProperties
      * @return an Iterator.
      */
     @NotNull
-    @Override
     public Iterator<Edge<Building, TunnelProperties>> iterator() {
         return getBoruvka().iterator();
     }

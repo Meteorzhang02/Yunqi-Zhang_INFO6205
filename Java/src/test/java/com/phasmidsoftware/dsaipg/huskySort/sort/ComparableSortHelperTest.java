@@ -24,7 +24,6 @@ public class ComparableSortHelperTest {
          * @param xs the array to be tested.
          * @return the result of calling sorted(xs).
          */
-        @Override
         public boolean postProcess(final X[] xs) {
             return sorted(xs);
         }

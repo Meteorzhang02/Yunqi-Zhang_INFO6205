@@ -53,7 +53,6 @@ public class Tunnels_Kruskal implements Iterable<Edge<Building, TunnelProperties
      * @return an Iterator.
      */
     @NotNull
-    @Override
     public Iterator<Edge<Building, TunnelProperties>> iterator() {
         return getKruskal().iterator();
     }

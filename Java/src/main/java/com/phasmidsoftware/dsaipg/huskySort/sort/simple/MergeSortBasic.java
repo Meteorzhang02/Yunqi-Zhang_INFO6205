@@ -22,7 +22,6 @@ public class MergeSortBasic<X extends Comparable<X>> extends SortWithHelper<X> {
      * @param makeCopy true if we need to work on a copy of the array.
      * @return either the original or a copy of the array.
      */
-    @Override
     public X[] preSort(final X[] xs, final boolean makeCopy) {
         // CONSIDER don't copy but just allocate according to the xs/aux interchange optimization
         aux = Arrays.copyOf(xs, xs.length);

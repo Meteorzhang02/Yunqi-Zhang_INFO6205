@@ -26,6 +26,70 @@ import java.util.function.Consumer;
 public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper<X> {
 
     /**
+     * Method to sort a sub-array of an array of Xs.
+     * <p>
+     * XXX check that the treatment of from and to is correct. It seems to be according to the unit tests.
+     *
+     * @param xs an array of Xs to be sorted in place.
+     */
+    public void sort(X[] xs, int from, int to) {
+        H h = new H(to - from, m);
+        int gap = h.first();
+        while (gap > 0) {
+            hSort(gap, xs, from, to);
+            if (shellFunction != null)
+                shellFunction.accept(getHelper());
+            gap = h.next();
+        }
+    }
+
+    /**
+     * Set the "shell" function which is invoked on the helper after each shell (i.e., each value of h).
+     * Yes, I do realize that shell was the name of the inventor, Donald Shell.
+     * But it's also a convenient name of a (set of) h-sorts which one particular h-value.
+     *
+     * @param shellFunction a consumer of Helper of X.
+     */
+    public void setShellFunction(Consumer<AutoCloseable> shellFunction) {
+        this.shellFunction = shellFunction;
+    }
+
+    /**
+     * The main method demonstrates the performance evaluation of a Shell Sort algorithm
+     * for various array sizes using an instrumented helper and benchmark timer.
+     * It iteratively doubles the array size starting from 64000 up to a maximum of 100000.
+     * The method collects and displays statistics including the number of comparisons,
+     * swaps, hits, and the execution time for sorting the arrays.
+     *
+     * @param args command-line arguments passed to the program, not used in this implementation.
+     */
+    public static void main(String[] args) {
+        int N = 64000;
+
+        while (N <= 100000) {
+            int nRuns = 20;
+            InstrumentedComparatorHelper<Integer> instrumentedHelper = new InstrumentedComparableHelper<>("ShellSort", N, nRuns, Config_Benchmark.setupConfig("true", "false", "0", "0", "", ""));
+            ShellSort<Integer> s = new ShellSort<>(5, instrumentedHelper);
+            int j = N;
+            s.init(j);
+            Integer[] xs = instrumentedHelper.random(Integer.class, r -> r.nextInt(j));
+            Benchmark<Boolean> benchmark = new Benchmark_Timer<>("Sorting", b -> s.sort(xs, 0, j));
+            double nTime = benchmark.run(true, nRuns);
+            long nCompares = instrumentedHelper.getCompares();
+            long nSwaps = instrumentedHelper.getSwaps();
+            long nHits = instrumentedHelper.getHits();
+
+            System.out.println("When array size is: " + j);
+            System.out.println("Compares: " + nCompares);
+            System.out.println("Swaps: " + nSwaps);
+            System.out.println("Hits: " + nHits);
+            System.out.println("Time: " + nTime);
+
+            N = N * 2;
+        }
+    }
+
+    /**
      * Primary constructor for ShellSort with configuration and size.
      *
      * @param m      the mode, that is to say the "gap" (h) sequence to follow:
@@ -78,35 +142,6 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
         trackInversions = false;
     }
 
-    /**
-     * Method to sort a sub-array of an array of Xs.
-     * <p>
-     * XXX check that the treatment of from and to is correct. It seems to be according to the unit tests.
-     *
-     * @param xs an array of Xs to be sorted in place.
-     */
-    public void sort(X[] xs, int from, int to) {
-        H h = new H(to - from, m);
-        int gap = h.first();
-        while (gap > 0) {
-            hSort(gap, xs, from, to);
-            if (shellFunction != null)
-                shellFunction.accept(getHelper());
-            gap = h.next();
-        }
-    }
-
-    /**
-     * Set the "shell" function which is invoked on the helper after each shell (i.e., each value of h).
-     * Yes, I do realize that shell was the name of the inventor, Donald Shell.
-     * But it's also a convenient name of a (set of) h-sorts which one particular h-value.
-     *
-     * @param shellFunction a consumer of Helper of X.
-     */
-    public void setShellFunction(Consumer<AutoCloseable> shellFunction) {
-        this.shellFunction = shellFunction;
-    }
-
     public static final String DESCRIPTION = "Shell sort in mode ";
 
     /**
@@ -138,7 +173,6 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
 
     private final int m;
     private final boolean trackInversions;
-
     private Consumer<AutoCloseable> shellFunction = null;
 
     /**
@@ -241,12 +275,27 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
             }
         }
 
+        /**
+         * Computes the k-th value in the Sedgewick gap sequence for shell sort.
+         * The Sedgewick sequence is defined as:
+         * - When k is even: 9 * (2^k - 2^(k/2)) + 1
+         * - When k is odd:  8 * 2^k - 6 * 2^((k+1)/2) + 1
+         *
+         * @param k the index of the desired gap value. It must be a non-negative integer.
+         * @return the k-th Sedgewick sequence value. For k < 0, the method returns 0.
+         */
         long sedgewick(int k) {
             if (k < 0) return 0;
             if (k % 2 == 0) return 9L * (powerOf2(k) - powerOf2(k / 2)) + 1;
             else return 8L * powerOf2(k) - 6 * powerOf2((k + 1) / 2) + 1;
         }
 
+        /**
+         * Computes the value of 2 raised to the power of the given exponent.
+         *
+         * @param k the exponent. It must be a non-negative integer.
+         * @return the computed value of 2^k as a long.
+         */
         private long powerOf2(int k) {
             long value = 1;
             for (int i = 0; i < k; i++) value *= 2;
@@ -254,6 +303,19 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
         }
     }
 
+    /**
+     * Executes a shell sort algorithm on the given array using the specified gap sequence mode and helper.
+     *
+     * @param m      the mode defining the gap sequence to follow for sorting:
+     *               1: ordinary insertion sort;
+     *               2: use powers of two less one;
+     *               3: use the sequence based on 3 (e.g., 1, 4, 13, etc.);
+     *               4: Sedgewick's sequence;
+     *               5: Pratt's sequence (2^i * 3^j, where i, j >= 0).
+     * @param helper a helper instance to assist with sorting actions and operations.
+     * @param xs     the array of elements to be sorted in place.
+     * @return true if the operation was successful.
+     */
     static <T extends Comparable<T>> boolean doShellSort(int m, Helper<T> helper, final T[] xs) {
         SortWithComparableHelper<T> shellSort = new ShellSort<>(m, helper);
         shellSort.mutatingSort(xs);
@@ -283,6 +345,20 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
         return result;
     }
 
+    /**
+     * Displays the results of performing a Shell Sort on random double arrays.
+     * The Shell Sort mode and array size are specified as parameters, and the method calculates
+     * the elapsed time for the sorting operation over multiple repetitions.
+     *
+     * @param m      the mode defining the gap sequence of the Shell Sort:
+     *               1: ordinary insertion sort;
+     *               2: powers of two less one;
+     *               3: the sequence based on 3 (e.g., 1, 4, 13, etc.);
+     *               4: Sedgewick's sequence;
+     *               5: Pratt's sequence (2^i * 3^j, where i, j >= 0).
+     * @param n      the size of the array to be generated and sorted.
+     * @param config the configuration object used to manage resources and settings for sorting.
+     */
     private static void showRandomDoubleShellSortResult(int m, int n, final Config config) {
         try (Stopwatch stopwatch = new Stopwatch()) {
             int repetitions = 100;
@@ -295,30 +371,4 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
     }
 
     final private static LazyLogger logger = new LazyLogger(ShellSort.class);
-
-    public static void main(String[] args) {
-        int N = 64000;
-
-        while (N <= 100000) {
-            int nRuns = 20;
-            InstrumentedComparatorHelper<Integer> instrumentedHelper = new InstrumentedComparableHelper<>("ShellSort", N, nRuns, Config_Benchmark.setupConfig("true", "false", "0", "0", "", ""));
-            ShellSort<Integer> s = new ShellSort<>(5, instrumentedHelper);
-            int j = N;
-            s.init(j);
-            Integer[] xs = instrumentedHelper.random(Integer.class, r -> r.nextInt(j));
-            Benchmark<Boolean> benchmark = new Benchmark_Timer<>("Sorting", b -> s.sort(xs, 0, j));
-            double nTime = benchmark.run(true, nRuns);
-            long nCompares = instrumentedHelper.getCompares();
-            long nSwaps = instrumentedHelper.getSwaps();
-            long nHits = instrumentedHelper.getHits();
-
-            System.out.println("When array size is: " + j);
-            System.out.println("Compares: " + nCompares);
-            System.out.println("Swaps: " + nSwaps);
-            System.out.println("Hits: " + nHits);
-            System.out.println("Time: " + nTime);
-
-            N = N * 2;
-        }
-    }
 }

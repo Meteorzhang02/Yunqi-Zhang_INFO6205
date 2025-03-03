@@ -18,7 +18,6 @@ public abstract class SortWithHelperAndAdditionalMemory<X> extends Classificatio
     private int additionalMemory;
     private int maxMemory;
 
-    @Override
     public void setArrayMemory(int n) {
         if (arrayMemory == -1) {
             arrayMemory = n;
@@ -26,13 +25,11 @@ public abstract class SortWithHelperAndAdditionalMemory<X> extends Classificatio
         }
     }
 
-    @Override
     public void additionalMemory(int n) {
         additionalMemory += n;
         if (maxMemory < additionalMemory) maxMemory = additionalMemory;
     }
 
-    @Override
     public Double getMemoryFactor() {
         if (arrayMemory == -1)
             throw new SortException("Array memory has not been set");

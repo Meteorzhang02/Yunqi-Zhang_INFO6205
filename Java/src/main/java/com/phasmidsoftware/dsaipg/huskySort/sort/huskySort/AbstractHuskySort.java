@@ -28,7 +28,6 @@ public abstract class AbstractHuskySort<X extends Comparable<X>> extends SortWit
      * @param makeCopy true if we need to work on a copy of the array.
      * @return the xs or a copy.
      */
-    @Override
     public final X[] preSort(final X[] xs, final boolean makeCopy) {
         // NOTE: Prepare for first pass where we code to longs and sort according to those.
         final X[] result = super.preSort(xs, makeCopy);
@@ -42,7 +41,6 @@ public abstract class AbstractHuskySort<X extends Comparable<X>> extends SortWit
      * @param xs the array sorted by the first pass.
      * @return either the array passed in or the result of invoking the post-sorter on that array.
      */
-    @Override
     public X[] postSort(final X[] xs) {
         if (huskyHelper.getCoding().perfect)
             return xs;
@@ -58,7 +56,6 @@ public abstract class AbstractHuskySort<X extends Comparable<X>> extends SortWit
      * @param xs sort the array xs, returning the sorted result, leaving xs unchanged.
      * @return the sorted version of xs (or its copy).
      */
-    @Override
     public final X[] sort(final X[] xs) {
         return sort(xs, huskyHelper.isMakeCopy());
     }
@@ -68,7 +65,6 @@ public abstract class AbstractHuskySort<X extends Comparable<X>> extends SortWit
      *
      * @return a HuskyHelper.
      */
-    @Override
     public final HuskyHelper<X> getHelper() {
         return huskyHelper;
     }

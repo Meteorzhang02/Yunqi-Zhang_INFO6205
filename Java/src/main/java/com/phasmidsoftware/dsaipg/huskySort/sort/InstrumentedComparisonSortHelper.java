@@ -25,7 +25,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
         return true;
     }
 
-    @Override
     public boolean inverted(final X v, final X w) {
         instrumenter.incrementCompares();
         return invertedPure(v, w);
@@ -61,7 +60,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      * @param i  the index of the destination of xs[j].
      * @param j  the index of the right-most element to be involved in the swap.
      */
-    @Override
     public void swapInto(final X[] xs, final int i, final int j) {
         instrumenter.incrementSwaps(j - 1);
         if (instrumenter.isCountFixes())
@@ -78,7 +76,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      * @param j  the index of the upper element.
      * @return true if there was an inversion (i.e., the order was wrong and had to be fixed).
      */
-    @Override
     public boolean swapConditional(final X[] xs, final int i, final int j) {
         instrumenter.incrementCompares();
         instrumenter.incrementHits(2);
@@ -95,7 +92,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      * @param i  the index of the upper element.
      * @return true if there was an inversion (i.e., the order was wrong and had to be fixed).
      */
-    @Override
     public boolean swapStableConditional(final X[] xs, final int i) {
         // CONSIDER invoke super-method
         final X v = xs[i];
@@ -123,7 +119,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      * @param target the target array.
      * @param j      the source index.
      */
-    @Override
     public void copy(final X[] source, final int i, final X[] target, final int j) {
         instrumenter.incrementCopies();
         target[j] = source[i];
@@ -153,7 +148,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      * @param w the second X.
      * @return the result of comparing v and w.
      */
-    @Override
     public int compare(final X v, final X w) {
         instrumenter.incrementCompares();
         return v.compareTo(w);
@@ -164,7 +158,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      *
      * @param n the number of copies made.
      */
-    @Override
     public void incrementFixes(final int n) {
         if (instrumenter.isCountFixes())
             instrumenter.fixes += n;
@@ -175,7 +168,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      *
      * @param n the number of copies made.
      */
-    @Override
     public void incrementCopies(final int n) {
         instrumenter.incrementCopies(n);
     }
@@ -185,7 +177,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      *
      * @return a value for cutoff.
      */
-    @Override
     public int getCutoff() {
         // NOTE that a cutoff value of 0 or less will result in an infinite recursion for any recursive method that uses it.
         return (cutoff >= 1) ? cutoff : super.getCutoff();
@@ -214,7 +205,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      * @param xs the array to be sorted.
      * @return the array after any pre-processing.
      */
-    @Override
     public X[] preProcess(final X[] xs) {
         final X[] result = super.preProcess(xs);
         // NOTE: because counting inversions is so slow, we only do if for a (configured) number of samples.
@@ -232,7 +222,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
      * @param xs the array to be tested.
      * @return the result of invoking super.postProcess(xs).
      */
-    @Override
     public boolean postProcess(final X[] xs) {
         final boolean result = super.postProcess(xs);
         if (!sorted(xs)) throw new ComparableSortHelper.HelperException("Array is not sorted");
@@ -240,17 +229,14 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
         return result;
     }
 
-    @Override
     public void registerDepth(final int depth) {
         if (depth > maxDepth) maxDepth = depth;
     }
 
-    @Override
     public int maxDepth() {
         return maxDepth;
     }
 
-    @Override
     public void close() {
         logger.debug(() -> "Closing ComparisonSortHelper: " + getDescription() + " with statPack: " + getStatPack());
         super.close();
@@ -325,7 +311,6 @@ public final class InstrumentedComparisonSortHelper<X extends Comparable<X>> ext
     private final int cutoff;
     private int maxDepth = 0;
 
-    @Override
     public Instrumenter getInstrumenter() {
         return instrumenter;
     }

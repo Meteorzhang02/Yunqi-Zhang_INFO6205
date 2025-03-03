@@ -25,7 +25,6 @@ public final class HuskyBucketSort<X extends Comparable<X>> extends AbstractHusk
      * @param xs the elements to be pre-processed.
      * @return the value of xs (unchanged in any way).
      */
-    @Override
     public X[] preProcess(final X[] xs) {
         bucketHelper = new HuskyBucketHelper<>(name, bucketSize, xs.length, getHelper().getCoder(), getHelper().getPostSorter());
         return xs;
@@ -38,7 +37,6 @@ public final class HuskyBucketSort<X extends Comparable<X>> extends AbstractHusk
      * @param makeCopy if set to true, we make a copy first and sort that.
      * @return the sorted array.
      */
-    @Override
     public X[] sort(final X[] xs, final boolean makeCopy) {
         final int n = xs.length;
         final X[] result = makeCopy ? Arrays.copyOf(xs, n) : xs;

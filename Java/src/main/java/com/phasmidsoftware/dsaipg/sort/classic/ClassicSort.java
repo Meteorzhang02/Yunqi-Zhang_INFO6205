@@ -22,7 +22,6 @@ public class ClassicSort<X extends Classify<X>> extends GenericSortWithHelper<X>
 
     public static final String DESCRIPTION = "Classic sort";
 
-    @Override
     public String getDescription() {
         return DESCRIPTION;
     }

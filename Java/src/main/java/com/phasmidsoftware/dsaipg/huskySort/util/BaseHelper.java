@@ -32,7 +32,6 @@ public abstract class BaseHelper<X> implements Helper<X> {
      * @param xs the array to be tested.
      * @return whether sorted (or don't care).
      */
-    @Override
     public boolean postProcess(final X[] xs) {
         return !checkSorted || sorted(xs);
     }

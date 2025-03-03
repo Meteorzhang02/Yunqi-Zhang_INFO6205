@@ -43,7 +43,6 @@ public class BaseComparableHelperTest {
          * @param f     a function which takes a Random and generates a random value of X.
          * @return an array of X of length determined by the current value according to setN.
          */
-        @Override
         public X[] random(int m, Class<X> clazz, Function<Random, X> f) {
             if (m <= 0)
                 throw new HelperException("Helper.random: requesting zero random elements (helper not initialized?)");
@@ -69,7 +68,6 @@ public class BaseComparableHelperTest {
             if (!isSorted(xs)) throw new HelperException("Array is not sorted");
         }
 
-        @Override
         public Helper<X> clone(String description, int N) {
             return null;
         }

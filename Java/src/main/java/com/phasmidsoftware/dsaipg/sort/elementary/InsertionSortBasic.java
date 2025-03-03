@@ -65,6 +65,13 @@ public class InsertionSortBasic<S> {
         // END SOLUTION
     }
 
+    /**
+     * Swaps two elements in an array.
+     *
+     * @param a the array in which the elements are to be swapped
+     * @param j the index of the first element to be swapped
+     * @param i the index of the second element to be swapped
+     */
     private void swap(Object[] a, int j, int i) {
         Object temp = a[j];
         a[j] = a[i];

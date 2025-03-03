@@ -45,7 +45,6 @@ public abstract class SortWithHelper<X extends Comparable<X>> implements Sort<X>
      *
      * @param xs the elements to be pre-processed.
      */
-    @Override
     public X[] preProcess(final X[] xs) {
         return helper.preProcess(xs);
     }

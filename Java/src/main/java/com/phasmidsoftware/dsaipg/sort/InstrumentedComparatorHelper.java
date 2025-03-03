@@ -33,7 +33,6 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      * @param i  the target index.
      * @return the value of xs[i].
      */
-    @Override
     public X get(X[] xs, int i) {
         instrumenter.incrementHits(1);
         return xs[i];

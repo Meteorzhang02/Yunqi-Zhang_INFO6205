@@ -24,7 +24,6 @@ public class IntroSort<X extends Comparable<X>> extends QuickSort_DualPivot<X> {
      * @param makeCopy true if we need to work on a copy of the array.
      * @return the result of calling super.preSort(xs, makeCopy).
      */
-    @Override
     public final X[] preSort(final X[] xs, final boolean makeCopy) {
         depthThreshold = 2 * floor_lg(xs.length);
         return super.preSort(xs, makeCopy);
@@ -40,7 +39,6 @@ public class IntroSort<X extends Comparable<X>> extends QuickSort_DualPivot<X> {
      * @param depth the current depth of the recursion.
      * @return true if there is no further work to be done.
      */
-    @Override
     protected final boolean terminator(final X[] xs, final int from, final int to, final int depth) {
         if (to - from <= sizeThreshold) {
             if (to > from + 1)

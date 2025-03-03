@@ -1,7 +1,9 @@
 package com.phasmidsoftware.dsaipg.sort.elementary;
 
 /**
- * Class Solution.
+ * The Solution class provides a static method for performing a binary search on a sorted array.
+ * The binary search is implemented to find the position of a target element within a descending sorted array.
+ * NOTE: this class is obsolete.
  */
 public class Solution {
     public static void main(String[] args) {

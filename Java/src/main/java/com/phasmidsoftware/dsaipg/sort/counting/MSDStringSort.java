@@ -174,6 +174,14 @@ public class MSDStringSort extends SortWithHelperAndAdditionalMemory<String> {
         else return 0; // CONSIDER creating a value in CodePointMapper to specify this.
     }
 
+    /**
+     * A {@code CodePointMapper} instance used for interpreting and mapping the characters of strings.
+     * This instance is essential for the MSD (Most-Significant-Digit) radix sort functionality, enabling
+     * effective character-based operations based on integer values determined by the mapping logic.
+     * <p>
+     * The mapper serves as a fundamental component within MSDStringSort, providing a mechanism
+     * to convert character data into deterministically mapped code points for use in sorting algorithms.
+     */
     private final CodePointMapper mapper;
 
     /**
@@ -219,7 +227,6 @@ public class MSDStringSort extends SortWithHelperAndAdditionalMemory<String> {
      * This method is designed to ensure all resources used by the object, including helper instances and other resources
      * managed by the parent class, are safely and effectively released.
      */
-    @Override
     public void close() {
         if (closeHelper) helper.close();
         super.close();

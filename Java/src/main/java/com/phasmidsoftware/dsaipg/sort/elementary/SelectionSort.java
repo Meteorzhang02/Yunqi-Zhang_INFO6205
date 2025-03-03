@@ -21,6 +21,26 @@ import java.io.IOException;
 public class SelectionSort<X extends Comparable<X>> extends SortWithComparableHelper<X> {
 
     /**
+     * Sorts the specified array within the given range using the Selection Sort algorithm.
+     * The method repeatedly selects the smallest element from the unsorted section of the array
+     * and moves it to the sorted section.
+     *
+     * @param xs   the array to be sorted.
+     * @param from the starting index (inclusive) of the range to be sorted.
+     * @param to   the ending index (exclusive) of the range to be sorted.
+     */
+    public void sort(X[] xs, int from, int to) {
+        final Helper<X> helper = getHelper();
+        for (int i = from; i < to - 1; i++) {
+            int min = i;
+            for (int j = i + 1; j < to; j++)
+                if (helper.less(xs[j], xs[min]))
+                    min = j;
+            helper.swap(xs, i, min);
+        }
+    }
+
+    /**
      * Constructor for SelectionSort
      *
      * @param N      the number elements we expect to sort.
@@ -47,26 +67,6 @@ public class SelectionSort<X extends Comparable<X>> extends SortWithComparableHe
      */
     public SelectionSort(Helper<X> helper) {
         super(helper);
-    }
-
-    /**
-     * Sorts the specified array within the given range using the Selection Sort algorithm.
-     * The method repeatedly selects the smallest element from the unsorted section of the array
-     * and moves it to the sorted section.
-     *
-     * @param xs   the array to be sorted.
-     * @param from the starting index (inclusive) of the range to be sorted.
-     * @param to   the ending index (exclusive) of the range to be sorted.
-     */
-    public void sort(X[] xs, int from, int to) {
-        final Helper<X> helper = getHelper();
-        for (int i = from; i < to - 1; i++) {
-            int min = i;
-            for (int j = i + 1; j < to; j++)
-                if (helper.less(xs[j], xs[min]))
-                    min = j;
-            helper.swap(xs, i, min);
-        }
     }
 
     /**

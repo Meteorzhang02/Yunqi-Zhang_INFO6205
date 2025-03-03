@@ -41,7 +41,6 @@ public abstract class BaseHuskySequenceCoder<X extends CharSequence> implements 
      * @param xs an array of X elements.
      * @return an array of longs corresponding to the Husky codes of the X elements.
      */
-    @Override
     public Coding huskyEncode(final X[] xs) {
         boolean isPerfect = true;
         final long[] result = new long[xs.length];
@@ -59,7 +58,6 @@ public abstract class BaseHuskySequenceCoder<X extends CharSequence> implements 
      *
      * @return false.
      */
-    @Override
     final public boolean perfect() {
         return false;
     }

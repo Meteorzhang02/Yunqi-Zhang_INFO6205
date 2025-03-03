@@ -155,7 +155,6 @@ public final class HuskyCoderFactory {
          *
          * @return true.
          */
-        @Override
         public boolean perfect() {
             return true;
         }
@@ -165,7 +164,6 @@ public final class HuskyCoderFactory {
      * A Husky Coder for ChronoLocalDateTimes.
      */
     public final static HuskyCoder<ChronoLocalDateTime<?>> chronoLocalDateTimeCoder = new HuskyCoder<>() {
-        @Override
         public long huskyEncode(final ChronoLocalDateTime<?> x) {
             return x.toEpochSecond(ZoneOffset.UTC);
         }
@@ -175,7 +173,6 @@ public final class HuskyCoderFactory {
          *
          * @return true.
          */
-        @Override
         public boolean perfect() {
             return true;
         }
@@ -190,7 +187,6 @@ public final class HuskyCoderFactory {
      * A Husky Coder for Integers.
      */
     public final static HuskyCoder<Integer> integerCoder = new HuskyCoder<>() {
-        @Override
         public long huskyEncode(final Integer x) {
             return x.longValue();
         }
@@ -200,7 +196,6 @@ public final class HuskyCoderFactory {
          *
          * @return true.
          */
-        @Override
         public boolean perfect() {
             return true;
         }
@@ -210,7 +205,6 @@ public final class HuskyCoderFactory {
      * A Husky Coder for Longs.
      */
     public final static HuskyCoder<Long> longCoder = new HuskyCoder<>() {
-        @Override
         public long huskyEncode(final Long x) {
             return x;
         }
@@ -220,7 +214,6 @@ public final class HuskyCoderFactory {
          *
          * @return true.
          */
-        @Override
         public boolean perfect() {
             return true;
         }
@@ -246,7 +239,6 @@ public final class HuskyCoderFactory {
      * @param <X> the type of the input to huskyEncode.
      */
     static abstract class ProbabilisticEncoder<X extends Number & Comparable<X>> implements HuskyCoder<X> {
-        @Override
         public long huskyEncode(final X x) {
             final long longValue = x.longValue();
             return longValue ^ (isEvent() ? 0xFFFFFFFFFFFFFFFFL : 0);

@@ -28,7 +28,6 @@ public class NonInstrumentingComparableHelper<X extends Comparable<X>> extends B
         }
     }
 
-    @Override
     public Helper<X> clone(String description, int N) {
         return new NonInstrumentingComparableHelper<>(description, N, config);
     }

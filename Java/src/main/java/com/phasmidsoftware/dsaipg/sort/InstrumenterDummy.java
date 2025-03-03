@@ -73,21 +73,17 @@ public class InstrumenterDummy implements Instrument {
         return false;
     }
 
-    @Override
     public void gatherStatistic() {
     }
 
-    @Override
     public boolean isShowStats() {
         return false;
     }
 
-    @Override
     public long getLookups() {
         return 0;
     }
 
-    @Override
     public void incrementLookups() {
 
     }

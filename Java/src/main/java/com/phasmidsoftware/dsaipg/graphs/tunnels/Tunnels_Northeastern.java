@@ -38,7 +38,6 @@ public class Tunnels_Northeastern implements Iterable<Edge<Building, TunnelPrope
      * @return an Iterator.
      */
     @NotNull
-    @Override
     public Iterator<Edge<Building, TunnelProperties>> iterator() {
         return mst.iterator();
     }

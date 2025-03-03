@@ -42,7 +42,6 @@ public abstract class ClassificationSorter<X, Y> extends SortWithHelper<X> imple
      * @return the classification result as an integer
      * @throws SortException if the classifier function is not set
      */
-    @Override
     public int classify(X x, Y y) {
         helper.incrementLookups();
         if (classifier != null)
@@ -60,7 +59,6 @@ public abstract class ClassificationSorter<X, Y> extends SortWithHelper<X> imple
      * @param y  the classification criteria of type Y
      * @return the classification result as an integer, determined by the classifier logic
      */
-    @Override
     public int classify(X[] xs, int i, Y y) {
         return classify(helper.get(xs, i), y);
     }

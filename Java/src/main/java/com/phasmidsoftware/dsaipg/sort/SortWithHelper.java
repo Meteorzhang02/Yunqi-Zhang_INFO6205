@@ -31,7 +31,6 @@ public abstract class SortWithHelper<X> implements ProcessingSort<X> {
         return helper;
     }
 
-    @Override
     public String getDescription() {
         return helper.getDescription();
     }

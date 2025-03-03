@@ -26,6 +26,20 @@ import java.util.Random;
 public class BubbleSort<X extends Comparable<X>> extends SortWithComparableHelper<X> {
 
     /**
+     * Sort the subarray xs:from:to using bubble sort.
+     *
+     * @param xs   sort the array xs from "from" to "to".
+     * @param from the index of the first element to sort.
+     * @param to   the index of the first element not to sort.
+     */
+    public void sort(X[] xs, int from, int to) {
+        final Helper<X> helper = getHelper();
+        for (int j = to; j > from; j--)
+            if (optimizedInnerLoopSuccess(xs, helper, from, j))
+                break;
+    }
+
+    /**
      * Constructor for any subclasses to use.
      *
      * @param N      the number of elements expected.
@@ -65,23 +79,37 @@ public class BubbleSort<X extends Comparable<X>> extends SortWithComparableHelpe
     }
 
     /**
-     * Sort the subarray xs:from:to using bubble sort.
+     * This is used only by unit tests.
      *
-     * @param xs   sort the array xs from "from" to "to".
-     * @param from the index of the first element to sort.
-     * @param to   the index of the first element not to sort.
+     * @param ys  the array to be sorted.
+     * @param <Y> the underlying element type.
      */
-    public void sort(X[] xs, int from, int to) {
-        final Helper<X> helper = getHelper();
-        for (int j = to; j > from; j--)
-            if (optimizedInnerLoopSuccess(xs, helper, from, j))
-                break;
+    public static <Y extends Comparable<Y>> void mutatingBubbleSort(Y[] ys) throws IOException {
+        try (SortWithHelper<Y> sort = new BubbleSort<>(Config.load(BubbleSort.class))) {
+            sort.mutatingSort(ys);
+        }
+    }
+
+    public static final String DESCRIPTION = "Bubble sort";
+
+    /**
+     * The main method is the entry point for the application.
+     * It runs bubble sort and insertion sort on sample data of specified size.
+     * TODO remove this--it doesn't belong.
+     *
+     * @param args command-line arguments passed to the program.
+     * @throws IOException if an I/O error occurs during sorting operations.
+     */
+    public static void main(String[] args) throws IOException {
+        bubbleSortMain(10000);
+        insertionSortMain(10000);
     }
 
     /**
-     * "Optimized" inner loop of bubble sort (see Wikipedia: <a href="https://en.wikipedia.org/wiki/Bubble_sort#Implementation">Bubble sort implementation</a>)
-     * The optimization is that we only loop until we reach the (j-1)th element because the jth element and beyond
-     * cannot possibly be out of order.
+     * "Optimized" inner loop of bubble sort
+     * (see Wikipedia: <a href="https://en.wikipedia.org/wiki/Bubble_sort#Implementation">Bubble sort implementation</a>)
+     * The optimization is that we only loop until we reach the (j-1)th element because the
+     * jth element and beyond cannot possibly be out of order.
      *
      * @param xs     the complete array to be sorted.
      * @param helper the helper.
@@ -109,33 +137,6 @@ public class BubbleSort<X extends Comparable<X>> extends SortWithComparableHelpe
 
         // XXX return true if there were no swaps
         return !swapped;
-    }
-
-    /**
-     * This is used only by unit tests.
-     *
-     * @param ys  the array to be sorted.
-     * @param <Y> the underlying element type.
-     */
-    public static <Y extends Comparable<Y>> void mutatingBubbleSort(Y[] ys) throws IOException {
-        try (SortWithHelper<Y> sort = new BubbleSort<>(Config.load(BubbleSort.class))) {
-            sort.mutatingSort(ys);
-        }
-    }
-
-    public static final String DESCRIPTION = "Bubble sort";
-
-    /**
-     * The main method is the entry point for the application.
-     * It runs bubble sort and insertion sort on sample data of specified size.
-     * TODO remove this--it doesn't belong.
-     *
-     * @param args command-line arguments passed to the program.
-     * @throws IOException if an I/O error occurs during sorting operations.
-     */
-    public static void main(String[] args) throws IOException {
-        bubbleSortMain(10000);
-        insertionSortMain(10000);
     }
 
     /**
@@ -194,5 +195,4 @@ public class BubbleSort<X extends Comparable<X>> extends SortWithComparableHelpe
     }
 
     final static LazyLogger logger = new LazyLogger(BubbleSort.class);
-
 }

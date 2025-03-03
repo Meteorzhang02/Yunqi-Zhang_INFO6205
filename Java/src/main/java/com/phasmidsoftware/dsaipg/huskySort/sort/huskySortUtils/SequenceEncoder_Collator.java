@@ -14,7 +14,6 @@ public class SequenceEncoder_Collator extends BaseHuskySequenceCoder<String> {
         this.collator = collator;
     }
 
-    @Override
     public Coding huskyEncode(final String[] xs) {
         final int length = xs.length;
         final CollationKey[] keys = new CollationKey[length];

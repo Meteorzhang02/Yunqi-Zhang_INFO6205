@@ -75,7 +75,6 @@ public class IntroHuskySort<X extends Comparable<X>> extends AbstractHuskySort<X
      * @param xs the result of the sorting.
      * @return the array xs, which may have been changed by both the adjunctSort and the post-sorter.
      */
-    @Override
     public X[] postSort(final X[] xs) {
         if (adjunctSorter != null)
             adjunctSorter.preProcess(xs);
@@ -87,7 +86,6 @@ public class IntroHuskySort<X extends Comparable<X>> extends AbstractHuskySort<X
      * Close this sorter.
      * As a side effect, we get the value of interim inversions, provided that it has been set up.
      */
-    @Override
     public void close() {
         if (closeHelper) {
             huskyHelper.close();
@@ -117,7 +115,6 @@ public class IntroHuskySort<X extends Comparable<X>> extends AbstractHuskySort<X
      * @param xs the array to be post-processed.
      * @return the result of calling super.postProcess AND (if appropriate) adjunctSorter.postProcess.
      */
-    @Override
     public boolean postProcess(final X[] xs) {
         boolean result = super.postProcess(xs);
         if (adjunctSorter != null)

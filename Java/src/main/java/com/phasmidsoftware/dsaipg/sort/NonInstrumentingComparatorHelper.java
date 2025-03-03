@@ -28,7 +28,6 @@ public class NonInstrumentingComparatorHelper<X> extends BaseComparatorHelper<X>
      * first argument is less than, equal to, or greater than the
      * second.
      */
-    @Override
     public int compare(X x1, X x2) {
         return pureComparison(x1, x2);
     }
@@ -53,7 +52,6 @@ public class NonInstrumentingComparatorHelper<X> extends BaseComparatorHelper<X>
         return new NonInstrumentingComparatorHelper<>(description, getComparator(), N, random, new InstrumenterDummy(), config);
     }
 
-    @Override
     public Helper<X> clone(String description, Comparator<X> comparator, int N) {
         return new NonInstrumentingComparatorHelper<>(description, comparator, N, random, new InstrumenterDummy(), config);
     }
