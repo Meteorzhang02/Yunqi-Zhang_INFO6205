@@ -15,6 +15,21 @@ import java.util.Random;
 public class WheelOfFortune<T> {
 
     /**
+     * Method to get a randomly chosen value of T.
+     * <p>
+     * The result depends on the events and the next value of random.
+     *
+     * @return a T from one of the events, whose probability of being selected
+     * is the quotient of the corresponding frequency and the value of total.
+     */
+    public T get() {
+        int r = random.nextInt(total);
+        // TO BE IMPLEMENTED 
+        throw new RuntimeException("logic error: " + r);
+        // END SOLUTION
+    }
+
+    /**
      * Primary constructor.
      *
      * @param random an instance of Random.
@@ -46,21 +61,6 @@ public class WheelOfFortune<T> {
     @SafeVarargs
     public WheelOfFortune(Event<T>... events) {
         this(new Random(), events);
-    }
-
-    /**
-     * Method to get a randomly chosen value of T.
-     * <p>
-     * The result depends on the events and the next value of random.
-     *
-     * @return a T from one of the events, whose probability of being selected
-     * is the quotient of the corresponding frequency and the value of total.
-     */
-    public T get() {
-        int r = random.nextInt(total);
-        // TO BE IMPLEMENTED 
-        throw new RuntimeException("logic error: " + r);
-        // END SOLUTION
     }
 
     // Private stuff...
@@ -97,7 +97,6 @@ public class WheelOfFortune<T> {
      * This array is initialized through the class constructors and remains immutable
      * once assigned.
      *
-     * @param <T> the type of the values associated with the events.
      */
     private final Event<T>[] events;
     /**
@@ -118,6 +117,14 @@ public class WheelOfFortune<T> {
      */
     public static class Event<E> {
 
+        /**
+         * Compares this Event object to the specified object for equality.
+         * Two Event objects are considered equal if they belong to the same class,
+         * and their respective event and frequency fields are equal.
+         *
+         * @param o the object to be compared for equality with this Event.
+         * @return true if the specified object is equal to this Event, false otherwise.
+         */
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -127,6 +134,11 @@ public class WheelOfFortune<T> {
                     Objects.equals(event, event1.event);
         }
 
+        /**
+         * Computes the hash code for this object based on its properties.
+         *
+         * @return an integer representing the hash code of the object, calculated using its "event" and "frequency" fields.
+         */
         @Override
         public int hashCode() {
             return Objects.hash(event, frequency);
@@ -146,6 +158,12 @@ public class WheelOfFortune<T> {
          */
         final int frequency;
 
+        /**
+         * Constructs an instance of the Event class with the specified event value and frequency.
+         *
+         * @param event     the value of the event of type E.
+         * @param frequency the frequency associated with the event, representing its occurrence count.
+         */
         Event(E event, int frequency) {
             this.event = event;
             this.frequency = frequency;

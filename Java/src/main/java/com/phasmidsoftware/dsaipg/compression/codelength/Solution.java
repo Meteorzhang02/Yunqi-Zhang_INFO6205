@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.phasmidsoftware.dsaipg.misc.codelength;
+package com.phasmidsoftware.dsaipg.compression.codelength;
 
 /**
  * The Solution class provides a method to calculate a specific probability value

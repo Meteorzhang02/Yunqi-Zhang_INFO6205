@@ -17,3 +17,7 @@ bin/*
 .settings
 
 *.kml
+
+INFO6205.iml
+
+Java/src/test/java/edu/neu/coe/info6205/admin/TicketTest.java

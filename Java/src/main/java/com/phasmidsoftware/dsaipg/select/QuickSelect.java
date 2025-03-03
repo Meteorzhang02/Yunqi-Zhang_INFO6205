@@ -3,6 +3,7 @@ package com.phasmidsoftware.dsaipg.select;
 import com.phasmidsoftware.dsaipg.sort.Helper;
 import com.phasmidsoftware.dsaipg.sort.NonInstrumentingComparableHelper;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.Partition;
+import com.phasmidsoftware.dsaipg.sort.linearithmic.Partitioner;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort_Basic;
 
 import java.util.List;
@@ -34,14 +35,8 @@ public class QuickSelect<X extends Comparable<X>> implements Select<X> {
         if (k < 0 || k >= xs.length) throw new IllegalArgumentException("k must be between 0 and " + (xs.length - 1));
         shuffle(xs);
         int from = 0, to = xs.length;
-        while (to > from + 1) {
-            int[] partitionList = partition(createPartition(xs, from, to));
-            int lt = partitionList[0];
-            int gt = partitionList[1];
-            if (k < lt) to = lt;
-            else if (k >= gt) from = gt;
-            else return xs[lt];
-        }
+        // TO BE IMPLEMENTED  implement the logic for QuickSelect using the partition and createPartition methods below.
+        // END SOLUTION
         return xs[k];
     }
 
@@ -92,5 +87,5 @@ public class QuickSelect<X extends Comparable<X>> implements Select<X> {
         a[r] = temp;
     }
 
-    private final QuickSort_Basic.Partitioner_Basic<X> partitioner;
+    private final Partitioner<X> partitioner;
 }

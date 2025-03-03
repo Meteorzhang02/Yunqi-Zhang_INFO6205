@@ -14,7 +14,7 @@ public class SuffixComparatorTest {
     @Test
     public void testCompareWithIdenticalSuffixes() {
         Comparator<String> baseComparator = String::compareTo;
-        SuffixComparator suffixComparator = new SuffixComparator(baseComparator, 7);
+        Comparator<String> suffixComparator = new SuffixComparator(baseComparator, 7);
 
         String s1 = "prefix1_ABC";
         String s2 = "Prefix2_ABC";
@@ -28,7 +28,7 @@ public class SuffixComparatorTest {
     @Test
     public void testCompareWithDifferentSuffixes() {
         Comparator<String> baseComparator = String::compareTo;
-        SuffixComparator suffixComparator = new SuffixComparator(baseComparator, 7);
+        Comparator<String> suffixComparator = new SuffixComparator(baseComparator, 7);
 
         String s1 = "prefix_ABC";
         String s2 = "prefix_DEF";
@@ -44,7 +44,7 @@ public class SuffixComparatorTest {
     @Test
     public void testCompareWithCustomPrefixLength() {
         Comparator<String> baseComparator = String::compareTo;
-        SuffixComparator suffixComparator = new SuffixComparator(baseComparator, 6);
+        Comparator<String> suffixComparator = new SuffixComparator(baseComparator, 6);
 
         String s1 = "prefix123_ABC";
         String s2 = "prefix456_DEF";
@@ -60,7 +60,7 @@ public class SuffixComparatorTest {
     @Test
     public void testCompareWithEqualSuffixesAndDifferentPrefixes() {
         Comparator<String> baseComparator = String::compareTo;
-        SuffixComparator suffixComparator = new SuffixComparator(baseComparator, 9);
+        Comparator<String> suffixComparator = new SuffixComparator(baseComparator, 9);
 
         String s1 = "prefix123_same";
         String s2 = "prefix456_same";
@@ -76,7 +76,7 @@ public class SuffixComparatorTest {
     @Test
     public void testCompareWithEmptyStrings() {
         Comparator<String> baseComparator = String::compareTo;
-        SuffixComparator suffixComparator = new SuffixComparator(baseComparator, 5);
+        Comparator<String> suffixComparator = new SuffixComparator(baseComparator, 5);
 
         String s1 = "";
         String s2 = "";
@@ -92,7 +92,7 @@ public class SuffixComparatorTest {
     @Test
     public void testCompareWithShortStrings() {
         Comparator<String> baseComparator = String::compareTo;
-        SuffixComparator suffixComparator = new SuffixComparator(baseComparator, 4);
+        Comparator<String> suffixComparator = new SuffixComparator(baseComparator, 4);
 
         String s1 = "short";
         String s2 = "longsuffix";
