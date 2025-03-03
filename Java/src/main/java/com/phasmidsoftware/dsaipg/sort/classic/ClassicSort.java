@@ -2,10 +2,10 @@ package com.phasmidsoftware.dsaipg.sort.classic;
 
 import com.phasmidsoftware.dsaipg.adt.bqs.Bag;
 import com.phasmidsoftware.dsaipg.adt.bqs.Bag_Array;
-import com.phasmidsoftware.dsaipg.sort.GenericSortWithHelper;
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.ProcessingSort;
-import com.phasmidsoftware.dsaipg.sort.SortException;
+import com.phasmidsoftware.dsaipg.sort.generic.ProcessingSort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortException;
+import com.phasmidsoftware.dsaipg.sort.helper.GenericSortWithHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.util.Config;
 
 import java.io.IOException;
@@ -60,6 +60,13 @@ public class ClassicSort<X extends Classify<X>> extends GenericSortWithHelper<X>
         }
     }
 
+    /**
+     * Returns a string representation of this ClassicSort instance.
+     * The string is generated using the associated Helper's {@code toString()} method,
+     * providing a detailed description of the state of the Helper.
+     *
+     * @return a string representation of the ClassicSort object
+     */
     @Override
     public String toString() {
         return getHelper().toString();

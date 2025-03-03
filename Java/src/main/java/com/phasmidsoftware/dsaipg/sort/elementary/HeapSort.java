@@ -1,7 +1,7 @@
 package com.phasmidsoftware.dsaipg.sort.elementary;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.SortWithComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.util.Config;
 
 /**

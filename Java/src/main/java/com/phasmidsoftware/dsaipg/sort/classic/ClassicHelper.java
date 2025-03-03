@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.sort.classic;
 
-import com.phasmidsoftware.dsaipg.sort.*;
+import com.phasmidsoftware.dsaipg.sort.helper.*;
 import com.phasmidsoftware.dsaipg.util.Config;
 import com.phasmidsoftware.dsaipg.util.StatPack;
 import com.phasmidsoftware.dsaipg.util.Utilities;

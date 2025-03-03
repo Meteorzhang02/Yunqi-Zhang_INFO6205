@@ -1,7 +1,7 @@
 package com.phasmidsoftware.dsaipg.util;
 
-import com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper;
-import com.phasmidsoftware.dsaipg.sort.Instrumenter;
+import com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Instrumenter;
 import org.junit.Ignore;
 import org.junit.Test;
 

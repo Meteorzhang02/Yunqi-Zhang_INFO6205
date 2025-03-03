@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.util;
 
-import com.phasmidsoftware.dsaipg.sort.SortWithHelper;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
 
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;

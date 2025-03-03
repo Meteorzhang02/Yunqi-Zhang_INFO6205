@@ -1,29 +1,21 @@
 package com.phasmidsoftware.dsaipg.sort.linearithmic;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.SortWithComparableHelper;
 import com.phasmidsoftware.dsaipg.sort.elementary.InsertionSort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.util.Config;
 import com.phasmidsoftware.dsaipg.util.LazyLogger;
 
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Abstract class representing the QuickSort algorithm,
+ * which is a recursive sorting algorithm using partitioning.
+ *
+ * @param <X> the type of elements to be sorted, which must implement Comparable.
+ */
 public abstract class QuickSort<X extends Comparable<X>> extends SortWithComparableHelper<X> {
-
-    public QuickSort(String description, int N, int nRuns, Config config) {
-        super(description, N, nRuns, config);
-        insertionSort = setupInsertionSort(getHelper());
-    }
-
-    public QuickSort(Helper<X> helper) {
-        super(helper);
-        insertionSort = setupInsertionSort(helper);
-    }
-
-    private InsertionSort<X> setupInsertionSort(final Helper<X> helper) {
-        return new InsertionSort<>(helper.clone("Quicksort: insertion sort"));
-    }
 
     /**
      * Method to create a Partitioner.
@@ -113,8 +105,36 @@ public abstract class QuickSort<X extends Comparable<X>> extends SortWithCompara
         return true;
     }
 
+    /**
+     * Retrieves the instance of InsertionSort used in this class.
+     *
+     * @return an InsertionSort instance configured for sorting arrays of type X.
+     */
     public InsertionSort<X> getInsertionSort() {
         return insertionSort;
+    }
+
+    /**
+     * Constructor for the QuickSort class.
+     *
+     * @param description a String describing the QuickSort instance.
+     * @param N           the size of the dataset to be sorted.
+     * @param nRuns       the number of times the sort process will be run.
+     * @param config      a configuration object containing parameters for the sorting algorithm.
+     */
+    public QuickSort(String description, int N, int nRuns, Config config) {
+        super(description, N, nRuns, config);
+        insertionSort = setupInsertionSort(getHelper());
+    }
+
+    /**
+     * Constructor for QuickSort, which initializes the sorting algorithm with the given helper.
+     *
+     * @param helper the helper instance to be used by this QuickSort implementation for sorting-related operations.
+     */
+    public QuickSort(Helper<X> helper) {
+        super(helper);
+        insertionSort = setupInsertionSort(helper);
     }
 
     /**
@@ -130,13 +150,30 @@ public abstract class QuickSort<X extends Comparable<X>> extends SortWithCompara
         return new Partition<>(ys, from, to);
     }
 
+    /**
+     * Creates a partition on the given array.
+     *
+     * @param ys the array to be partitioned
+     * @param <Y> the type of the elements in the array, which must be comparable
+     * @return a Partition object representing the partitioned range of the array
+     */
     public static <Y extends Comparable<Y>> Partition<Y> createPartition(Y[] ys) {
         return createPartition(ys, 0, ys.length);
     }
 
+    protected Partitioner<X> partitioner;
+
     private final InsertionSort<X> insertionSort;
 
-    protected Partitioner<X> partitioner;
+    /**
+     * Sets up and returns an instance of the InsertionSort class configured with a cloned helper.
+     *
+     * @param helper the Helper instance, which provides necessary utilities and configurations for sorting.
+     * @return an InsertionSort instance initialized with a cloned helper specific for insertion sort.
+     */
+    private InsertionSort<X> setupInsertionSort(final Helper<X> helper) {
+        return new InsertionSort<>(helper.clone("Quicksort: insertion sort"));
+    }
 
     final static LazyLogger logger = new LazyLogger(QuickSort.class);
 }

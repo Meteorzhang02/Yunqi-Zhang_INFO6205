@@ -2,6 +2,9 @@ package com.phasmidsoftware.dsaipg.sort;
 
 import com.phasmidsoftware.dsaipg.sort.elementary.InsertionSortOpt;
 import com.phasmidsoftware.dsaipg.sort.elementary.ShellSort;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.IntroSort;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.MergeSort;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort_3way;

@@ -4,7 +4,7 @@
 
 package com.phasmidsoftware.dsaipg.sort.linearithmic;
 
-import com.phasmidsoftware.dsaipg.sort.Sort;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
 import com.phasmidsoftware.dsaipg.util.Config;
 import org.junit.Test;
 

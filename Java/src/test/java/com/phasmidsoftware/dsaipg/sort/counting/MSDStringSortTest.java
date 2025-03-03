@@ -1,9 +1,9 @@
 package com.phasmidsoftware.dsaipg.sort.counting;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.HelperFactory;
-import com.phasmidsoftware.dsaipg.sort.Sort;
-import com.phasmidsoftware.dsaipg.sort.SortWithHelper;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort_3way;
 import com.phasmidsoftware.dsaipg.util.*;
@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.phasmidsoftware.dsaipg.sort.Instrument.HITS;
-import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.getRunsConfig;
+import static com.phasmidsoftware.dsaipg.sort.helper.Instrument.HITS;
+import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper.getRunsConfig;
 import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.HELPER;
 import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfig;
 import static org.junit.Assert.*;

@@ -3,11 +3,16 @@
  */
 package com.phasmidsoftware.dsaipg.util;
 
-import com.phasmidsoftware.dsaipg.sort.*;
 import com.phasmidsoftware.dsaipg.sort.classic.BucketSort;
 import com.phasmidsoftware.dsaipg.sort.counting.LSDStringSort;
 import com.phasmidsoftware.dsaipg.sort.counting.MSDStringSort;
 import com.phasmidsoftware.dsaipg.sort.elementary.*;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortException;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.TimSort;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.*;
 
@@ -21,7 +26,7 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.AT;
+import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper.AT;
 import static com.phasmidsoftware.dsaipg.sort.linearithmic.MergeSort.MERGESORT;
 import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.isInstrumented;
 import static com.phasmidsoftware.dsaipg.util.SortBenchmarkHelper.*;

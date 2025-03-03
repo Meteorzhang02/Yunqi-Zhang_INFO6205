@@ -1,10 +1,10 @@
 package com.phasmidsoftware.dsaipg.util;
 
-import com.phasmidsoftware.dsaipg.sort.BaseHelper;
-import com.phasmidsoftware.dsaipg.sort.Instrumenter;
+import com.phasmidsoftware.dsaipg.sort.helper.BaseHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Instrumenter;
 import org.ini4j.Ini;
 
-import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparableHelper.*;
+import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparableHelper.*;
 import static com.phasmidsoftware.dsaipg.sort.linearithmic.MergeSort.INSURANCE;
 import static com.phasmidsoftware.dsaipg.sort.linearithmic.MergeSort.NOCOPY;
 

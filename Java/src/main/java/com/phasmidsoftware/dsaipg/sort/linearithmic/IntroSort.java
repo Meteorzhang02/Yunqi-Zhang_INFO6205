@@ -3,8 +3,8 @@
  */
 package com.phasmidsoftware.dsaipg.sort.linearithmic;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
-import com.phasmidsoftware.dsaipg.sort.NonInstrumentingComparableHelper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
 import com.phasmidsoftware.dsaipg.util.Config;
 
 import java.util.Arrays;
@@ -18,35 +18,6 @@ import java.util.Arrays;
  * @param <X> the type of elements to be sorted, which must extend Comparable.
  */
 public class IntroSort<X extends Comparable<X>> extends QuickSort_DualPivot<X> {
-
-    /**
-     * Constructor for QuickSort_3way
-     *
-     * @param helper an explicit instance of Helper to be used.
-     */
-    public IntroSort(Helper<X> helper) {
-        super(helper);
-    }
-
-    /**
-     * Constructor for QuickSort_3way
-     *
-     * @param N      the number elements we expect to sort.
-     * @param nRuns  the number of runs to perform.
-     * @param config the configuration.
-     */
-    public IntroSort(int N, int nRuns, Config config) {
-        super(DESCRIPTION, N, nRuns, config);
-    }
-
-    /**
-     * Constructor for IntroSort using a configuration instance.
-     *
-     * @param config the configuration object that provides settings for the sort.
-     */
-    public IntroSort(Config config) {
-        this(new NonInstrumentingComparableHelper<>(DESCRIPTION, config));
-    }
 
     /**
      * Sorts the given array using the IntroSort algorithm.
@@ -102,8 +73,43 @@ public class IntroSort<X extends Comparable<X>> extends QuickSort_DualPivot<X> {
 
     public static final String DESCRIPTION = "Intro sort";
 
-    /*
-     * Heapsort algorithm
+    /**
+     * Constructor for QuickSort_3way
+     *
+     * @param helper an explicit instance of Helper to be used.
+     */
+    public IntroSort(Helper<X> helper) {
+        super(helper);
+    }
+
+    /**
+     * Constructor for QuickSort_3way
+     *
+     * @param N      the number elements we expect to sort.
+     * @param nRuns  the number of runs to perform.
+     * @param config the configuration.
+     */
+    public IntroSort(int N, int nRuns, Config config) {
+        super(DESCRIPTION, N, nRuns, config);
+    }
+
+    /**
+     * Constructor for IntroSort using a configuration instance.
+     *
+     * @param config the configuration object that provides settings for the sort.
+     */
+    public IntroSort(Config config) {
+        this(new NonInstrumentingComparableHelper<>(DESCRIPTION, config));
+    }
+
+    /**
+     * Sorts the specified portion of the array using the Heapsort algorithm.
+     * This method organizes the array in a binary heap structure and ensures sorting by repeatedly
+     * moving the largest element to the end of the heap and re-adjusting the heap structure.
+     *
+     * @param a    the array to be sorted
+     * @param from the index of the first element to be included in the sorting
+     * @param to   the index of the first element not to be included in the sorting
      */
     private void heapSort(X[] a, int from, int to) {
         Helper<X> helper = getHelper();
@@ -117,6 +123,16 @@ public class IntroSort<X extends Comparable<X>> extends QuickSort_DualPivot<X> {
         }
     }
 
+    /**
+     * Restores the heap property by moving an element down the heap starting at the given position.
+     * Ensures that the subtree rooted at the specified position satisfies the heap condition.
+     *
+     * @param a      the array representing the heap
+     * @param i      the current index in the heap being adjusted
+     * @param n      the size of the heap
+     * @param lo     the offset for indexing into the array
+     * @param helper a helper utility used for instrumentation and comparisons
+     */
     private void downHeap(X[] a, int i, int n, int lo, Helper<X> helper) {
         X d = a[lo + i - 1];
         int child;
@@ -136,6 +152,12 @@ public class IntroSort<X extends Comparable<X>> extends QuickSort_DualPivot<X> {
         a[lo + i - 1] = d;
     }
 
+    /**
+     * Computes the largest integer less than or equal to the base-2 logarithm of the given integer.
+     *
+     * @param a the integer whose floor base-2 logarithm is to be calculated; must be greater than 0
+     * @return the floor of the base-2 logarithm of the given integer
+     */
     private static int floor_lg(int a) {
         return (int) (Math.floor(Math.log(a) / Math.log(2)));
     }

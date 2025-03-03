@@ -1,12 +1,12 @@
 package com.phasmidsoftware.dsaipg.sort.linearithmic;
 
-import com.phasmidsoftware.dsaipg.sort.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.util.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.getRunsConfig;
+import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper.getRunsConfig;
 
 /**
  * Implementation of the QuickSort algorithm with a basic partitioning strategy.
@@ -19,6 +19,14 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
 
     public static final String DESCRIPTION = "QuickSort basic";
 
+    /**
+     * Constructor for QuickSort_Basic.
+     *
+     * @param description a description of the QuickSort instance.
+     * @param N           the number of elements expected to be sorted.
+     * @param nRuns       the number of times the sorting algorithm should run.
+     * @param config      the configuration settings for the sorting algorithm.
+     */
     public QuickSort_Basic(String description, int N, final int nRuns, Config config) {
         super(description, N, nRuns, config);
         setPartitioner(createPartitioner());
@@ -84,15 +92,6 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
     public static class Partitioner_Basic<Y extends Comparable<Y>> implements Partitioner<Y> {
 
         /**
-         * Constructor for creating a basic partitioner with a specified helper.
-         *
-         * @param helper a Helper instance of type Y used to perform various partitioning-related tasks.
-         */
-        public Partitioner_Basic(Helper<Y> helper) {
-            this.helper = helper;
-        }
-
-        /**
          * Method to partition the given partition into smaller partitions.
          *
          * @param partition the partition to divide up.
@@ -138,10 +137,26 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
         }
 
         /**
+         * Constructor for creating a basic partitioner with a specified helper.
+         *
+         * @param helper a Helper instance of type Y used to perform various partitioning-related tasks.
+         */
+        public Partitioner_Basic(Helper<Y> helper) {
+            this.helper = helper;
+        }
+
+        /**
          * Auxiliary class to help with the instrumenting case.
          * In particular, we minimize the number of hits.
          */
         class XValue {
+            /**
+             * Updates the instance variable with a specific element from the given array and increments a counter for hits.
+             *
+             * @param xs the array of type Y elements from which the value to update is selected
+             * @param i the index of the element in the array to update the instance variable with
+             * @return true always, indicating a successful update operation
+             */
             public boolean update(Y[] xs, int i) {
                 helper.incrementHits(1);
                 this.x = xs[i];
@@ -150,10 +165,19 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
 
             Y x;
 
+            /**
+             * Constructs an XValue instance and assigns the given value to the instance variable x.
+             *
+             * @param x an object of type Y to initialize the instance variable x
+             */
             public XValue(Y x) {
                 this.x = x;
             }
 
+            /**
+             * Default constructor for the XValue class.
+             * Initializes the instance variable to null by invoking the parameterized constructor with a null argument.
+             */
             public XValue() {
                 this(null);
             }

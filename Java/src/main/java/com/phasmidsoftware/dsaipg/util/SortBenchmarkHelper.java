@@ -1,7 +1,7 @@
 package com.phasmidsoftware.dsaipg.util;
 
 
-import com.phasmidsoftware.dsaipg.sort.SortException;
+import com.phasmidsoftware.dsaipg.sort.generic.SortException;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

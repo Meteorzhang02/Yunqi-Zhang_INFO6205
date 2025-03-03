@@ -1,7 +1,11 @@
 package com.phasmidsoftware.dsaipg.sort.classic;
 
-import com.phasmidsoftware.dsaipg.sort.*;
 import com.phasmidsoftware.dsaipg.sort.elementary.InsertionSort;
+import com.phasmidsoftware.dsaipg.sort.generic.Sort;
+import com.phasmidsoftware.dsaipg.sort.generic.SortException;
+import com.phasmidsoftware.dsaipg.sort.helper.Helper;
+import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
+import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
 import com.phasmidsoftware.dsaipg.util.Config;
 import com.phasmidsoftware.dsaipg.util.LazyLogger;
 
@@ -11,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.getRunsConfig;
+import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper.getRunsConfig;
 
 /**
  * Bucket Sort.
