@@ -1,13 +1,13 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.StatPack;
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 
 import java.util.Random;
 import java.util.function.Function;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.*;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.*;
 
 /**
  * The BaseHelper abstract class provides utility methods and configuration options

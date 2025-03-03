@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.phasmidsoftware.dsaipg.sort.counting.LSDStringSort;
 import com.phasmidsoftware.dsaipg.sort.generic.Sort;
 import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import org.junit.Test;
 
 import java.io.IOException;

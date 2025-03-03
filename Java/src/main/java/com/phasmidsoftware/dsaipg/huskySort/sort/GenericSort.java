@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.huskySort.sort;
 
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 
 import java.util.Arrays;
 import java.util.Collection;

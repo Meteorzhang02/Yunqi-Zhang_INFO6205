@@ -5,7 +5,7 @@ import com.phasmidsoftware.dsaipg.huskySort.sort.huskySortUtils.HuskyCoderFactor
 import com.phasmidsoftware.dsaipg.huskySort.util.Benchmark;
 import com.phasmidsoftware.dsaipg.huskySort.util.Config;
 import com.phasmidsoftware.dsaipg.huskySort.util.TimeLogger;
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

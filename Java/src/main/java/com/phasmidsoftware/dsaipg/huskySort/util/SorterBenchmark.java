@@ -5,7 +5,7 @@ import com.phasmidsoftware.dsaipg.huskySort.sort.SortWithHelper;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import static com.phasmidsoftware.dsaipg.util.Utilities.formatWhole;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.formatWhole;
 
 
 /**

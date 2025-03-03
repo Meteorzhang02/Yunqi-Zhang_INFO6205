@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.graphs.union_find;
 
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,13 +1,13 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
 import com.phasmidsoftware.dsaipg.sort.classic.ClassicHelper;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 import java.util.Comparator;
 import java.util.Random;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.getSeed;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.isInstrumented;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.getSeed;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.isInstrumented;
 
 /**
  * Class HelperFactory.

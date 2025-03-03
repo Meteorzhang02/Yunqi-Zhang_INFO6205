@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.phasmidsoftware.dsaipg.util.SortBenchmarkHelper.regexLeipzig;
+import static com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmarkHelper.regexLeipzig;
 
 /**
  * Quick Benchmark Integration Test.

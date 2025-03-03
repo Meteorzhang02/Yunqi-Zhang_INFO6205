@@ -6,7 +6,7 @@ package com.phasmidsoftware.dsaipg.huskySort.sort.simple;
 import com.phasmidsoftware.dsaipg.huskySort.sort.ComparableSortHelper;
 import com.phasmidsoftware.dsaipg.huskySort.sort.ComparisonSortHelper;
 import com.phasmidsoftware.dsaipg.huskySort.util.Config;
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 
 /**
  * (redundant) Class to implement Intro Sort.

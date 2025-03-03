@@ -1,12 +1,12 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 
 import java.util.Random;
 import java.util.function.Function;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.isInstrumented;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.isInstrumented;
 
 /**
  * A helper class extending BaseComparableHelper to assist with sorting and comparisons

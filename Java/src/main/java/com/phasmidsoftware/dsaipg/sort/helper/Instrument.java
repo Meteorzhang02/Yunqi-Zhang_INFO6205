@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
-import com.phasmidsoftware.dsaipg.util.StatPack;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
 
 /**
  * Interface to define the operations of instrumentation.

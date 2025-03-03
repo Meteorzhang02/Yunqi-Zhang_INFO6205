@@ -9,7 +9,7 @@ import com.phasmidsoftware.dsaipg.sort.generic.Sort;
 import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparableHelper;
 import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Function;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfig;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfig;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 

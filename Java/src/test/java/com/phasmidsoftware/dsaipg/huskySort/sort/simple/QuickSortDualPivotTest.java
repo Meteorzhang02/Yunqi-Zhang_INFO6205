@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.phasmidsoftware.dsaipg.huskySort.sort.huskySort.HuskySortBenchmark.runStringSortBenchmark;
 import static com.phasmidsoftware.dsaipg.huskySort.sort.huskySort.HuskySortBenchmark.timeLoggersLinearithmic;
-import static com.phasmidsoftware.dsaipg.util.Utilities.round;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.round;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

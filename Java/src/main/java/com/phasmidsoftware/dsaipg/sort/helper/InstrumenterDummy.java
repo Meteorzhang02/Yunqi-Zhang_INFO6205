@@ -1,7 +1,7 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.StatPack;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 /**
  * A dummy implementation of the Instrument interface, primarily used for testing

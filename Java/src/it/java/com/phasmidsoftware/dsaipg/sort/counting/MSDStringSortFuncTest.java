@@ -3,7 +3,13 @@ package com.phasmidsoftware.dsaipg.sort.counting;
 import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
 import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort_3way;
-import com.phasmidsoftware.dsaipg.util.*;
+import com.phasmidsoftware.dsaipg.util.PrivateMethodTester;
+import com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmark;
+import com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmarkHelper;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.general.CodePointMapper;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 import org.junit.Test;
 
 import java.io.*;
@@ -16,8 +22,8 @@ import java.util.stream.Collectors;
 
 import static com.phasmidsoftware.dsaipg.sort.helper.Instrument.HITS;
 import static com.phasmidsoftware.dsaipg.sort.helper.InstrumentedComparatorHelper.getRunsConfig;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.HELPER;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfig;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.HELPER;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfig;
 import static org.junit.Assert.assertEquals;
 
 public class MSDStringSortFuncTest {

@@ -7,13 +7,17 @@ package com.phasmidsoftware.dsaipg.sort.elementary;
 import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
 import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
-import com.phasmidsoftware.dsaipg.util.*;
+import com.phasmidsoftware.dsaipg.util.PrivateMethodTester;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
+import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 import org.junit.Test;
 
 import static com.phasmidsoftware.dsaipg.sort.helper.BaseComparatorHelper.INVERSIONS;
 import static com.phasmidsoftware.dsaipg.sort.helper.Instrument.COMPARES;
 import static com.phasmidsoftware.dsaipg.sort.helper.Instrument.FIXES;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfig;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

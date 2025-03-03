@@ -8,7 +8,7 @@ import com.phasmidsoftware.dsaipg.huskySort.sort.SortWithHelper;
 import com.phasmidsoftware.dsaipg.huskySort.sort.huskySortUtils.HuskyCoder;
 import com.phasmidsoftware.dsaipg.huskySort.sort.simple.MergeSortBasic;
 import com.phasmidsoftware.dsaipg.huskySort.util.*;
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 
 import java.util.function.Consumer;
 

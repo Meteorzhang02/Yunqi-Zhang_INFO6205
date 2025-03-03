@@ -2,8 +2,8 @@ package com.phasmidsoftware.dsaipg.sort.generic;
 
 import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.sort.helper.HelperFactory;
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.LazyLogger;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 
 import java.util.Comparator;
 

@@ -3,7 +3,7 @@ package com.phasmidsoftware.dsaipg.graphs.tunnels;
 import com.phasmidsoftware.dsaipg.graphs.gis.*;
 import com.phasmidsoftware.dsaipg.graphs.undirected.Edge;
 import com.phasmidsoftware.dsaipg.graphs.undirected.EdgeGraph;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

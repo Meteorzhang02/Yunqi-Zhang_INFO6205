@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.phasmidsoftware.dsaipg.util.Utilities.round;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.round;
 import static org.junit.Assert.*;
 
 @SuppressWarnings("ALL")

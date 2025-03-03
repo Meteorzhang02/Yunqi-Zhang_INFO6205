@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import org.junit.Before;
 import org.junit.Test;
 

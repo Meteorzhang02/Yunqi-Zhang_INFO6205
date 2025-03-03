@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.huskySort.util;
 
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 
 public class Statistics {
 

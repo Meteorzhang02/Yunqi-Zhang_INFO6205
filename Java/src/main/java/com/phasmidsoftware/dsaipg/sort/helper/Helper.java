@@ -1,7 +1,7 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
 import com.phasmidsoftware.dsaipg.sort.generic.SortException;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.function.Function;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.CUTOFF_DEFAULT;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.CUTOFF_DEFAULT;
 import static java.util.Arrays.binarySearch;
 
 /**

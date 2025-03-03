@@ -1,7 +1,7 @@
 package com.phasmidsoftware.dsaipg.huskySort.util;
 
 import com.phasmidsoftware.dsaipg.huskySort.sort.ComparableSortHelper;
-import com.phasmidsoftware.dsaipg.util.Utilities;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
 
 import java.util.Random;
 import java.util.function.Function;

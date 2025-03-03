@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.phasmidsoftware.dsaipg.util.Utilities.formatWhole;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.formatWhole;
 
 
 /**

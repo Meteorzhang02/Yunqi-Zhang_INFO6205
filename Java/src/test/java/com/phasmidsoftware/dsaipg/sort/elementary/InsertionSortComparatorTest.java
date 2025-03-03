@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.Comparator;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfigFixes;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfigFixes;
 import static org.junit.Assert.assertArrayEquals;
 
 /**

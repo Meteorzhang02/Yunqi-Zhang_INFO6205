@@ -5,7 +5,7 @@ import com.phasmidsoftware.dsaipg.huskySort.util.*;
 import java.util.Random;
 
 import static com.phasmidsoftware.dsaipg.huskySort.util.Instrumenter.INVERSIONS;
-import static com.phasmidsoftware.dsaipg.util.Utilities.formatWhole;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.formatWhole;
 
 /**
  * ComparisonSortHelper class for sorting methods with instrumentation of compares and swaps, and in addition, bounds checks.

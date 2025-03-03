@@ -2,7 +2,7 @@ package com.phasmidsoftware.dsaipg.graphs.gis;
 
 import com.phasmidsoftware.dsaipg.graphs.undirected.Edge;
 import com.phasmidsoftware.dsaipg.graphs.undirected.EdgeGraph;
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 
 /**
  * An interface defining the behavior of a geographic graph (Geo), where vertices represent

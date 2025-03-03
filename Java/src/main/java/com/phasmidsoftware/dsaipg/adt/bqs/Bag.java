@@ -4,7 +4,7 @@
 
 package com.phasmidsoftware.dsaipg.adt.bqs;
 
-import com.phasmidsoftware.dsaipg.util.SizedIterable;
+import com.phasmidsoftware.dsaipg.util.iteration.SizedIterable;
 
 /**
  * A Bag is a collection that allows multiple occurrences of items.

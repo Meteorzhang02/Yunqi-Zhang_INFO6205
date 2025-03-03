@@ -4,11 +4,11 @@ import com.phasmidsoftware.dsaipg.sort.elementary.InsertionSort;
 import com.phasmidsoftware.dsaipg.sort.generic.SortException;
 import com.phasmidsoftware.dsaipg.sort.generic.SortWithComparableHelper;
 import com.phasmidsoftware.dsaipg.sort.helper.Helper;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 import java.util.Arrays;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.*;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.*;
 
 /**
  * A generic implementation of the MergeSort algorithm for sorting elements of type X,

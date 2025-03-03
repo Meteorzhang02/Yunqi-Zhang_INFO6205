@@ -6,7 +6,7 @@ package com.phasmidsoftware.dsaipg.huskySort.util;
 
 import java.util.function.*;
 
-import static com.phasmidsoftware.dsaipg.util.Utilities.formatWhole;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.formatWhole;
 
 
 /**

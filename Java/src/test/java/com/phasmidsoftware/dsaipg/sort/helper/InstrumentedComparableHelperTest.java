@@ -2,10 +2,10 @@ package com.phasmidsoftware.dsaipg.sort.helper;
 
 import com.phasmidsoftware.dsaipg.sort.generic.Sort;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.MergeSort;
-import com.phasmidsoftware.dsaipg.util.Config;
 import com.phasmidsoftware.dsaipg.util.PrivateMethodTester;
-import com.phasmidsoftware.dsaipg.util.StatPack;
-import com.phasmidsoftware.dsaipg.util.Statistics;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
+import com.phasmidsoftware.dsaipg.util.benchmark.Statistics;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.phasmidsoftware.dsaipg.sort.helper.Instrument.COMPARES;
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.setupConfig;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfig;
 import static org.junit.Assert.*;
 
 public class InstrumentedComparableHelperTest {

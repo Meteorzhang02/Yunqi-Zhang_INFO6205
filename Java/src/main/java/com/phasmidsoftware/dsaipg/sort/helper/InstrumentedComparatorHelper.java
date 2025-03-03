@@ -1,15 +1,15 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
 import com.phasmidsoftware.dsaipg.sort.elementary.InsertionSortComparator;
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.LazyLogger;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 
 import java.util.Comparator;
 import java.util.Random;
 import java.util.function.Function;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.*;
-import static com.phasmidsoftware.dsaipg.util.Utilities.formatWhole;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.*;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.formatWhole;
 
 /**
  * Helper class for sorting methods with instrumentation of compares and swaps, and in addition, bounds checks.

@@ -9,7 +9,11 @@ import com.phasmidsoftware.dsaipg.sort.linearithmic.IntroSort;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.MergeSort;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort_3way;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort_DualPivot;
-import com.phasmidsoftware.dsaipg.util.*;
+import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark;
+import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
+import com.phasmidsoftware.dsaipg.util.config.Config;
+import com.phasmidsoftware.dsaipg.util.general.Utilities;
+import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

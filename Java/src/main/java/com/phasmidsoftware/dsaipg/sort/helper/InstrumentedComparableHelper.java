@@ -1,10 +1,10 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 import java.util.Random;
 
-import static com.phasmidsoftware.dsaipg.util.Config_Benchmark.getSeed;
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.getSeed;
 
 /**
  * Helper class for sorting methods with instrumentation of compares and swaps, and in addition, bounds checks.

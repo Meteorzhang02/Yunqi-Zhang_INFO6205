@@ -1,8 +1,8 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
-import com.phasmidsoftware.dsaipg.util.Config;
-import com.phasmidsoftware.dsaipg.util.StatPack;
-import com.phasmidsoftware.dsaipg.util.Statistics;
+import com.phasmidsoftware.dsaipg.util.benchmark.StatPack;
+import com.phasmidsoftware.dsaipg.util.benchmark.Statistics;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 /**
  * The Instrumenter class implements the Instrument interface and is used

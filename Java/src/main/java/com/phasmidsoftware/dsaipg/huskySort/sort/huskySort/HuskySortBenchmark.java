@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 import static com.phasmidsoftware.dsaipg.huskySort.sort.huskySort.AbstractHuskySort.UNICODE_CODER;
 import static com.phasmidsoftware.dsaipg.huskySort.sort.huskySortUtils.HuskyCoderFactory.englishCoder;
 import static com.phasmidsoftware.dsaipg.huskySort.sort.huskySortUtils.HuskySortHelper.generateRandomLocalDateTimeArray;
-import static com.phasmidsoftware.dsaipg.util.Utilities.*;
+import static com.phasmidsoftware.dsaipg.util.general.Utilities.*;
 
 public final class HuskySortBenchmark {
 

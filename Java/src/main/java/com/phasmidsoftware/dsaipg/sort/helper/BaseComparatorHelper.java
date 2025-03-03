@@ -1,7 +1,7 @@
 package com.phasmidsoftware.dsaipg.sort.helper;
 
 import com.phasmidsoftware.dsaipg.sort.generic.SortException;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 import java.util.Comparator;
 import java.util.Random;

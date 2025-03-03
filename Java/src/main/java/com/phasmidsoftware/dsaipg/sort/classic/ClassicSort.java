@@ -6,7 +6,7 @@ import com.phasmidsoftware.dsaipg.sort.generic.ProcessingSort;
 import com.phasmidsoftware.dsaipg.sort.generic.SortException;
 import com.phasmidsoftware.dsaipg.sort.helper.GenericSortWithHelper;
 import com.phasmidsoftware.dsaipg.sort.helper.Helper;
-import com.phasmidsoftware.dsaipg.util.Config;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
 import java.io.IOException;
 import java.util.HashMap;
