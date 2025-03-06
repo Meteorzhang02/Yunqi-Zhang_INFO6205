@@ -7,8 +7,6 @@ package com.phasmidsoftware.dsaipg.adt.symbolTable.hashtable;
 import com.phasmidsoftware.dsaipg.adt.symbolTable.BaseImmutableSymbolTable;
 import com.phasmidsoftware.dsaipg.adt.symbolTable.ST;
 
-import java.util.Set;
-
 /**
  * This class defines a specialized type of symbol table where the value corresponding to a key
  * is the count of the number of times increment has been called for that key.
@@ -16,18 +14,6 @@ import java.util.Set;
  * @param <Key> the key type.
  */
 public class FrequencyCounter<Key> extends BaseImmutableSymbolTable<Key, Integer> {
-
-    /**
-     * Retrieves the value associated with the given key from the symbol table.
-     * If the key is not present in the symbol table, the method returns a default value of 0.
-     *
-     * @param key the key whose associated value is to be returned.
-     * @return the value associated with the specified key, or 0 if the key is not present.
-     */
-    public Integer get(Key key) {
-        validateKey(key);
-        return map.getOrDefault(key, () -> 0);
-    }
 
     /**
      * Calculates the relative frequency of a specified key.
@@ -53,15 +39,6 @@ public class FrequencyCounter<Key> extends BaseImmutableSymbolTable<Key, Integer
     }
 
     /**
-     * Get the set of keys in this symbol table.
-     *
-     * @return the Set of keys.
-     */
-    public Set<Key> keys() {
-        return map.keys();
-    }
-
-    /**
      * Increments the frequency count of the specified key in the symbol table.
      * If the key does not exist in the table, it initializes its count to 1.
      * Additionally, increments the total frequency count across all keys.
@@ -80,7 +57,7 @@ throw new RuntimeException("implementation missing");
      * @param map the symbol table (ST<Key, Integer>) to be used for tracking frequencies.
      */
     public FrequencyCounter(ST<Key, Integer> map) {
-        this.map = map;
+        super(map, () -> 0);
     }
 
     /**
@@ -104,23 +81,6 @@ throw new RuntimeException("implementation missing");
         return map.toString();
     }
 
-    /**
-     * Get the size of this FrequencyCounter.
-     *
-     * @return the current size.
-     */
-    public int size() {
-        return map.size();
-    }
-
-    /**
-     * A symbol table (ST) to track key-value pairs where the key is of a
-     * generic type and the value is an {@code Integer}.
-     * This symbol table is used for managing frequencies of keys, allowing operations such as insertion, retrieval,
-     * and frequency counting in the context of the {@code FrequencyCounter}.
-     * The map is initialized to maintain the frequency counts for each key.
-     */
-    private final ST<Key, Integer> map;
     @SuppressWarnings("CanBeFinal")
     private long total = 0L;
 }

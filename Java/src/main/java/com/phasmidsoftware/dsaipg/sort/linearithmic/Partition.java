@@ -1,9 +1,13 @@
 package com.phasmidsoftware.dsaipg.sort.linearithmic;
 
 /**
- * Class to represent a partition for Quicksort.
+ * Class representing a partition of an array for sorting or manipulation purposes.
+ * The partition is defined by a range of indices within the array, specified by
+ * the starting index {@code from} (inclusive) and the ending index {@code to} (exclusive).
+ * This class is typically used in the context of divide-and-conquer sorting algorithms
+ * such as Quicksort, where subsets of an array are recursively partitioned and sorted.
  *
- * @param <X> the underlying type of the array.
+ * @param <X> the type of elements in the array, which must extend {@code Comparable<X>}.
  */
 public class Partition<X extends Comparable<X>> {
     /**

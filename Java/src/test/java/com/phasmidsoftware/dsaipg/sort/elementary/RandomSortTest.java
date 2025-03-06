@@ -141,11 +141,8 @@ public class RandomSortTest {
         assertTrue(helper.isSorted(ys));
         sorter.postProcess(ys);
         final int compares = (int) statPack.getStatistics(COMPARES).mean();
-        // NOTE: these are suppoed to match within about 12%.
         // Since we set a specific seed, this should always succeed.
-        // If we use true random seed and this test fails, just increase the delta a little.
-//        assertEquals(4950, compares);
-        System.out.println("comparisons: " + compares);
+        assertEquals(2013, compares);
         final int inversions = (int) statPack.getStatistics(INVERSIONS).mean();
         final int fixes = (int) statPack.getStatistics(FIXES).mean();
         System.out.println(statPack);

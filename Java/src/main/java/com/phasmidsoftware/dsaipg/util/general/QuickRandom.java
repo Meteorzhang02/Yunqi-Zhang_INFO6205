@@ -20,6 +20,7 @@ public class QuickRandom {
      * @return a pseudo-random number between m (inclusive) and N (exclusive).
      */
     public int get(int m) {
+        if (m < 0) throw new IllegalArgumentException("m must be non-negative");
         r ^= r << 13;
         r ^= r >> 17;
         r ^= r << 5;
@@ -35,7 +36,8 @@ public class QuickRandom {
      */
     public QuickRandom(int N, long seed) {
         this.N = N;
-        r = (int) seed;
+        if (N <= 0) throw new IllegalArgumentException("N must be positive");
+        r = (int) (seed ^ 0xAAAAAAAAL); // NOTE We do this because a seed of 0 doesn't work well!
     }
 
     /**

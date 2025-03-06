@@ -25,6 +25,38 @@ import java.io.IOException;
 public class RandomSort<X extends Comparable<X>> extends SortWithComparableHelper<X> {
 
     /**
+     * Method to sort a sub-array of an array of Xs.
+     * <p>
+     *
+     * @param xs an array of Xs to be sorted in place.
+     */
+    public void sort(X[] xs, int from, int to) {
+        int N = to - from;
+        final Helper<X> helper = getHelper();
+        boolean instrumented = helper.instrumented();
+        QuickRandom r = new QuickRandom(N, 0);
+        long inversions = instrumented ? helper.inversions(xs) : 0;
+        if (N > CUTOFF) {
+            int m = (int) (FACTOR * Utilities.lg(N) * N);
+            for (int i = m; i > 0; i--) helper.swapConditional(xs, r.get() + from, r.get());
+            if (instrumented) {
+                final long currentInversions = helper.inversions(xs);
+                final long fixes = inversions - currentInversions;
+                inversions = currentInversions;
+                System.out.println("pre-processor: inversions=" + currentInversions + ", fixes=" + fixes + ", comparisons=" + m);
+            }
+        }
+        new InsertionSort<>(helper).sort(xs, from, to);
+        if (instrumented) {
+            String s = helper.showStats();
+            System.out.println("after insertion sort: " + s);
+            final long currentInversions = helper.inversions(xs);
+            final long fixes = inversions - currentInversions;
+            System.out.println("insertion sort: inversions=" + currentInversions + ", fixes=" + fixes);
+        }
+    }
+
+    /**
      * Constructor for RandomSort
      *
      * @param N      the number elements we expect to sort.
@@ -52,41 +84,6 @@ public class RandomSort<X extends Comparable<X>> extends SortWithComparableHelpe
      */
     public RandomSort(Helper<X> helper) {
         super(helper);
-    }
-
-    /**
-     * Method to sort a sub-array of an array of Xs.
-     * <p>
-     *
-     * @param xs an array of Xs to be sorted in place.
-     */
-    public void sort(X[] xs, int from, int to) {
-        int N = to - from;
-        final Helper<X> helper = getHelper();
-        boolean instrumented = helper.instrumented();
-        QuickRandom r = new QuickRandom(N);
-        long inversions = instrumented ? helper.inversions(xs) : 0;
-        if (N > CUTOFF) {
-            int m = (int) (FACTOR * Utilities.lg(N) * N);
-            for (int i = m; i > 0; i--) {
-                int j = r.get() + from;
-                helper.swapConditional(xs, j, r.get());
-            }
-            if (instrumented) {
-                final long currentInversions = helper.inversions(xs);
-                final long fixes = inversions - currentInversions;
-                inversions = currentInversions;
-                System.out.println("pre-processor: inversions=" + currentInversions + ", fixes=" + fixes + ", comparisons=" + m);
-            }
-        }
-        new InsertionSort<>(helper).sort(xs, from, to);
-        if (instrumented) {
-            String s = helper.showStats();
-            System.out.println("after insertion sort: " + s);
-            final long currentInversions = helper.inversions(xs);
-            final long fixes = inversions - currentInversions;
-            System.out.println("insertion sort: inversions=" + currentInversions + ", fixes=" + fixes);
-        }
     }
 
     public static final String DESCRIPTION = "Random sort";
