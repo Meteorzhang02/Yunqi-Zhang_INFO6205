@@ -51,6 +51,16 @@ public class ComparableHelperTest {
     }
 
     @Test
+    public void testInverted() {
+        for (int i = 0; i < 100; i++) {
+            Integer[] pair = helper.randomPair(Integer.class, r -> r.nextInt(10));
+            boolean cf0 = pair[0] > pair[1];
+            boolean cf2 = helper.inverted(pair, 0, 1);
+            assertEquals(cf0, cf2);
+        }
+    }
+
+    @Test
     public void swapConditional() {
         for (int i = 0; i < 100; i++) {
             Integer[] pair = helper.randomPair(Integer.class, r -> r.nextInt(10));

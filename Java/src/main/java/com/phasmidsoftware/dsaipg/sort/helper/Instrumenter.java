@@ -117,8 +117,8 @@ public class Instrumenter implements Instrument {
      * Method to keep track of hits (array accesses that MAY not be in cache)...
      * but only if instrumenting.
      */
-    public void incrementLookups() {
-        if (countLookups) lookups++;
+    public void incrementLookups(long n) {
+        if (countLookups) lookups += n;
     }
 
     /**

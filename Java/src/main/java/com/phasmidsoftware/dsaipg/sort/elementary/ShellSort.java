@@ -23,12 +23,18 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
+import static com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmark.BENCHMARKSTRINGSORTERS;
+
 /**
  * Implementation of ShellSort, a generalization of insertion sort which allows
  * the exchange of items that are far apart, defined by "gap" sequences.
  * This implementation of ShellSort uses various gap sequences, selectable by
  * specified modes. It provides versatility and performance improvements for
  * diverse data distributions.
+ *
+ * NOTE that when invoking ShellSort with mode 1 (should be identical to InsertionSort),
+ * we actually do fractionally more hits, but slightly fewer comparisons, than InsertionSort.
+ * See the method doInstrumentedHSort for a slightly better explanation.
  *
  * @param <X> the type parameter which extends Comparable, allowing comparison
  *            of elements.
@@ -45,12 +51,15 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
     public void sort(X[] xs, int from, int to) {
         H h = new H(to - from, m);
         int gap = h.first();
+//        try (Stopwatch stopwatch = new Stopwatch("microseconds")) {
         while (gap > 0) {
             hSort(gap, xs, from, to);
+//            logger.debug("hSort time: "+stopwatch.lap()+" microseconds");
             if (shellFunction != null)
                 shellFunction.accept(getHelper());
             gap = h.next();
         }
+//        }
     }
 
     /**
@@ -65,42 +74,7 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
     }
 
     /**
-     * The main method demonstrates the performance evaluation of a Shell Sort algorithm
-     * for various array sizes using an instrumented helper and benchmark timer.
-     * It iteratively doubles the array size starting from 64000 up to a maximum of 100000.
-     * The method collects and displays statistics including the number of comparisons,
-     * swaps, hits, and the execution time for sorting the arrays.
-     *
-     * @param args command-line arguments passed to the program, not used in this implementation.
-     */
-    public static void main(String[] args) {
-        int N = 64000;
-
-        while (N <= 100000) {
-            int nRuns = 20;
-            InstrumentedComparatorHelper<Integer> instrumentedHelper = new InstrumentedComparableHelper<>("ShellSort", N, nRuns, Config_Benchmark.setupConfig("true", "false", "0", "0", "", ""));
-            ShellSort<Integer> s = new ShellSort<>(5, instrumentedHelper);
-            int j = N;
-            s.init(j);
-            Integer[] xs = instrumentedHelper.random(Integer.class, r -> r.nextInt(j));
-            Benchmark<Boolean> benchmark = new Benchmark_Timer<>("Sorting", b -> s.sort(xs, 0, j));
-            double nTime = benchmark.run(true, nRuns);
-            long nCompares = instrumentedHelper.getCompares();
-            long nSwaps = instrumentedHelper.getSwaps();
-            long nHits = instrumentedHelper.getHits();
-
-            System.out.println("When array size is: " + j);
-            System.out.println("Compares: " + nCompares);
-            System.out.println("Swaps: " + nSwaps);
-            System.out.println("Hits: " + nHits);
-            System.out.println("Time: " + nTime);
-
-            N = N * 2;
-        }
-    }
-
-    /**
-     * Primary constructor for ShellSort with configuration and size.
+     * Primary constructor for ShellSort with mode, size, runs, and configuration.
      *
      * @param m      the mode, that is to say the "gap" (h) sequence to follow:
      *               1: ordinary insertion sort;
@@ -115,8 +89,7 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
     public ShellSort(int m, int N, int nRuns, Config config) {
         super(DESCRIPTION + m, N, nRuns, config);
         this.m = m;
-        // TODO get trackInversions from the Config file
-        trackInversions = false;
+        trackInversions = config.getBoolean(BENCHMARKSTRINGSORTERS, "trackinversions");
     }
 
     /**
@@ -152,38 +125,12 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
         trackInversions = false;
     }
 
-    public static final String DESCRIPTION = "Shell sort in mode ";
-
     /**
-     * Private method to h-sort an array.
-     *
-     * @param h    the stride (gap) of the h-sort.
-     * @param xs   the array to be sorted.
-     * @param from the first index to be considered in array xs.
-     * @param to   one plus the last index to be considered in array xs.
+     * Description string that identifies the mode of the Shell Sort operation being performed.
+     * This constant is used as a prefix in logging or message output to indicate
+     * the current mode (or gap sequence) used by the algorithm.
      */
-    private void hSort(int h, X[] xs, int from, int to) {
-        final Helper<X> helper = getHelper();
-        long inversionsStart = 0;
-        if (trackInversions && helper.instrumented()) {
-            inversionsStart = helper.inversions(xs);
-            logger.debug("hSort (begin) with h=" + h + ", current inversionsStart=" + inversionsStart);
-        }
-        // TODO in the following operation, we over-count hits (see InsertionSort for how to do it correctly)
-        for (int i = h + from; i < to; i++) {
-            int j = i;
-            while (j >= h + from && helper.swapConditional(xs, j - h, j)) j -= h;
-        }
-        if (trackInversions && helper.instrumented()) {
-            long inversionsEnd = helper.inversions(xs);
-            int proportionFixed = (int) (100.0 * (inversionsStart - inversionsEnd) / inversionsStart);
-            logger.debug("hSort (end) with h=" + h + ", inversions fixed=" + proportionFixed + "%");
-        }
-    }
-
-    private final int m;
-    private final boolean trackInversions;
-    private Consumer<AutoCloseable> shellFunction = null;
+    public static final String DESCRIPTION = "Shell sort in mode ";
 
     /**
      * Private inner class to provide h (gap) values.
@@ -202,7 +149,7 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
                 case 1:
                     break;
                 case 2:
-                    while (h <= N) h = 2 * (h + 1) - 1;
+                    while (h <= N / 2) h = 2 * (h + 1) - 1;
                     break;
                 case 3:
                     while (h <= N / 3) h = h * 3 + 1;
@@ -314,6 +261,41 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
     }
 
     /**
+     * The main method demonstrates the performance evaluation of a Shell Sort algorithm
+     * for various array sizes using an instrumented helper and benchmark timer.
+     * It iteratively doubles the array size starting from 64000 up to a maximum of 100000.
+     * The method collects and displays statistics including the number of comparisons,
+     * swaps, hits, and the execution time for sorting the arrays.
+     *
+     * @param args command-line arguments passed to the program, not used in this implementation.
+     */
+    public static void main(String[] args) {
+        int N = 64000;
+
+        while (N <= 100000) {
+            int nRuns = 20;
+            InstrumentedComparatorHelper<Integer> instrumentedHelper = new InstrumentedComparableHelper<>("ShellSort", N, nRuns, Config_Benchmark.setupConfig("true", "false", "0", "0", "", ""));
+            ShellSort<Integer> s = new ShellSort<>(5, instrumentedHelper);
+            int j = N;
+            s.init(j);
+            Integer[] xs = instrumentedHelper.random(Integer.class, r -> r.nextInt(j));
+            Benchmark<Boolean> benchmark = new Benchmark_Timer<>("Sorting", b -> s.sort(xs, 0, j));
+            double nTime = benchmark.run(true, nRuns);
+            long nCompares = instrumentedHelper.getCompares();
+            long nSwaps = instrumentedHelper.getSwaps();
+            long nHits = instrumentedHelper.getHits();
+
+            System.out.println("When array size is: " + j);
+            System.out.println("Compares: " + nCompares);
+            System.out.println("Swaps: " + nSwaps);
+            System.out.println("Hits: " + nHits);
+            System.out.println("Time: " + nTime);
+
+            N = N * 2;
+        }
+    }
+
+    /**
      * Executes a shell sort algorithm on the given array using the specified gap sequence mode and helper.
      *
      * @param m      the mode defining the gap sequence to follow for sorting:
@@ -353,6 +335,120 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
         }
         if (helper.instrumented()) logger.info(helper.showStats());
         return result;
+    }
+
+    /**
+     * Private method to h-sort an array.
+     *
+     * @param h    the stride (gap) of the h-sort.
+     * @param xs   the array to be sorted.
+     * @param from the first index to be considered in array xs.
+     * @param to   one plus the last index to be considered in array xs.
+     */
+    private void hSort(int h, X[] xs, int from, int to) {
+        final Helper<X> helper = getHelper();
+        if (helper.instrumented())
+            doInstrumentedHSort(h, xs, from, to, helper);
+        else
+            // XXX Straightforward hSort logic for when not instrumented
+            for (int i = h + from; i < to; i++) {
+                int j = i;
+                while (j >= h + from && helper.swapConditional(xs, j - h, j)) j -= h;
+            }
+    }
+
+    /**
+     * The mode defining the "gap" (h) sequence used for Shell Sort.
+     * <p>
+     * This variable determines the strategy used to define the gap sequence for sorting:
+     * - 1: Ordinary insertion sort.
+     * - 2: Gap sequence as powers of two minus one.
+     * - 3: Gap sequence based on the series {1, 4, 13, ...}.
+     * - 4: Sedgewick's sequence.
+     * - 5: Pratt's sequence, defined as 2^i * 3^j, where i, j >= 0.
+     * <p>
+     * This variable is final and is set during the initialization of the ShellSort class.
+     */
+    private final int m;
+    /**
+     * A boolean flag indicating whether inversions should be tracked during the sorting process.
+     * When enabled, the algorithm will monitor and potentially log the number and positions
+     * of inversions in the data being sorted. This can be useful for debugging or analyzing
+     * the efficiency of the sorting algorithm.
+     */
+    private final boolean trackInversions;
+    /**
+     * A consumer function used in the context of the Shell Sort implementation.
+     * This function can be set or modified to perform specific actions
+     * during the execution of the sorting algorithm, particularly after each "shell"
+     * (i.e., each h-step) is processed. It allows the execution of custom operations,
+     * such as resource management or instrumentation tasks, by consuming an
+     * instance of {@link AutoCloseable}.
+     * <p>
+     * Initially, this variable is null. Its purpose can be defined or overridden
+     * using the setShellFunction method provided in the ShellSort class.
+     */
+    private Consumer<AutoCloseable> shellFunction = null;
+
+    /**
+     * Performs an instrumented h-sort on a segment of an array using the specified helper.
+     * The method tracks inversions if enabled and provides debug logging for before and after state changes.
+     * <p>
+     * NOTE that when mode is 1, this results in slightly fewer comparison but slightly more hits
+     * than Insertion sort.
+     * The exact causes remain a mystery as of now.
+     *
+     * @param h      the stride (gap) used for h-sorting.
+     * @param xs     the array of elements to be sorted.
+     * @param from   the starting index (inclusive) of the sub-array to be sorted.
+     * @param to     the ending index (exclusive) of the sub-array to be sorted.
+     * @param helper an instance of the Helper interface, providing utilities such as comparisons and inversion tracking.
+     */
+    private void doInstrumentedHSort(int h, X[] xs, int from, int to, Helper<X> helper) {
+        long inversionsStart = 0;
+        if (trackInversions) {
+            inversionsStart = helper.inversions(xs);
+            logger.debug("hSort (begin) with h=" + h + ", current inversionsStart=" + inversionsStart);
+        }
+        // XXX hSort logic that does not over-count hits, etc.
+        for (int k = 0; k < h; k++) {
+            X a = helper.get(xs, from + k);
+            for (int i = from + h + k; i < to; i += h)
+                a = doInsert(xs, h, from, i, a, helper.get(xs, i), helper);
+        }
+        if (trackInversions) {
+            long inversionsEnd = helper.inversions(xs);
+            long fixed = inversionsStart - inversionsEnd;
+            int proportionFixed = (int) (100.0 * fixed / inversionsStart);
+            logger.debug("hSort (end) with h=" + h + ", inversions fixed=" + fixed + " (" + proportionFixed + "%)");
+        }
+    }
+
+    /**
+     * Performs a modified insertion process within a h-sorted sub-array during the Shell Sort algorithm.
+     *
+     * @param xs      the array of elements to be sorted.
+     * @param h       the current gap (stride) used in the Shell Sort process.
+     * @param from    the starting index of the sub-array being processed.
+     * @param i       the current index in the sub-array where the insertion is performed.
+     * @param a       an element of type X currently being compared and/or swapped.
+     * @param b       another element of type X being swapped into position.
+     * @param helper  an instance of the Helper<X> interface used to perform comparisons and swaps.
+     * @param <X>     the type parameter extending Comparable, representing the elements in the array.
+     * @return the element of type X that will replace `a` after this process is complete.
+     */
+    private static <X extends Comparable<X>> X doInsert(X[] xs, int h, int from, int i, X a, X b, Helper<X> helper) {
+        X aNext = b;
+        int j = i;
+        while (true) {
+            boolean swapped = helper.swapConditional(xs, a, j - h, j, b);
+            if (!swapped) break;
+            if (aNext == b) aNext = a;
+            j -= h;
+            if (j - h < from) break;
+            a = helper.get(xs, j - h);
+        }
+        return aNext;
     }
 
     /**

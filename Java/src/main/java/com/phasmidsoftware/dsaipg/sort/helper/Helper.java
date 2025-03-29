@@ -183,6 +183,15 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
      */
     default void copyBlock(X[] source, int i, X[] target, int j, int n) {
         System.arraycopy(source, i, target, j, n);
+        // CONSIDER something like the following (which comes from binarySort within TimSort):
+//        switch (n) {
+//            case 2:  a[left + 2] = a[left + 1];
+//            case 1:  a[left + 1] = a[left];
+//                break;
+//            default: System.arraycopy(a, left, a, left + 1, n);
+//        }
+//        a[left] = pivot;
+
     }
 
     /**
@@ -338,6 +347,7 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
 
     /**
      * Compare values xs[i] and w and return true if xs[i] is less than w.
+     * NOTE: only used by unit tests
      *
      * @param xs the array.
      * @param i  the index of the first value.
@@ -370,6 +380,18 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
      */
     default boolean less(X[] xs, int i, int j) {
         return less(xs, xs[i], j);
+    }
+
+    /**
+     * Compare values xs[i] and xs[j] and return true if xs[i] is more than xs[j].
+     *
+     * @param xs the array.
+     * @param i  the index of the first value.
+     * @param j  the index of the second value.
+     * @return true if xs[i] is more than xs[j].
+     */
+    default boolean inverted(X[] xs, int i, int j) {
+        return compare(xs, i, j) > 0;
     }
 
     /**
@@ -412,14 +434,11 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
      */
     default void sortTrio(X[] xs, int from, int to) {
         if (to == from + 3) {
-            X a = get(xs, from);
-            X b = get(xs, from + 1);
-            X c = get(xs, from + 2);
-            boolean swappedAB = swapConditional(xs, a, from, from + 1, b);
-            if (swappedAB) b = a;
-            boolean swappedBC = swapConditional(xs, b, from + 1, from + 2, c);
-            if (!swappedAB && !swappedBC) return;
-            if (swappedBC) swapConditional(xs, from, from + 1, c);
+            boolean swappedXY = swapConditional(xs, from, from + 1);
+            boolean swappedYZ = swapConditional(xs, from + 1, from + 2);
+            if (!swappedXY && !swappedYZ) return; // xyz
+            if (swappedYZ) swapConditional(xs, from, from + 1);
+            else swapConditional(xs, from, from + 2);
         }
     }
 
@@ -515,7 +534,7 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
      * @param i  the index of the element to be swapped into the ordered array xs[0...i-1].
      */
     default void swapIntoSorted(X[] xs, int i) {
-        int j = binarySearch(xs, 0, i, xs[i]);
+        int j = binarySearch(xs, 0, i, get(xs, i));
         if (j < 0) j = -j - 1;
         if (j < i) swapInto(xs, j, i);
     }

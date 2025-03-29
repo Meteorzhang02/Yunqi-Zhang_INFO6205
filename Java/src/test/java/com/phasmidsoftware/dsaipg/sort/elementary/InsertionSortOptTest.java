@@ -48,9 +48,11 @@ public class InsertionSortOptTest {
         assertTrue(helper.isSorted(ys));
         sorter.postProcess(ys);
         final int hits = (int) statPack.getStatistics(HITS).mean();
-        assertEquals(5, hits);
+        assertEquals(8, hits);
         final int compares = (int) statPack.getStatistics(COMPARES).mean();
         assertEquals(5, compares);
+        final int lookups = (int) statPack.getStatistics(LOOKUPS).mean();
+        assertEquals(3, lookups); // XXX should be Omega(n-1)
         final int inversionsFound = (int) statPack.getStatistics(INVERSIONS).mean();
         assertEquals(0L, inversionsFound);
         final int fixes = (int) statPack.getStatistics(FIXES).mean();
@@ -75,9 +77,11 @@ public class InsertionSortOptTest {
         final PrivateMethodTester privateMethodTester = new PrivateMethodTester(helper);
         final StatPack statPack = (StatPack) privateMethodTester.invokePrivate("getStatPack");
         final int hits = (int) statPack.getStatistics(HITS).mean();
-        assertEquals(14, hits);
+        assertEquals(19, hits);
         final int compares = (int) statPack.getStatistics(COMPARES).mean();
         assertEquals(4, compares);
+        final int lookups = (int) statPack.getStatistics(LOOKUPS).mean();
+        assertEquals(3, lookups);
         final int inversionsFound = (int) statPack.getStatistics(INVERSIONS).mean();
         assertEquals(0L, inversionsFound);
     }

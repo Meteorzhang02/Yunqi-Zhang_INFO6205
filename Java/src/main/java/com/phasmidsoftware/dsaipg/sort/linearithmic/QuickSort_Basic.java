@@ -159,6 +159,7 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
              */
             public boolean update(Y[] xs, int i) {
                 helper.incrementHits(1);
+                helper.incrementLookups(1);
                 this.x = xs[i];
                 return true;
             }

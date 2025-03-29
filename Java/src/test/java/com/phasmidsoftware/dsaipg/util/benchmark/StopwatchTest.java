@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Random;
 
+import static org.junit.Assert.assertEquals;
+
 public class StopwatchTest {
 
     @Test
@@ -15,6 +17,47 @@ public class StopwatchTest {
         try (Stopwatch target = new Stopwatch()) {
             Arrays.sort(xs);
             System.out.println(target.lap());
+        }
+    }
+
+    @Test
+    public void lap1a() {
+        try (Stopwatch target = new Stopwatch()) {
+            Thread.sleep(10);
+            long lap = target.lap();
+            assertEquals(10, lap, 5);
+        } catch (InterruptedException ignored) {
+        }
+    }
+
+    @Test
+    public void lap1b() {
+        try (Stopwatch target = new Stopwatch("microseconds")) {
+            Thread.sleep(10);
+            long lap = target.lap();
+            assertEquals(10000, lap, 2600);
+        } catch (InterruptedException ignored) {
+        }
+    }
+
+
+    @Test
+    public void lap1c() {
+        try (Stopwatch target = new Stopwatch("nanoseconds")) {
+            Thread.sleep(10);
+            long lap = target.lap();
+            assertEquals(10000000, lap, 2600000);
+        } catch (InterruptedException ignored) {
+        }
+    }
+
+    @Test // Slow!
+    public void lap1d() {
+        try (Stopwatch target = new Stopwatch("seconds")) {
+            Thread.sleep(2000);
+            long lap = target.lap();
+            assertEquals(2, lap, 0.1);
+        } catch (InterruptedException ignored) {
         }
     }
 

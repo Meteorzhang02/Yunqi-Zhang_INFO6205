@@ -69,9 +69,17 @@ public class Timer {
      * @return the average milliseconds per repetition.
      */
     public <T, U> double repeat(int n, boolean warmup, Supplier<T> supplier, Function<T, U> function, UnaryOperator<T> preFunction, Consumer<U> postFunction) {
-        // TO BE IMPLEMENTED : note that the timer is running when this method is called and should still be running when it returns.
-         return 0;
-        // END SOLUTION
+        // NOTE that the timer is running when this method is called and should still be running when it returns.
+        pause();
+        doTrace(() -> "repeat: with " + n + " runs"); // NOTE optional
+        doTrace(warmup, () -> "warmup"); // NOTE optional
+        int lastx = -1;
+        for (int i = 0; i < n; i++)
+            lastx = doRepeatForIteration(n, warmup, supplier, function, preFunction, postFunction, lastx, i);
+        final double result = meanLapTime();
+        System.out.print("\r");
+        resume();
+        return result;
     }
 
     /**
@@ -173,6 +181,25 @@ public class Timer {
         Supplier<String> f = () -> "create new timer";
         doTrace(f);
         resume();
+    }
+
+    /**
+     * Executes a single iteration of a timed operation, optionally performing pre-processing and post-processing
+     * functions, and updates status based on the iteration progress.
+     *
+     * @param n            the total number of iterations to be performed.
+     * @param warmup       indicates if the operation is in the warmup phase (true) or actual execution (false).
+     * @param supplier     a supplier function that provides the initial input value for the operation.
+     * @param function     the main function to be timed, which processes the input value.
+     * @param preFunction  an optional function applied to preprocess the input before timing (may be null).
+     * @param postFunction an optional function applied to post-process the result after timing (may be null).
+     * @param lastx        the previous state value used for status updates.
+     * @param i            the current iteration index, used for progress calculations.
+     * @return the updated lastx value after status update.
+     */
+    private <T, U> int doRepeatForIteration(int n, boolean warmup, Supplier<T> supplier, Function<T, U> function, UnaryOperator<T> preFunction, Consumer<U> postFunction, int lastx, int i) {
+        // TO BE IMPLEMENTED : note that the timer should be paused when this method is invoked. You may use doPrintStatus to show progress (but optional).
+        return lastx;
     }
 
     /**

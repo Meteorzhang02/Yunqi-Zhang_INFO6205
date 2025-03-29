@@ -46,6 +46,7 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      */
     public X get(X[] xs, int i) {
         instrumenter.incrementHits(1);
+        instrumenter.incrementLookups(1);
         return xs[i];
     }
 
@@ -153,10 +154,25 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      * @param i  the index of the destination of xs[j].
      * @param j  the index of the right-most element to be involved in the swap.
      */
-    public void swapInto(X[] xs, int i, int j) {
+    public void swapInto(X[] xs, int i, int j, X x) {
         instrumenter.incrementSwaps(j - i);
         instrumenter.incrementFixes(j - i);
-        super.swapInto(xs, i, j);
+        instrumenter.incrementHits(1); // for the final assignment
+        super.swapInto(xs, i, j, x);
+    }
+
+    /**
+     * Method to perform a stable swap using half-exchanges,
+     * i.e. between xs[i] and xs[j] such that xs[j] is moved to index i,
+     * and xs[i] through xs[j-1] are all moved up one.
+     * This type of swap is used by insertion sort.
+     *
+     * @param xs the array of Xs.
+     * @param i  the index of the destination of xs[j].
+     * @param j  the index of the right-most element to be involved in the swap.
+     */
+    public void swapInto(X[] xs, int i, int j) {
+        this.swapInto(xs, i, j, get(xs, j));
     }
 
     /**
@@ -171,9 +187,10 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      * @param i  the index of the element to be swapped into the ordered array xs[0...i-1].
      */
     public void swapIntoSorted(X[] xs, int i) {
-        int j = binarySearch(xs, 0, i, xs[i]);
+        X x = get(xs, i);
+        int j = binarySearch(xs, 0, i, x);
         if (j < 0) j = -j - 1;
-        if (j < i) swapInto(xs, j, i);
+        if (j < i) swapInto(xs, j, i, x);
     }
 
     /**
@@ -254,6 +271,40 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
     }
 
     /**
+     * Method to sort a trio of adjacent elements.
+     * It is the caller's responsibility to ensure that to - from = 3
+     * NOTE this method is more complicated than it might be.
+     * That is so that we don't incur any additional hits or lookups.
+     *  @param xs   the array of X elements.
+     *
+     * @param from the index of the first element.
+     * @param to   one plus the index of the third element.
+     */
+    @Override
+    public void sortTrio(X[] xs, int from, int to) {
+        if (to == from + 3) {
+            X x = get(xs, from);
+            X y = get(xs, from + 1);
+            boolean swappedXY = swapConditional(xs, x, from, from + 1, y);
+            if (swappedXY) {
+                X t = x;
+                x = y;
+                y = t;
+            }
+            X z = get(xs, from + 2);
+            boolean swappedYZ = swapConditional(xs, y, from + 1, from + 2, z);
+            if (!swappedXY && !swappedYZ) return; // xyz
+            if (swappedYZ) {
+                X t = z;
+                z = y;
+                y = t;
+            }
+            if (swappedYZ) swapConditional(xs, x, from, from + 1, y);
+            else swapConditional(xs, x, from, from + 2, z);
+        }
+    }
+
+    /**
      * Copy the element at source[j] into target[i]
      *
      * @param source the source array.
@@ -308,6 +359,7 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
         super.distributeBlock(source, from, to, target, f);
         instrumenter.incrementCopies(to - from);
         instrumenter.incrementHits((to - from) * 2L);
+        instrumenter.incrementLookups(to - from);
     }
 
     /**
@@ -319,6 +371,7 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      */
     public X[] copyArray(X[] a) {
         instrumenter.incrementCopies(a.length);
+        instrumenter.incrementHits(2L * a.length);
         return super.copyArray(a);
     }
 
@@ -331,9 +384,6 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      */
     public int compare(X v, X w) {
         instrumenter.incrementCompares();
-        // NOTE in the following lines, we depend on the fact that X is an object type (and not a primitive).
-        instrumenter.incrementLookups();
-        instrumenter.incrementLookups();
         return pureComparison(v, w);
     }
 

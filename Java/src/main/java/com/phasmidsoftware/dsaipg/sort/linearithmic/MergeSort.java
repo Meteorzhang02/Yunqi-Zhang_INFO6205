@@ -74,7 +74,6 @@ public class MergeSort<X extends Comparable<X>> extends SortWithComparableHelper
     public void sort(X[] a, int from, int to) {
         Config config = helper.getConfig();
         boolean noCopy = config.getBoolean(MERGESORT, NOCOPY);
-        // CONSIDER don't copy but just allocate according to the xs/aux interchange optimization
         @SuppressWarnings("unchecked") X[] aux = noCopy ? helper.copyArray(a) : (X[]) new Comparable[a.length];
         sort(a, aux, from, to);
     }
@@ -129,36 +128,41 @@ public class MergeSort<X extends Comparable<X>> extends SortWithComparableHelper
 
     /**
      * Sorts the given range of the array using merge sort with optional optimizations for insurance and no-copy.
+     * When called with no-copy true, both primary and secondary partitions
+     * (but not necessary the entire arrays) will be identical.
+     * When called with no-copy false, the secondary array will be undefined.
      *
-     * @param a    the primary array used for sorting.
-     * @param aux  the auxiliary array used for intermediate storage during sorting.
+     * @param primary    the primary array.
+     *                   If the partition is small, insertion sort will be applied to this array.
+     * @param secondary  the auxiliary array used for intermediate storage during sorting.
      * @param from the starting index (inclusive) of the range to be sorted.
      * @param to   the ending index (exclusive) of the range to be sorted.
      */
-    private void sort(X[] a, X[] aux, int from, int to) {
+    private void sort(X[] primary, X[] secondary, int from, int to) {
         Config config = helper.getConfig();
+        boolean noCopy = config.getBoolean(MERGESORT, NOCOPY); // XXX I recommend that you test noCopy before testing insurance.
         boolean insurance = config.getBoolean(MERGESORT, INSURANCE);
-        boolean noCopy = config.getBoolean(MERGESORT, NOCOPY);
+        assert Arrays.compare(primary, from, to, secondary, from, to) == 0 : "MergeSort::sort: partitions are not the same";
         if (to <= from + helper.cutoff()) { // XXX check that a cutoff value of 1 effectively stops the cutoff mechanism.
-            insertionSort.sort(a, from, to);
+            insertionSort.sort(primary, from, to);
             return;
         }
 
-        // TO BE IMPLEMENTED  : implement merge sort with insurance and no-copy optimizations
+        // TO BE IMPLEMENTED  : implement merge sort with no-copy and insurance optimizations (use helper.less and helper.copyBlock)
 throw new RuntimeException("implementation missing");
     }
 
     /**
-     * Merges two sorted subarrays into a combined sorted array.
-     * The first subarray is defined as [from, mid) and the second subarray as [mid, to).
-     * Elements from these subarrays are copied into the result array in sorted order.
+     * Merges two sorted partitions (subarrays) into a combined sorted partition (subarray).
+     * The first partition is defined as [from, mid) and the second partition as [mid, to).
+     * Elements from these partitions are copied into the result array in sorted order.
      * CONSIDER combine with MergeSortBasic, perhaps.
      *
-     * @param sorted The source array containing the two sorted subarrays to be merged.
+     * @param sorted The source array containing the two sorted partitions to be merged.
      * @param result The destination array where the merged results will be stored.
-     * @param from   The starting index (inclusive) of the first subarray.
-     * @param mid    The ending index (exclusive) of the first subarray and the starting index of the second subarray.
-     * @param to     The ending index (exclusive) of the second subarray.
+     * @param from   The starting index (inclusive) of the first partition.
+     * @param mid    The ending index (exclusive) of the first partition and the starting index of the second partition.
+     * @param to     The ending index (exclusive) of the second partition.
      */
     private void merge(X[] sorted, X[] result, int from, int mid, int to) {
         int i = from;

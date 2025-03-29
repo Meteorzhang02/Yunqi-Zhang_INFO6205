@@ -146,11 +146,11 @@ public interface Instrument {
     void incrementHits(long n);
 
     /**
-     * Increments the count of lookups performed by the instrument.
-     * This method is used to track the number of lookup operations
-     * in the context of performance measurement or algorithm analysis.
+     * Increments the count of lookup operations by the specified value.
+     *
+     * @param n the number to increase the lookup count; must be a non-negative value
      */
-    void incrementLookups();
+    void incrementLookups(long n);
 
     /**
      * Increments the count of fixes by the specified amount.

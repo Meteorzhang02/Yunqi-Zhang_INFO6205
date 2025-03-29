@@ -171,9 +171,11 @@ public abstract class BaseHelper<X> {
      * Increments the count of lookups performed by delegating to the associated instrumenter.
      * This method is used to track the number of lookup operations for analysis
      * and performance measurement purposes.
+     *
+     * @param n the number of lookups to be counted.
      */
-    public void incrementLookups() {
-        instrumenter.incrementLookups();
+    public void incrementLookups(long n) {
+        instrumenter.incrementLookups(n);
     }
 
     /**

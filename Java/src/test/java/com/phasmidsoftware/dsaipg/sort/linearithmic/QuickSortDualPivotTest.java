@@ -168,7 +168,7 @@ public class QuickSortDualPivotTest {
         assertEquals(Integer.valueOf(5), ys[2]);
         final PrivateMethodTester privateMethodTester = new PrivateMethodTester(helper);
         final StatPack statPack = (StatPack) privateMethodTester.invokePrivate("getStatPack");
-        assertEquals(2, (int) statPack.getStatistics(COMPARES).mean());
+        assertEquals(3, (int) statPack.getStatistics(COMPARES).mean());
         assertEquals(1, (int) statPack.getStatistics(SWAPS).mean());
         assertEquals(1, (int) statPack.getStatistics(FIXES).mean());
         assertEquals(5, (int) statPack.getStatistics(HITS).mean());

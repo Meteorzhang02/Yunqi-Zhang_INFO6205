@@ -160,13 +160,14 @@ public class ClassicHelper<X> implements NonComparableHelper<X> {
     }
 
     /**
-     * Increments the lookup count for the associated instrumenter.
-     * This method delegates the operation to the {@code instrumenter} instance's
-     * {@code incrementLookups()} method, which increases the internal count of
-     * lookup operations performed within this helper instance.
+     * Increments the count of lookups performed by the instrumenter by the specified value.
+     * This method is used to track and record the number of lookup operations,
+     * which can be useful for performance measurement or analysis.
+     *
+     * @param n the number of lookups to increment. Must be a non-negative value.
      */
-    public void incrementLookups() {
-        instrumenter.incrementLookups();
+    public void incrementLookups(long n) {
+        instrumenter.incrementLookups(n);
     }
 
     /**

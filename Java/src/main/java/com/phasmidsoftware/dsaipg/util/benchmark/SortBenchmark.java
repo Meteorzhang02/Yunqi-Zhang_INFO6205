@@ -13,7 +13,6 @@ import com.phasmidsoftware.dsaipg.sort.generic.SortWithComparableHelper;
 import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
 import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
-import com.phasmidsoftware.dsaipg.sort.linearithmic.TimSort;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.*;
 import com.phasmidsoftware.dsaipg.util.config.Config;
 import com.phasmidsoftware.dsaipg.util.general.CodePointMapper;
@@ -145,7 +144,7 @@ public class SortBenchmark {
 
         // NOTE this is supposed to match the previous benchmark run exactly. I don't understand why it takes rather less time.
         if (isConfigBenchmarkDateSorter("timsort")) {
-            logger.info(benchmarkFactory("Repeat ProcessingSort LocalDateTimes using timSort::mutatingSort", new TimSort<>(helper)::mutatingSort, null).runFromSupplier(localDateTimeSupplier, 100) + "ms");
+            logger.info(benchmarkFactory("Repeat ProcessingSort LocalDateTimes using timSort::mutatingSort", new TimSortWrapper<>(helper)::mutatingSort, null).runFromSupplier(localDateTimeSupplier, 100) + "ms");
             // NOTE this is intended to replace the run two lines previous. It should take the exact same amount of time.
             runDateTimeSortBenchmark(LocalDateTime.class, localDateTimes, n, 100);
         }
@@ -198,8 +197,8 @@ public class SortBenchmark {
 
         // Linearithmic sorts
         if (isConfigBenchmarkStringSorter("timsort") && nRunsLinearithmic > 0)
-            try (SortWithHelper<String> sorter = TimSort.CaseInsensitiveSort(nWords, config)) {
-                runStringSortBenchmark(words, nWords, nRunsLinearithmic * 2, sorter, timeLoggersLinearithmic);
+            try (SortWithHelper<String> sorter = TimSortWrapper.CaseInsensitiveSort(nWords, config)) {
+                runStringSortBenchmark(words, nWords, nRunsLinearithmic * 20, sorter, timeLoggersLinearithmic);
             }
 
         if (isConfigBenchmarkStringSorter(MERGESORT))
@@ -236,28 +235,35 @@ public class SortBenchmark {
                 runStringSortBenchmark(words, nWords, nRunsLinearithmic, sorter, timeLoggersLinearithmic);
             }
 
+        // XXX Sub-quadratic sorts
         if (isConfigBenchmarkStringSorter("shellsort")) {
-            int nRunsSubQuadratic = estimateRuns(totalWork, Math.pow(nWords, 4.0 / 3) / 2);
+            int mode = config.getInt(BENCHMARKSTRINGSORTERS, "shellsortmode", 4);
+            double growthExponent = 6.0 / 5; // For default case of 4
+            if (mode != 4) {  growthExponent = 4.0 / 3;  }
+            int nRunsSubQuadratic = estimateRuns(totalWork, Math.pow(nWords, growthExponent) / 2);
+            System.out.println("runsSubQuadratic: " + nRunsSubQuadratic);
             if (nRunsSubQuadratic > 0)
-                try (SortWithHelper<String> sorter = new ShellSort<>(4, nWords, nRunsSubQuadratic, config)) {
-                    runStringSortBenchmark(words, nWords, nRunsSubQuadratic, sorter, timeLoggersSubQuadratic);
+                try (SortWithHelper<String> sorter = new ShellSort<>(mode, nWords, nRunsSubQuadratic, config)) {
+                    runStringSortBenchmark(words, nWords, nRunsSubQuadratic, sorter, timeLoggersSubQuadratic(growthExponent));
                 }
         }
 
-        // Quadratic sorts.
+        // XXX Quadratic sorts.
         if (isConfigBenchmarkStringSorter("insertionsort") || isConfigBenchmarkStringSorter("insertionsortopt") || isConfigBenchmarkStringSorter("bubblesort")) {
             double inversions = meanInversions(nWords);
-            int nRunsQuadraticQuick = estimateRuns(totalWork * 15, inversions);
-            int nRunsQuadraticSlow = estimateRuns(totalWork * 4, inversions);
+            int nRunsQuadraticQuick = estimateRuns(totalWork * 300, inversions);
+            int nRunsQuadraticSlow = estimateRuns(totalWork * 40, inversions);
+            int nRunsQuadraticSomewhatSlow = estimateRuns(totalWork * 120, inversions);
+            System.out.println("runsQuadraticQuick: " + nRunsQuadraticQuick);
 
             if (isConfigBenchmarkStringSorter("insertionsortopt") && nRunsQuadraticQuick > 0)
                 try (SortWithHelper<String> sorter = new InsertionSortOpt<>(InsertionSortOpt.DESCRIPTION, nWords, nRunsQuadraticQuick, config)) {
                     runStringSortBenchmark(words, nWords, nRunsQuadraticQuick, sorter, timeLoggersQuadratic);
                 }
 
-            if (isConfigBenchmarkStringSorter("insertionsort") && nRunsQuadraticQuick > 0)
-                try (SortWithHelper<String> sorter = new InsertionSort<>(InsertionSort.DESCRIPTION, nWords, nRunsQuadraticQuick, config)) {
-                    runStringSortBenchmark(words, nWords, nRunsQuadraticQuick, sorter, timeLoggersQuadratic);
+            if (isConfigBenchmarkStringSorter("insertionsort") && nRunsQuadraticSomewhatSlow > 0)
+                try (SortWithHelper<String> sorter = new InsertionSort<>(InsertionSort.DESCRIPTION, nWords, nRunsQuadraticSomewhatSlow, config)) {
+                    runStringSortBenchmark(words, nWords, nRunsQuadraticSomewhatSlow, sorter, timeLoggersQuadratic);
                 }
 
             if (isConfigBenchmarkStringSorter("bubblesort") && nRunsQuadraticSlow > 0)
@@ -366,9 +372,11 @@ public class SortBenchmark {
      */
     private void sortIntegersByShellSort(int N, int runs) {
         int m = config.getInt(BENCHMARKINTEGERSORTERS, "mode", 4);
+        double growthExponent = 6.0 / 5; // For default case of 4
+        if (m != 3) {  growthExponent = 4.0 / 3;  }
         SortWithHelper<Integer> sorter = new ShellSort<>(m, N, runs, config);
         Integer[] numbers = sorter.getHelper().random(Integer.class, Random::nextInt);
-        runIntegerSortBenchmark(numbers, N, runs, sorter, sorter::preProcess, timeLoggersSubQuadratic);
+        runIntegerSortBenchmark(numbers, N, runs, sorter, sorter::preProcess, timeLoggersSubQuadratic(growthExponent));
     }
 
     /**
@@ -420,8 +428,8 @@ public class SortBenchmark {
         if (N > Integer.MAX_VALUE) throw new SortException("number of elements is too large");
         int x = (int) N;
         logger.info("############################### " + x + " words ###############################");
-//        String resource = "eng-uk_web_2002_" + (x < 50000 ? "10K" : x < 200000 ? "100K" : "1M") + "-sentences.txt";
-        String resource = "eng-uk_web_2002_" + (x < 50000 ? "10K" : "100K") + "-sentences.txt";
+//        String resource = "/eng-uk_web_2002_" + (x < 50000 ? "10K" : x < 200000 ? "100K" : "1M") + "-sentences.txt";
+        String resource = "/eng-uk_web_2002_" + (x < 50000 ? "10K" : "100K") + "-sentences.txt";
         try {
             benchmarkStringSorters(getWords(resource, SortBenchmark::getLeipzigWords), x);
         } catch (FileNotFoundException e) {
@@ -502,9 +510,11 @@ public class SortBenchmark {
     /**
      * For shellsort.
      */
-    final static TimeLogger[] timeLoggersSubQuadratic = {
-            TIME_LOGGER_RAW,
-            new TimeLogger("Normalized time per run {n^(4/3)}: ", n -> Math.pow(n, 5.0 / 4))
+    static TimeLogger[] timeLoggersSubQuadratic(double power) {
+        return new TimeLogger[] {
+                TIME_LOGGER_RAW,
+         new TimeLogger("Normalized time per run {n^"+power+"}: ", n -> Math.pow(n, power))
+            };
     };
 
 
@@ -650,7 +660,7 @@ public class SortBenchmark {
      */
     @SuppressWarnings("SameParameterValue")
     private void runDateTimeSortBenchmark(Class<?> tClass, ChronoLocalDateTime<?>[] dateTimes, int N, int m) throws IOException {
-        final SortWithHelper<ChronoLocalDateTime<?>> sorter = new TimSort<>();
+        final SortWithHelper<ChronoLocalDateTime<?>> sorter = new TimSortWrapper<>();
         logger.info("****************************** DateTime sort: " + N + " " + sorter.getDescription() + " ******************************");
         @SuppressWarnings("unchecked") final SorterBenchmark<ChronoLocalDateTime<?>> sorterBenchmark = new SorterBenchmark<>((Class<ChronoLocalDateTime<?>>) tClass, (xs) -> Arrays.copyOf(xs, xs.length), sorter, dateTimes, m, timeLoggersLinearithmic);
         sorterBenchmark.run(getDescription(N, sorter), N);

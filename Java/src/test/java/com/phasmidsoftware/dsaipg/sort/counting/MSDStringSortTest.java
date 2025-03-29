@@ -179,10 +179,10 @@ public class MSDStringSortTest {
         final PrivateMethodTester privateMethodTester = new PrivateMethodTester(helper);
         // TODO check these values
         assertEquals(4157L, privateMethodTester.invokePrivate("getSwaps"));
-        assertEquals(4895L, privateMethodTester.invokePrivate("getCompares"));
+        assertEquals(4905L, privateMethodTester.invokePrivate("getCompares"));
         // NOTE this was 16979 before. Please check.
         assertEquals(2308L, privateMethodTester.invokePrivate("getCopies"));
-        assertEquals(25293L, privateMethodTester.invokePrivate("getHits"));
+        assertEquals(25245L, privateMethodTester.invokePrivate("getHits"));
     }
 
     private static long runMSD(Config config, final int n) {
