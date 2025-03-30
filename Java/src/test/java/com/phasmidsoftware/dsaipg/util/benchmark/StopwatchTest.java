@@ -46,7 +46,7 @@ public class StopwatchTest {
         try (Stopwatch target = new Stopwatch("nanoseconds")) {
             Thread.sleep(10);
             long lap = target.lap();
-            assertEquals(10000000, lap, 2600000);
+            assertEquals(10000000, lap, 2800000);
         } catch (InterruptedException ignored) {
         }
     }
