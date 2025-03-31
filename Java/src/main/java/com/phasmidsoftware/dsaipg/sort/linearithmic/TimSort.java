@@ -206,23 +206,23 @@ class TimSort<T> {
      * the required forms.
      *
      * @param a      the array to be sorted
-     * @param lo     the index of the first element, inclusive, to be sorted
-     * @param hi     the index of the last element, exclusive, to be sorted
+     * @param from     the index of the first element, inclusive, to be sorted
+     * @param to     the index of the last element, exclusive, to be sorted
      * @param helper
      * @since 1.8
      */
-    static <T> void sort(T[] a, int lo, int hi, Helper<T> helper) {
+    static <T> void sort(T[] a, int from, int to, Helper<T> helper) {
         Comparator<T> c = helper.getComparator();
-        assert c != null && a != null && lo >= 0 && lo <= hi && hi <= a.length;
+        assert c != null && a != null && from >= 0 && from <= to && to <= a.length;
 
-        int nRemaining = hi - lo;
+        int nRemaining = to - from;
         if (nRemaining < 2)
             return;  // Arrays of size 0 and 1 are always sorted
 
         // If array is small, do a "mini-TimSort" with no merges
         if (nRemaining < MIN_MERGE) {
-            int initRunLen = countRunAndMakeAscending(a, lo, hi, c);
-            binarySort(a, lo, hi, lo + initRunLen, helper);
+            int initRunLen = countRunAndMakeAscending(a, from, to, c);
+            binarySort(a, from, to, from + initRunLen, helper);
             return;
         }
 
@@ -235,26 +235,26 @@ class TimSort<T> {
         int minRun = minRunLength(nRemaining);
         do {
             // Identify next run
-            int runLen = countRunAndMakeAscending(a, lo, hi, c);
+            int runLen = countRunAndMakeAscending(a, from, to, c);
 
             // If run is short, extend to min(minRun, nRemaining)
             if (runLen < minRun) {
                 int force = nRemaining <= minRun ? nRemaining : minRun;
-                binarySort(a, lo, lo + force, lo + runLen, helper);
+                binarySort(a, from, from + force, from + runLen, helper);
                 runLen = force;
             }
 
             // Push run onto pending-run stack, and maybe merge
-            ts.pushRun(lo, runLen);
+            ts.pushRun(from, runLen);
             ts.mergeCollapse();
 
             // Advance to find next run
-            lo += runLen;
+            from += runLen;
             nRemaining -= runLen;
         } while (nRemaining != 0);
 
         // Merge all remaining runs to complete sort
-        assert lo == hi;
+        assert from == to;
         ts.mergeForceCollapse();
         assert ts.stackSize == 1;
     }

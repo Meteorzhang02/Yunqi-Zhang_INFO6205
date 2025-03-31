@@ -130,26 +130,26 @@ public class IntroSort<X extends Comparable<X>> extends QuickSort_DualPivot<X> {
      * @param a      the array representing the heap
      * @param i      the current index in the heap being adjusted
      * @param n      the size of the heap
-     * @param lo     the offset for indexing into the array
+     * @param from     the offset for indexing into the array
      * @param helper a helper utility used for instrumentation and comparisons
      */
-    private void downHeap(X[] a, int i, int n, int lo, Helper<X> helper) {
-        X d = a[lo + i - 1];
+    private void downHeap(X[] a, int i, int n, int from, Helper<X> helper) {
+        X d = a[from + i - 1];
         int child;
         while (i <= n / 2) {
             child = 2 * i;
             if (helper.instrumented()) {
-                if (child < n && helper.compare(a, lo + child - 1, lo + child) < 0) child++;
-                if (helper.compare(d, a[lo + child - 1]) >= 0) break;
+                if (child < n && helper.compare(a, from + child - 1, from + child) < 0) child++;
+                if (helper.compare(d, a[from + child - 1]) >= 0) break;
             } else {
-                if (child < n && a[lo + child - 1].compareTo(a[lo + child]) < 0) child++;
-                if (d.compareTo(a[lo + child - 1]) >= 0) break;
+                if (child < n && a[from + child - 1].compareTo(a[from + child]) < 0) child++;
+                if (d.compareTo(a[from + child - 1]) >= 0) break;
             }
             helper.incrementFixes(1);
-            a[lo + i - 1] = a[lo + child - 1];
+            a[from + i - 1] = a[from + child - 1];
             i = child;
         }
-        a[lo + i - 1] = d;
+        a[from + i - 1] = d;
     }
 
     /**
