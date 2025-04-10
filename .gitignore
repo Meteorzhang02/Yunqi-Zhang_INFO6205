@@ -10,6 +10,9 @@ hs_err_pid*
 
 # IDE files #
 .idea
+INFO6205.iml
+
+.vscode/
 
 bin/*
 .classpath
@@ -17,7 +20,5 @@ bin/*
 .settings
 
 *.kml
-
-INFO6205.iml
 
 Java/src/test/java/edu/neu/coe/info6205/admin/TicketTest.java
