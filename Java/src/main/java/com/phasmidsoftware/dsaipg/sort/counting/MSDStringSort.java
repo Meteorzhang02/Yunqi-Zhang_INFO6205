@@ -14,10 +14,18 @@ import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.HELPER;
 import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.MSDCUTOFF;
 
 /**
- * Implements the MSD (Most-Significant-Digit) String Sort algorithm
- * for sorting an array of strings. The algorithm recursively partitions
- * strings based on the current character (digit) being evaluated, until the entire
- * array is sorted.
+ * This class implements the Most-Significant-Digit (MSD) string sort algorithm.
+ * MSD string sort is a stable, radix-based sorting algorithm that organizes strings by
+ * processing their characters from the most-significant (leftmost) to the least-significant (rightmost).
+ * The algorithm recursively partitions strings based on character positions until all are sorted.
+ *
+ * MSDStringSort is especially useful for sorting large collections of variable-length strings,
+ * particularly when the strings share long common prefixes.
+ *
+ * Features include:
+ * - Recursive sorting based on character positions.
+ * - Transition to 3-way Quicksort when the number of elements is less than the cutoff value (by default, 256).
+ * - Support for helper and configuration-based custom logic.
  */
 public class MSDStringSort extends SortWithHelperAndAdditionalMemory<String> {
 

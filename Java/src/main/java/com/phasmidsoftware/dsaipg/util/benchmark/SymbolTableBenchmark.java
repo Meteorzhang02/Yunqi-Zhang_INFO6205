@@ -118,8 +118,8 @@ public class SymbolTableBenchmark {
      * @param nRuns  the number of times the benchmark process will be repeated.
      * @param random an instance of {@code Random} used to introduce randomness during the benchmarking process.
      */
-    private static void runHashTableBenchmark(String[] words, int nWords, int nRuns, Random random) {
-        Benchmark<String[]> benchmark = new Benchmark_Timer<>("hashTable", null, SymbolTableBenchmark::buildAndRenderHashTable, null);
+    private void runHashTableBenchmark(String[] words, int nWords, int nRuns, Random random) {
+        Benchmark<String[]> benchmark = new Benchmark_Timer<>("hashTable", config, null, SymbolTableBenchmark::buildAndRenderHashTable, null);
         doPureBenchmark(words, nWords, nRuns, random, benchmark);
     }
 
@@ -131,8 +131,8 @@ public class SymbolTableBenchmark {
      * @param nRuns  the number of benchmark iterations to execute.
      * @param random the Random instance used for any randomness needed during benchmarking.
      */
-    private static void runRBTreeBenchmark(String[] words, int nWords, int nRuns, Random random) {
-        Benchmark<String[]> benchmark = new Benchmark_Timer<>("RBTree", null, SymbolTableBenchmark::buildRBTree, null);
+    private void runRBTreeBenchmark(String[] words, int nWords, int nRuns, Random random) {
+        Benchmark<String[]> benchmark = new Benchmark_Timer<>("RBTree", config, null, SymbolTableBenchmark::buildRBTree, null);
         doPureBenchmark(words, nWords, nRuns, random, benchmark);
     }
 
@@ -180,7 +180,8 @@ public class SymbolTableBenchmark {
      * @param wordCounts a stream of integers representing the word counts to be used in the benchmarks
      */
     private void doBenchmarks(Stream<Integer> wordCounts) {
-        logger.info("Beginning String sorts");
+        boolean showProgress = config.getBoolean("timer", "showprogress");
+        logger.info("Beginning Symbol Table Benchmark, showing progress: " + showProgress);
         wordCounts.forEach(this::doSymbolTableBenchmark);
     }
 

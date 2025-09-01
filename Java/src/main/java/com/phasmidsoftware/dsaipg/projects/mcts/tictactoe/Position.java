@@ -79,7 +79,7 @@ public class Position {
             for (int j = 0; j < gridSize; j++)
                 if (grid[i][j] < 0)
                     // TO BE IMPLEMENTED 
-         ;
+  ;
         // END SOLUTION
         return result;
     }

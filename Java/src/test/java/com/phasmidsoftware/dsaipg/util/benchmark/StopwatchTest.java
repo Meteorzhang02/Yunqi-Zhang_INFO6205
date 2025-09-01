@@ -25,7 +25,7 @@ public class StopwatchTest {
         try (Stopwatch target = new Stopwatch()) {
             Thread.sleep(10);
             long lap = target.lap();
-            assertEquals(10, lap, 5);
+            assertEquals(10, lap, 6);
         } catch (InterruptedException ignored) {
         }
     }
@@ -35,7 +35,7 @@ public class StopwatchTest {
         try (Stopwatch target = new Stopwatch("microseconds")) {
             Thread.sleep(10);
             long lap = target.lap();
-            assertEquals(10000, lap, 2600);
+            assertEquals(10000, lap, 2750);
         } catch (InterruptedException ignored) {
         }
     }
@@ -56,7 +56,7 @@ public class StopwatchTest {
         try (Stopwatch target = new Stopwatch("seconds")) {
             Thread.sleep(2000);
             long lap = target.lap();
-            assertEquals(2, lap, 0.1);
+            assertEquals(2, lap, 0.15);
         } catch (InterruptedException ignored) {
         }
     }

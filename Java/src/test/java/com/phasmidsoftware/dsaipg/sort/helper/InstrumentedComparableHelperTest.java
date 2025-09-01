@@ -29,9 +29,9 @@ public class InstrumentedComparableHelperTest {
     }
 
     @Test
-    public void testLess() {
+    public void testNotInverted() {
         final Helper<String> helper = new InstrumentedComparableHelper<>("test", config);
-        assertTrue(helper.less(xA, xB));
+        assertTrue(helper.notInverted(xA, xB));
         final PrivateMethodTester privateMethodTester = new PrivateMethodTester(helper);
         assertEquals(1L, privateMethodTester.invokePrivate("getCompares"));
         assertEquals(0L, privateMethodTester.invokePrivate("getSwaps"));
@@ -71,9 +71,9 @@ public class InstrumentedComparableHelperTest {
         String[] xs = new String[]{xA, xB};
         final Helper<String> helper = new InstrumentedComparableHelper<>("test", config);
         final PrivateMethodTester privateMethodTester = new PrivateMethodTester(helper);
-        helper.swap(xs, xA, 0, 1);
+        helper.swapV(xA, xs, 0, 1);
         assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.swap(xs, xB, 0, 1);
+        helper.swapV(xB, xs, 0, 1);
         assertArrayEquals(new String[]{xA, xB}, xs);
         assertEquals(2L, privateMethodTester.invokePrivate("getSwaps"));
         assertEquals(6L, privateMethodTester.invokePrivate("getHits"));
@@ -84,9 +84,9 @@ public class InstrumentedComparableHelperTest {
         String[] xs = new String[]{xA, xB};
         final Helper<String> helper = new InstrumentedComparableHelper<>("test", config);
         final PrivateMethodTester privateMethodTester = new PrivateMethodTester(helper);
-        helper.swap(xs, 0, 1, xB);
+        helper.swapW(xB, xs, 0, 1);
         assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.swap(xs, 0, 1, xA);
+        helper.swapW(xA, xs, 0, 1);
         assertArrayEquals(new String[]{xA, xB}, xs);
         assertEquals(2L, privateMethodTester.invokePrivate("getSwaps"));
         assertEquals(6L, privateMethodTester.invokePrivate("getHits"));
@@ -97,9 +97,9 @@ public class InstrumentedComparableHelperTest {
         String[] xs = new String[]{xA, xB};
         final Helper<String> helper = new InstrumentedComparableHelper<>("test", config);
         final PrivateMethodTester privateMethodTester = new PrivateMethodTester(helper);
-        helper.swap(xs, xA, 0, 1, xB);
+        helper.swapVW(xA, xB, xs, 0, 1);
         assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.swap(xs, xB, 0, 1, xA);
+        helper.swapVW(xB, xA, xs, 0, 1);
         assertArrayEquals(new String[]{xA, xB}, xs);
         assertEquals(2L, privateMethodTester.invokePrivate("getSwaps"));
         assertEquals(4L, privateMethodTester.invokePrivate("getHits"));

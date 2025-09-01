@@ -109,8 +109,8 @@ public class QuickSort_BasicTest {
         assertTrue(helper.isSorted(sorted));
         assertEquals(56, helper.getCompares());
         assertEquals(14, helper.getSwaps());
-        assertEquals(97, helper.getHits());
-        assertEquals(69, helper.getLookups());
+        assertEquals(96, helper.getHits());
+        assertEquals(68, helper.getLookups());
     }
 
     @Test
@@ -163,8 +163,8 @@ public class QuickSort_BasicTest {
         assertTrue(helper.isSorted(sorted));
         assertEquals(12392, helper.getCompares());
         assertEquals(2221, helper.getSwaps());
-        assertEquals(17752, helper.getHits());
-        assertEquals(13310, helper.getLookups());
+        assertEquals(17712, helper.getHits());
+        assertEquals(13270, helper.getLookups());
     }
 
     @Test
@@ -181,8 +181,8 @@ public class QuickSort_BasicTest {
         double averageSwaps = averageCompares / 6;
         long expectedSwaps = 2466L;
         assertEquals(expectedSwaps, helper.getSwaps());
-        assertEquals(17775, helper.getHits());
-        assertEquals(12843, helper.getLookups());
+        assertEquals(17759, helper.getHits());
+        assertEquals(12827, helper.getLookups());
         assertEquals(averageCompares, expectedCompares, 2000);
         assertEquals(averageSwaps, expectedSwaps, 800);
     }

@@ -26,8 +26,8 @@ public class InsertionSortOpt<X extends Comparable<X>> extends InsertionSort<X> 
      */
     public void sort(X[] xs, int from, int to) {
         final Helper<X> helper = getHelper();
-        for (int i = from + 1; i < to; i++) {
-            helper.swapIntoSorted(xs, i);
+        for (int i = from + 1; i < to; i++) { // n - 1 iterations
+            helper.swapIntoSorted(xs, from, i);
         }
     }
 

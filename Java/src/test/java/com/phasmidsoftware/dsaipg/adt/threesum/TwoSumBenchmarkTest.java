@@ -1,6 +1,8 @@
 package com.phasmidsoftware.dsaipg.adt.threesum;
 
+import com.phasmidsoftware.dsaipg.adt.symbolTable.tree.BSTBenchmark;
 import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import org.junit.Test;
 
 import java.util.function.Supplier;
@@ -79,7 +81,7 @@ public class TwoSumBenchmarkTest {
         Supplier<int[]> supplier = () -> new int[0];
 
         try {
-            double t1 = new Benchmark_Timer<int[]>("Empty Array Test", x -> x, xs -> {
+            double t1 = new Benchmark_Timer<int[]>("Empty Array Test", Config.getConfig(BSTBenchmark.class), x -> x, xs -> {
             }).runFromSupplier(supplier, runs);
             assertTrue(t1 >= 0);
         } catch (Exception e) {

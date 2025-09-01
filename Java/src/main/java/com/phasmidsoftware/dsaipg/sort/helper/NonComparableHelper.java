@@ -21,37 +21,6 @@ public interface NonComparableHelper<X> extends Helper<X> {
      */
     void init(int n);
 
-    /**
-     * Method to perform a stable swap using half-exchanges,
-     * i.e., between xs[i] and xs[j] such that xs[j] is moved to index i,
-     * and xs[i] through xs[j-1] are all moved up one.
-     * This type of swap is used by insertion sort.
-     *
-     * @param xs the array of Xs.
-     * @param i  the index of the destination of xs[j].
-     * @param j  the index of the right-most element to be involved in the swap.
-     * @param x the value of xs[j].
-     */
-    default void swapInto(X[] xs, int i, int j, X x) {
-        if (j > i) {
-            copyBlock(xs, i, xs, i + 1, j - i);
-            xs[i] = x;
-        }
-    }
-
-    /**
-     * Method to perform a stable swap using half-exchanges,
-     * i.e., between xs[i] and xs[j] such that xs[j] is moved to index i,
-     * and xs[i] through xs[j-1] are all moved up one.
-     * This type of swap is used by insertion sort.
-     *
-     * @param xs the array of Xs.
-     * @param i  the index of the destination of xs[j].
-     * @param j  the index of the right-most element to be involved in the swap.
-     */
-    default void swapInto(X[] xs, int i, int j) {
-        swapInto(xs, i, j, xs[j]);
-    }
 
     /**
      * Provides a string representation of fixes or adjustments for the given array of X objects.

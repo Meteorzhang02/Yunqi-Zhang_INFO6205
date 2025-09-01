@@ -35,14 +35,14 @@ public class ComparableHelperTest {
     }
 
     @Test
-    public void testLess() {
+    public void testNotInverted1() {
         for (int i = 0; i < 100; i++) {
             Integer[] pair = helper.randomPair(Integer.class, r -> r.nextInt(10));
             boolean cf0 = pair[0] < pair[1];
-            boolean cf1 = helper.less(pair[0], pair[1]);
-            boolean cf2 = helper.less(pair, 0, 1);
-            boolean cf3 = helper.less(pair, pair[0], 1);
-            boolean cf4 = helper.less(pair, 0, pair[1]);
+            boolean cf1 = helper.notInverted(pair[0], pair[1]);
+            boolean cf2 = helper.notInverted(pair, 0, 1);
+            boolean cf3 = helper.notInverted(pair, pair[0], 1);
+            boolean cf4 = helper.notInverted(pair, 0, pair[1]);
             assertEquals(cf0, cf1);
             assertEquals(cf0, cf2);
             assertEquals(cf0, cf3);

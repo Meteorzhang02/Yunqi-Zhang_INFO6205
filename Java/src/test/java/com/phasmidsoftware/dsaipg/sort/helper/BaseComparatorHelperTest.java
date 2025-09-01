@@ -49,13 +49,13 @@ public class BaseComparatorHelperTest {
     }
 
     @Test
-    public void less() {
+    public void notInverted() {
         for (int i = 0; i < 100; i++) {
             Integer[] pair = helper.randomPair(Integer.class, r -> r.nextInt(10));
             boolean cf0 = pair[0] < pair[1]; // no hits, 0 lookups
-            boolean cf1 = helper.less(pair[0], pair[1]); // no hits, 0 lookups
-            boolean cf2 = helper.less(pair, 0, 1); // 2 hits, 2 lookups
-            boolean cf3 = helper.less(pair, 0, pair[1]); // 1 hit, 1 lookup
+            boolean cf1 = helper.notInverted(pair[0], pair[1]); // no hits, 0 lookups
+            boolean cf2 = helper.notInverted(pair, 0, 1); // 2 hits, 2 lookups
+            boolean cf3 = helper.notInverted(pair, 0, pair[1]); // 1 hit, 1 lookup
             assertEquals(cf0, cf1);
             assertEquals(cf0, cf2);
             assertEquals(cf0, cf3);

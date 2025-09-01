@@ -98,6 +98,7 @@ public class InsertionSort<X extends Comparable<X>> extends SortWithComparableHe
     /**
      * Performs the insertion operation for sorting, moving elements into their correct position
      * within the specified range in the array.
+     * CONSIDER creating a signature for swapStableConditional(xs,a,j,b).
      *
      * @param xs      the array being sorted
      * @param from    the starting index of the range to be sorted
@@ -111,8 +112,7 @@ public class InsertionSort<X extends Comparable<X>> extends SortWithComparableHe
         X aNext = b;
         int j = i;
         while (true) {
-            boolean swapped = helper.swapConditional(xs, a, j - 1, j, b);
-            if (!swapped) break;
+            if (!helper.swapConditional(xs, a, j - 1, j, b)) break;
             if (aNext == b) aNext = a;
             j--;
             if (j == from) break;

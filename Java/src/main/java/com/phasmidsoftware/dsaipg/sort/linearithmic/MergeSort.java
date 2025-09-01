@@ -142,14 +142,14 @@ public class MergeSort<X extends Comparable<X>> extends SortWithComparableHelper
         Config config = helper.getConfig();
         boolean noCopy = config.getBoolean(MERGESORT, NOCOPY); // XXX I recommend that you test noCopy before testing insurance.
         boolean insurance = config.getBoolean(MERGESORT, INSURANCE);
-        assert Arrays.compare(primary, from, to, secondary, from, to) == 0 : "MergeSort::sort: partitions are not the same";
+        assert !noCopy || Arrays.compare(primary, from, to, secondary, from, to) == 0 : "MergeSort::sort: partitions are not the same";
         if (to <= from + helper.cutoff()) { // XXX check that a cutoff value of 1 effectively stops the cutoff mechanism.
             insertionSort.sort(primary, from, to);
             return;
         }
 
         // TO BE IMPLEMENTED  : implement merge sort with no-copy and insurance optimizations (use helper.less and helper.copyBlock)
-throw new RuntimeException("implementation missing");
+                throw new RuntimeException("implementation missing");
     }
 
     /**
@@ -176,7 +176,7 @@ throw new RuntimeException("implementation missing");
             } else if (j >= to) {
                 helper.copy(v, result, k);
                 if (++i < mid) v = helper.get(sorted, i);
-            } else if (helper.less(w, v)) {
+            } else if (helper.notInverted(w, v)) {
                 helper.incrementFixes(mid - i);
                 helper.copy(w, result, k);
                 if (++j < to) w = helper.get(sorted, j);

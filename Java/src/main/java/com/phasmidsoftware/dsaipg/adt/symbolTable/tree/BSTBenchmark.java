@@ -2,11 +2,12 @@ package com.phasmidsoftware.dsaipg.adt.symbolTable.tree;
 
 import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
 import com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmark;
-import com.phasmidsoftware.dsaipg.util.benchmark.TimeLogger;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import com.phasmidsoftware.dsaipg.util.general.Utilities;
 import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,15 +62,13 @@ public class BSTBenchmark<K extends Comparable<K>, V> extends Benchmark_Timer<K[
     /**
      * Constructor for a SorterBenchmark where we provide the following parameters:
      *
-     * @param tClass      the class of K.
-     * @param bst         the bst.
-     * @param ks          the array of Ts.
-     * @param nRuns       the number of runs to perform in this benchmark.
-     * @param timeLoggers the time-loggers.
-     * @param stats       the statistics to be returned.
+     * @param bst    the bst.
+     * @param nRuns  the number of runs to perform in this benchmark.
+     * @param stats  the statistics to be returned.
+     * @param config the configuration.
      */
-    public BSTBenchmark(final Class<K> tClass, final BstDetail<K, V> bst, final K[] ks, final int nRuns, final TimeLogger[] timeLoggers, final Stats stats) {
-        super("BST benchmark", createPreProcessor(), createExperiment(bst), createPostProcessor(bst, stats));
+    public BSTBenchmark(final BstDetail<K, V> bst, final int nRuns, final Stats stats, Config config) {
+        super("BST benchmark", config, createPreProcessor(), createExperiment(bst), createPostProcessor(bst, stats));
         this.nRuns = nRuns;
     }
 
@@ -95,12 +94,15 @@ public class BSTBenchmark<K extends Comparable<K>, V> extends Benchmark_Timer<K[
             final BstDetail<String, Integer> bst = createBST(mode, words, initialSampleFraction);
             logger.info("BST has " + bst.size() + " nodes initially");
             final Stats stats = new Stats(bst.size());
-            final BSTBenchmark<String, Integer> benchmark = new BSTBenchmark<>(String.class, bst, words, nRuns, SortBenchmark.timeLoggersLinearithmic, stats);
+            Config config = Config.load(BSTBenchmark.class);
+            final BSTBenchmark<String, Integer> benchmark = new BSTBenchmark<>(bst, nRuns, stats, config);
             final Supplier<String[]> supplier = () -> Utilities.fillRandomArray(String.class, random, runSampleSize, r -> words[r.nextInt(words.length)]);
             final double result = benchmark.runBenchmark(supplier);
             logger.info("Stats: " + stats + "; average milliseconds: " + formatDecimal3Places(result));
         } catch (FileNotFoundException e) {
             logger.error("BSTBenchmark: cannot find word file: " + e.getLocalizedMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

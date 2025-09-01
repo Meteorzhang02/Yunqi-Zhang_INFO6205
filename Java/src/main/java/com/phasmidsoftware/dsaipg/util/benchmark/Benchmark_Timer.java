@@ -4,6 +4,7 @@
 
 package com.phasmidsoftware.dsaipg.util.benchmark;
 
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 
 import java.util.function.Consumer;
@@ -57,16 +58,17 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
             return t;
         };
         // Warmup phase
-        new Timer().repeat(getWarmupRuns(m), true, supplier, function, fPre, null);
+        new Timer(config).repeat(getWarmupRuns(m), true, supplier, function, fPre, null);
 
         // Timed phase
-        return new Timer().repeat(m, false, supplier, function, fPre, fPost);
+        return new Timer(config).repeat(m, false, supplier, function, fPre, fPost);
     }
 
     /**
      * Constructor for a Benchmark_Timer with the option of specifying all three functions.
      *
      * @param description the description of the benchmark.
+     * @param config        the configuration.
      * @param fPre        a function of T => T.
      *                    Function fPre is run before each invocation of fRun (but with the clock stopped).
      *                    The result of fPre (if any) is passed to fRun.
@@ -75,8 +77,9 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
      *                    When you create a lambda defining fRun, you must return "null."
      * @param fPost       a Consumer function (i.e. a function of T => Void).
      */
-    public Benchmark_Timer(String description, UnaryOperator<T> fPre, Consumer<T> fRun, Consumer<T> fPost) {
+    public Benchmark_Timer(String description, Config config, UnaryOperator<T> fPre, Consumer<T> fRun, Consumer<T> fPost) {
         this.description = description;
+        this.config = config;
         this.fPre = fPre;
         this.fRun = fRun;
         this.fPost = fPost;
@@ -86,41 +89,45 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
      * Constructor for a Benchmark_Timer with the option of specifying all three functions.
      *
      * @param description the description of the benchmark.
+     * @param config        the configuration.
      * @param fPre        a function of T => T.
      *                    Function fPre is run before each invocation of fRun (but with the clock stopped).
      *                    The result of fPre (if any) is passed to fRun.
-     * @param fRun        a Consumer function (i.e. a function of T => Void).
+     * @param fRun        a Consumer function (i.e., a function of T => Void).
      *                    Function fRun is the function whose timing you want to measure. For example, you might create a function which sorts an array.
      */
-    public Benchmark_Timer(String description, UnaryOperator<T> fPre, Consumer<T> fRun) {
-        this(description, fPre, fRun, null);
+    public Benchmark_Timer(String description, Config config, UnaryOperator<T> fPre, Consumer<T> fRun) {
+        this(description, config, fPre, fRun, null);
     }
 
     /**
      * Constructor for a Benchmark_Timer with only fRun and fPost Consumer parameters.
      *
      * @param description the description of the benchmark.
-     * @param fRun        a Consumer function (i.e. a function of T => Void).
+     * @param config        the configuration.
+     * @param fRun        a Consumer function (i.e., a function of T => Void).
      *                    Function fRun is the function whose timing you want to measure. For example, you might create a function which sorts an array.
      *                    When you create a lambda defining fRun, you must return "null."
-     * @param fPost       a Consumer function (i.e. a function of T => Void).
+     * @param fPost       a Consumer function (i.e., a function of T => Void).
      */
-    public Benchmark_Timer(String description, Consumer<T> fRun, Consumer<T> fPost) {
-        this(description, null, fRun, fPost);
+    public Benchmark_Timer(String description, Config config, Consumer<T> fRun, Consumer<T> fPost) {
+        this(description, config, null, fRun, fPost);
     }
 
     /**
      * Constructor for a Benchmark_Timer where only the (timed) run function is specified.
      *
      * @param description the description of the benchmark.
+     * @param config        the configuration.
      * @param f           a Consumer function (i.e. a function of T => Void).
      *                    Function f is the function whose timing you want to measure. For example, you might create a function which sorts an array.
      */
-    public Benchmark_Timer(String description, Consumer<T> f) {
-        this(description, null, f, null);
+    public Benchmark_Timer(String description, Config config, Consumer<T> f) {
+        this(description, config, null, f, null);
     }
 
     private final String description;
+    private final Config config;
     private final UnaryOperator<T> fPre;
     private final Consumer<T> fRun;
     private final Consumer<T> fPost;

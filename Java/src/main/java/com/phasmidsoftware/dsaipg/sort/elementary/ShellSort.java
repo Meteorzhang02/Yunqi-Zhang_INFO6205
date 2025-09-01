@@ -274,12 +274,13 @@ public class ShellSort<X extends Comparable<X>> extends SortWithComparableHelper
 
         while (N <= 100000) {
             int nRuns = 20;
-            InstrumentedComparatorHelper<Integer> instrumentedHelper = new InstrumentedComparableHelper<>("ShellSort", N, nRuns, Config_Benchmark.setupConfig("true", "false", "0", "0", "", ""));
+            Config config = Config_Benchmark.setupConfig("true", "false", "0", "0", "", "");
+            InstrumentedComparatorHelper<Integer> instrumentedHelper = new InstrumentedComparableHelper<>("ShellSort", N, nRuns, config);
             ShellSort<Integer> s = new ShellSort<>(5, instrumentedHelper);
             int j = N;
             s.init(j);
             Integer[] xs = instrumentedHelper.random(Integer.class, r -> r.nextInt(j));
-            Benchmark<Boolean> benchmark = new Benchmark_Timer<>("Sorting", b -> s.sort(xs, 0, j));
+            Benchmark<Boolean> benchmark = new Benchmark_Timer<>("Sorting", config, b -> s.sort(xs, 0, j));
             double nTime = benchmark.run(true, nRuns);
             long nCompares = instrumentedHelper.getCompares();
             long nSwaps = instrumentedHelper.getSwaps();

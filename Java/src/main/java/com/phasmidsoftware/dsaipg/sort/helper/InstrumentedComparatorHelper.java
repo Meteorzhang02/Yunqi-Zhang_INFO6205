@@ -58,8 +58,8 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      * @param j  the index of the second value.
      * @return true if v is less than xs[j].
      */
-    public boolean less(X[] xs, X v, int j) {
-        return less(v, get(xs, j));
+    public boolean notInverted(X[] xs, X v, int j) {
+        return notInverted(v, get(xs, j));
     }
 
     /**
@@ -70,8 +70,8 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      * @param w  the second value.
      * @return true if v is less than w.
      */
-    public boolean less(X[] xs, int i, X w) {
-        return less(get(xs, i), w);
+    public boolean notInverted(X[] xs, int i, X w) {
+        return notInverted(get(xs, i), w);
     }
 
     /**
@@ -82,8 +82,8 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      * @param j  the index of the second value.
      * @return true if xs[i] is less than xs[j].
      */
-    public boolean less(X[] xs, int i, int j) {
-        return less(xs, get(xs, i), j);
+    public boolean notInverted(X[] xs, int i, int j) {
+        return notInverted(xs, get(xs, i), j);
     }
 
     /**
@@ -94,54 +94,57 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      * @param j  the other index.
      */
     public void swap(X[] xs, int i, int j) {
-        swap(xs, get(xs, i), i, j);
+        assert i != j;
+        swapV(get(xs, i), xs, i, j);
     }
 
     /**
      * Method to perform a general swap, i.e., between xs[i] and xs[j]
+     * NOTE: i must be different from j
+     *  @param v  the value of xs[i].
      *
      * @param xs the array of X elements.
-     * @param v  the value of xs[i].
      * @param i  the index of the lower of the elements to be swapped.
      * @param j  the index of the higher of the elements to be swapped.
      */
-    public void swap(X[] xs, X v, int i, int j) {
-        swap(xs, v, i, j, get(xs, j));
+    public void swapV(X v, X[] xs, int i, int j) {
+        assert i != j;
+        swapVW(v, get(xs, j), xs, i, j);
     }
 
     /**
      * Method to perform a general swap, i.e., between xs[i] and xs[j]
+     * NOTE: i must be different from j
      *
-     * @param xs the array of X elements.
-     * @param i  the index of the lower of the elements to be swapped.
-     * @param j  the index of the higher of the elements to be swapped.
      * @param w  the value of xs[j].
+     * @param xs the array of X elements.
+     * @param i  the index of the lower of the elements to be swapped.
+     * @param j  the index of the higher of the elements to be swapped.
      */
-    public void swap(X[] xs, int i, int j, X w) {
-        swap(xs, get(xs, i), i, j, w);
+    public void swapW(X w, X[] xs, int i, int j) {
+        assert i != j;
+        swapVW(get(xs, i), w, xs, i, j);
     }
 
     /**
-     * Method to perform a general swap, i.e., between xs[i] and xs[j]
+     * Method to perform a general swap, i.e., between xs[i] and xs[j].
+     * It is expected that sometimes i == j.
      *
-     * @param xs the array of X elements.
      * @param v  the value of xs[i].
+     * @param w  the value of xs[j].
+     * @param xs the array of X elements.
      * @param i  the index of the lower of the elements to be swapped.
      * @param j  the index of the higher of the elements to be swapped.
-     * @param w  the value of xs[j].
      */
-    public void swap(X[] xs, X v, int i, int j, X w) {
+    public void swapVW(X v, X w, X[] xs, int i, int j) {
         if (i == j) return;
         instrumenter.incrementSwaps(1);
         if (instrumenter.countFixes()) enumerateFixes(xs, i, j, Integer.signum(pureComparison(v, w)));
-        if (logger.isDebugEnabled()) {
-            if (xs[i] != v)
-                logger.warn("swap: WARNING: v=" + v + " is not equal to xs[" + i + "]: " + xs[i]);
-            if (xs[j] != w)
-                logger.warn("swap: WARNING: w=" + w + " is not equal to xs[" + j + "]: " + xs[j]);
-        }
+        // NOTE that the checkElementConsistency may issue warnings but we only test it if debug is enabled.
+        // CONSIDER using assert instead.
+        if (debugEnabled) checkElementConsistency(xs, v, i, j, w);
         instrumenter.incrementHits(2);
-        super.swap(xs, v, i, j, w);
+        super.swapVW(v, w, xs, i, j);
     }
 
     /**
@@ -155,43 +158,13 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      * @param j  the index of the right-most element to be involved in the swap.
      */
     public void swapInto(X[] xs, int i, int j, X x) {
-        instrumenter.incrementSwaps(j - i);
+        instrumenter.incrementSwaps(1);
+        instrumenter.incrementCopies(j - i);
         instrumenter.incrementFixes(j - i);
         instrumenter.incrementHits(1); // for the final assignment
         super.swapInto(xs, i, j, x);
     }
 
-    /**
-     * Method to perform a stable swap using half-exchanges,
-     * i.e. between xs[i] and xs[j] such that xs[j] is moved to index i,
-     * and xs[i] through xs[j-1] are all moved up one.
-     * This type of swap is used by insertion sort.
-     *
-     * @param xs the array of Xs.
-     * @param i  the index of the destination of xs[j].
-     * @param j  the index of the right-most element to be involved in the swap.
-     */
-    public void swapInto(X[] xs, int i, int j) {
-        this.swapInto(xs, i, j, get(xs, j));
-    }
-
-    /**
-     * Method to perform a stable swap using half-exchanges, and binary search.
-     * i.e. x[i] is moved leftwards to its proper place, and all elements from
-     * the destination of x[i] through x[i-1] are moved up one place.
-     * This type of swap is used by insertion sort.
-     * <p>
-     * NOTE: this needs more precision.
-     *
-     * @param xs the array of X elements, whose elements 0 through i-1 MUST be sorted.
-     * @param i  the index of the element to be swapped into the ordered array xs[0...i-1].
-     */
-    public void swapIntoSorted(X[] xs, int i) {
-        X x = get(xs, i);
-        int j = binarySearch(xs, 0, i, x);
-        if (j < 0) j = -j - 1;
-        if (j < i) swapInto(xs, j, i, x);
-    }
 
     /**
      * Count the number of inversions of this array.
@@ -239,24 +212,6 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      */
     public boolean swapConditional(X[] xs, X v, int i, int j) {
         return swapConditional(xs, v, i, j, get(xs, j));
-    }
-
-    /**
-     * Method to perform a stable swap, but only if xs[i] is less than xs[j], i.e. out of order.
-     *
-     * @param xs the array of elements under consideration
-     * @param v  the value of xs[i].
-     * @param i  the index of the lower element.
-     * @param j  the index of the upper element.
-     * @param w  the value of xs[j]
-     * @return true if there was an inversion (i.e., the order was wrong and had to be fixed).
-     */
-    public boolean swapConditional(X[] xs, X v, int i, int j, X w) {
-        if (i == j) return false;
-        if (i > j) return swapConditional(xs, w, j, i, v);
-        boolean exchange = compare(v, w) > 0;
-        if (exchange) swap(xs, v, i, j, w);
-        return exchange;
     }
 
     /**
@@ -341,7 +296,8 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
     public void copyBlock(X[] source, int i, X[] target, int j, int n) {
         super.copyBlock(source, i, target, j, n);
         instrumenter.incrementCopies(n);
-        instrumenter.incrementHits(2L * n);
+        if (source == target) instrumenter.incrementHits(n+1);  // CONSIDER is this right?
+        else instrumenter.incrementHits(2L * n);
     }
 
     /**
@@ -611,6 +567,7 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
         this.countInversions = config.getInt(Instrumenter.INSTRUMENTING, Instrumenter.INVERSIONS, 0);
         this.MSDcutoff = config.getInt(HELPER, MSDCUTOFF, MSD_CUTOFF_DEFAULT);
         this.nRuns = nRuns;
+        debugEnabled = logger.isDebugEnabled();
     }
 
     /**
@@ -706,14 +663,14 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
      * @param key  the key.
      * @return the index of the element where <code>key</code> was found, otherwise the index where it would have been found.
      */
-    private int binarySearch(X[] xs, int from, int to, X key) {
+    @Override
+    public int binarySearch(X[] xs, int from, int to, X key) {
         int low = from;
         int high = to - 1;
 
         while (low <= high) {
             int mid = (low + high) >>> 1;
-            incrementHits(1);
-            int cmp = compare(xs[mid], key);
+            int cmp = compare(get(xs, mid), key);
             if (cmp < 0)
                 low = mid + 1;
             else if (cmp > 0)
@@ -724,8 +681,13 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
         return -(low + 1);  // key not found.
     }
 
-    // NOTE: the following private methods are only for testing (using reflection).
-
+    /**
+     * Checks the consistency between recorded fixes and the calculated inversions
+     * against the initial value stored in the instrumenter's statistics pack.
+     * NOTE: this private methods is only for testing (using reflection).
+     *
+     * @param xs an array of elements of type X to be analyzed for inversions
+     */
     private void checkFixes(X[] xs) {
         if (instrumenter.getStatPack() != null) {
             final double initial = instrumenter.getStatPack().total(Instrumenter.INVERSIONS);
@@ -740,8 +702,10 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
     protected final int nRuns;
     protected long countInversions;
     protected int maxDepth = 0;
+    private final boolean debugEnabled; // XXX cached version
 
     public static final String AT = "@";
+
     /**
      * Default value of runs when not specified in config.init (Help section).
      * Its only significance actually is that it's the initial number of samples in the statistics array.
@@ -750,8 +714,33 @@ public class InstrumentedComparatorHelper<X> extends BaseComparatorHelper<X> {
     public static final int DEFAULT_RUNS = 1;
     public static final int MSD_CUTOFF_DEFAULT = 256;
 
+    /**
+     * Retrieves the number of runs from the specified configuration object.
+     *
+     * @param config the configuration object from which the runs value will be retrieved
+     * @return the number of runs as an integer
+     */
     public static int getRunsConfig(Config config) {
         return config.getInt(HELPER, "runs", DEFAULT_RUNS);
+    }
+
+    /**
+     * Logs warning messages depending on the state of the input parameters.
+     * It verifies the consistency of the elements
+     * at specified indices in the array with the provided values.
+     *
+     * @param <X> the type of the elements in the array
+     * @param xs  the array of elements to be checked
+     * @param v   the expected value at index i in the array
+     * @param i   the index of the array to be checked against v
+     * @param j   the index of the array to be checked against w
+     * @param w   the expected value at index j in the array
+     */
+    private static <X> void checkElementConsistency(X[] xs, X v, int i, int j, X w) {
+            if (xs[i] != v)
+                logger.warn("swap: WARNING: v=" + v + " is not equal to xs[" + i + "]: " + xs[i]);
+            if (xs[j] != w)
+                logger.warn("swap: WARNING: w=" + w + " is not equal to xs[" + j + "]: " + xs[j]);
     }
 
 }

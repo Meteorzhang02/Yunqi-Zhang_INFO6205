@@ -6,6 +6,7 @@ import com.phasmidsoftware.dsaipg.util.general.Utilities;
 import java.util.Random;
 import java.util.function.Function;
 
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.HELPER;
 import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.isInstrumented;
 
 /**
@@ -17,7 +18,7 @@ import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.isInstrume
  */
 public class NonInstrumentingComparableHelper<X extends Comparable<X>> extends BaseComparableHelper<X> {
 
-    public static final String INSTRUMENT = "instrument";
+//    public static final String INSTRUMENT = "instrument";
 
     /**
      * Static method to get a Helper configured for the given class.
@@ -84,6 +85,20 @@ public class NonInstrumentingComparableHelper<X extends Comparable<X>> extends B
     }
 
     /**
+     * Performs any necessary post-processing on the provided array of elements.
+     * This implementation does nothing by default and can be overridden as needed.
+     *
+     * @param xs an array of elements of type X to be post-processed
+     */
+    @Override
+    public void postProcess(X[] xs) {
+        super.postProcess(xs);
+        super.postProcess(xs);
+        if (checkSorted && !isSorted(xs))
+            throw new NonInstrumentingComparatorHelper.HelperException("NonInstrumentingComparatorHelper.postProcess: array is not sorted");
+    }
+
+    /**
      * Provides a string representation of the NonInstrumentingComparableHelper instance.
      * The representation includes the description of the helper, the number of elements,
      * and whether it is instrumented or not.
@@ -105,6 +120,7 @@ public class NonInstrumentingComparableHelper<X extends Comparable<X>> extends B
      */
     public NonInstrumentingComparableHelper(String description, int n, Random random, Config config) {
         super(description, n, random, new InstrumenterDummy(), config);
+        checkSorted = config.getBoolean(HELPER, "checksorted");
     }
 
     /**
@@ -141,6 +157,7 @@ public class NonInstrumentingComparableHelper<X extends Comparable<X>> extends B
      * Keep track of the random array that was generated. This is available via the InstrumentedHelper class.
      */
     protected X[] randomArray;
+    private final boolean checkSorted;
 
     /**
      * A custom runtime exception used within the context of helper-related operations.

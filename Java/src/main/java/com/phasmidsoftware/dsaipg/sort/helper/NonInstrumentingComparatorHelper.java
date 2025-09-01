@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.function.Function;
 
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.HELPER;
 import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.isInstrumented;
 
 /**
@@ -17,6 +18,7 @@ import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.isInstrume
  * @param <X> the type of elements this helper works with, extending Comparable.
  */
 public class NonInstrumentingComparatorHelper<X> extends BaseComparatorHelper<X> {
+
     /**
      * Compares two objects of type X using a predefined comparator.
      *
@@ -69,6 +71,19 @@ public class NonInstrumentingComparatorHelper<X> extends BaseComparatorHelper<X>
     }
 
     /**
+     * Performs any necessary post-processing on the provided array of elements.
+     * This implementation does nothing by default and can be overridden as needed.
+     *
+     * @param xs an array of elements of type X to be post-processed
+     */
+    @Override
+    public void postProcess(X[] xs) {
+        super.postProcess(xs);
+        if (checkSorted && !isSorted(xs))
+            throw new HelperException("NonInstrumentingComparatorHelper.postProcess: array is not sorted");
+    }
+
+    /**
      * Creates a new instance of {@code NonInstrumentingComparableHelper} based on the given description and size.
      *
      * @param description a brief description for the helper instance being cloned.
@@ -118,6 +133,7 @@ public class NonInstrumentingComparatorHelper<X> extends BaseComparatorHelper<X>
      */
     public NonInstrumentingComparatorHelper(String description, Comparator<X> comparator, int n, Random random, Config config) {
         super(description, comparator, n, random, new InstrumenterDummy(), config);
+        checkSorted = config.getBoolean(HELPER, "checksorted");
     }
 
     /**
@@ -157,6 +173,8 @@ public class NonInstrumentingComparatorHelper<X> extends BaseComparatorHelper<X>
      * Keep track of the random array that was generated. This is available via the InstrumentedHelper class.
      */
     protected X[] randomArray;
+
+    private final boolean checkSorted;
 
     /**
      * A custom runtime exception used within the context of helper-related operations.
