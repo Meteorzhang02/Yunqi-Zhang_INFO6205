@@ -67,11 +67,12 @@ public class OperationsBenchmark {
     private void runLargestInteger() {
         final int nLargest = config.getInt("operationsbenchmark", "nlargest", DEFAULT_ARRAY_SIZE);
         final int repetitions = config.getInt("operationsbenchmark", "repetitions", 1000);
+
         logger.info("OperationsBenchmark.runBenchmarks: largest " + nLargest + " integers with " + repetitions + " repetitions");
 
         try (
                 final Helper<Integer> helper = new NonInstrumentingComparableHelper<>("largest", nLargest, 0L, config)) {
-            final Timer timer = new Timer();
+            final Timer timer = new Timer(config);
             final double time = timer.repeat(repetitions,
                     () -> getRandomIntegers(helper),
                     OperationsBenchmark::findLargest
@@ -88,7 +89,7 @@ public class OperationsBenchmark {
         final int repetitions = config.getInt("operationsbenchmark", "repetitions", 1000);
         logger.info("OperationsBenchmark.runBenchmarks: compareAdjacent " + nCompareAdjacent + " integers with " + repetitions + " repetitions");
         try (final Helper<Integer> helper = new NonInstrumentingComparableHelper<>("compareAdjacent", nCompareAdjacent, 0L, config)) {
-            final Timer timer = new Timer();
+            final Timer timer = new Timer(config);
             final double time = timer.repeat(repetitions,
                     () -> getRandomIntegers(helper),
                     OperationsBenchmark::compareAdjacent
@@ -105,7 +106,7 @@ public class OperationsBenchmark {
         final int repetitions = config.getInt("operationsbenchmark", "repetitions", 1000);
         logger.info("OperationsBenchmark.runBenchmarks: compareAdjacentOptimized " + nCompareAdjacent + " integers with " + repetitions + " repetitions");
         try (final Helper<Integer> helper = new NonInstrumentingComparableHelper<>("compareAdjacent", nCompareAdjacent, 0L, config)) {
-            final Timer timer = new Timer();
+            final Timer timer = new Timer(config);
             final double time = timer.repeat(repetitions,
                     () -> getRandomIntegers(helper),
                     OperationsBenchmark::compareAdjacentOptimized

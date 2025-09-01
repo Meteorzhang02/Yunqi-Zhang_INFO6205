@@ -2,11 +2,14 @@ package com.phasmidsoftware.dsaipg.adt.threesum;
 
 import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
 import com.phasmidsoftware.dsaipg.util.benchmark.TimeLogger;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import com.phasmidsoftware.dsaipg.util.general.Utilities;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+
+import static com.phasmidsoftware.dsaipg.util.config.Config.getConfig;
 
 /**
  * The ThreeSumBenchmark class provides a framework for evaluating and comparing
@@ -36,6 +39,7 @@ public class ThreeSumBenchmark {
         this.runs = runs;
         this.supplier = new Source(n, m).intsSupplier(10);
         this.n = n;
+        config = getConfig(ThreeSumBenchmark.class);
     }
 
     /**
@@ -99,7 +103,7 @@ public class ThreeSumBenchmark {
     private void benchmarkThreeSum(final String description, final Consumer<int[]> function, int n, final TimeLogger[] timeLoggers) {
         if (description.equals("ThreeSumCubic") && n > 4000) return;
         // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+                throw new RuntimeException("implementation missing");
     }
 
     /**
@@ -145,4 +149,5 @@ throw new RuntimeException("implementation missing");
     private final int runs;
     private final Supplier<int[]> supplier;
     private final int n;
+    private final Config config;
 }

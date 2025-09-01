@@ -2,7 +2,9 @@ package com.phasmidsoftware.dsaipg.adt.threesum;
 
 import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark_Timer;
 import com.phasmidsoftware.dsaipg.util.benchmark.TimeLogger;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -16,6 +18,7 @@ import java.util.function.UnaryOperator;
  * and range of integers.
  */
 public class TwoSumBenchmark {
+
     /**
      * Constructs an instance of the TwoSumBenchmark class to benchmark Two-Sum problem implementations.
      *
@@ -27,6 +30,11 @@ public class TwoSumBenchmark {
         this.runs = runs;
         this.supplier = new Source(n, m).intsSupplier(10);
         this.n = n;
+        try {
+            this.config = Config.load(ThreeSumBenchmark.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -87,7 +95,7 @@ public class TwoSumBenchmark {
     private void benchmarkTwoSum(final String description, final Consumer<int[]> function, int n, final TimeLogger[] timeLoggers) {
         if (n > 8000) return;
         // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+                throw new RuntimeException("implementation missing");
     }
 
     /**
@@ -106,4 +114,5 @@ throw new RuntimeException("implementation missing");
     private final int runs;
     private final Supplier<int[]> supplier;
     private final int n;
+    private final Config config;
 }

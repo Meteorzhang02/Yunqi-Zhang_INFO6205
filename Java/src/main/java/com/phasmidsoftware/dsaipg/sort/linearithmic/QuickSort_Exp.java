@@ -99,14 +99,14 @@ public class QuickSort_Exp<X extends Comparable<X>> extends QuickSort<X> {
             if (helper.instrumented()) {
                 helper.incrementHits(1);
                 while (true) {
-                    while (i < hi && helper.less(xs[++i], v)) {
+                    while (i < hi && helper.notInverted(xs[++i], v)) {
                     }
-                    while (j > from && helper.less(v, xs[--j])) {
+                    while (j > from && helper.notInverted(v, xs[--j])) {
                     }
                     if (i >= j) break;
                     helper.swap(xs, i, j);
                 }
-                helper.swap(xs, from, j);
+                if (from != j) helper.swap(xs, from, j);
             } else {
                 while (true) {
                     while (i < hi && xs[++i].compareTo(v) < 0) {

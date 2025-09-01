@@ -1,6 +1,7 @@
 package com.phasmidsoftware.dsaipg.util.benchmark;
 
 import com.phasmidsoftware.dsaipg.sort.generic.SortWithHelper;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 
 import java.util.function.Consumer;
@@ -55,9 +56,10 @@ public class SorterBenchmark<T extends Comparable<T>> extends Benchmark_Timer<T[
      * @param ts            the array of Ts.
      * @param nRuns         the number of runs to perform in this benchmark.
      * @param timeLoggers   the time-loggers.
+     * @param config        the configuration.
      */
-    public SorterBenchmark(Class<T> tClass, UnaryOperator<T[]> preProcessor, SortWithHelper<T> sorter, Consumer<T[]> postProcessor, T[] ts, int nRuns, TimeLogger[] timeLoggers) {
-        super(sorter.toString(), preProcessor, sorter::mutatingSort, postProcessor);
+    public SorterBenchmark(Class<T> tClass, UnaryOperator<T[]> preProcessor, SortWithHelper<T> sorter, Consumer<T[]> postProcessor, T[] ts, int nRuns, TimeLogger[] timeLoggers, Config config) {
+        super(sorter.toString(), config, preProcessor, sorter::mutatingSort, postProcessor);
         this.sorter = sorter;
         this.tClass = tClass;
         this.ts = ts;
@@ -77,7 +79,7 @@ public class SorterBenchmark<T extends Comparable<T>> extends Benchmark_Timer<T[
      * @param timeLoggers  the time-loggers.
      */
     public SorterBenchmark(Class<T> tClass, UnaryOperator<T[]> preProcessor, SortWithHelper<T> sorter, T[] ts, int nRuns, TimeLogger[] timeLoggers) {
-        this(tClass, preProcessor, sorter, sorter::postProcess, ts, nRuns, timeLoggers);
+        this(tClass, preProcessor, sorter, sorter::postProcess, ts, nRuns, timeLoggers, Config.getConfig(tClass));
     }
 
     /**

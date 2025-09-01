@@ -4,6 +4,7 @@
 
 package com.phasmidsoftware.dsaipg.util.benchmark;
 
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import org.junit.Test;
 
 import java.util.function.Consumer;
@@ -25,7 +26,9 @@ public class BenchmarkTest {
         int nRuns = 2;
         int warmups = 1;
         Benchmark<Boolean> bm = new Benchmark_Timer<>(
-                "testWaitPeriods", b -> {
+                "testWaitPeriods",
+                Config.getConfig(BenchmarkTest.class),
+                b -> {
             GoToSleep(50L, -1);
             return null;
         },
@@ -77,7 +80,7 @@ public class BenchmarkTest {
         };
 
         // Create an instance of Benchmark_Timer
-        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("Basic Test", fRun);
+        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("Basic Test", Config.getConfig(BenchmarkTest.class), fRun);
 
         // Execute the runFromSupplier method
         double time = timer.runFromSupplier(supplier, 10);
@@ -102,7 +105,7 @@ public class BenchmarkTest {
         Consumer<Integer> fRun = i -> assertTrue(i >= 0);
 
         // Create an instance of Benchmark_Timer with preprocessing
-        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("With Preprocessing Test", fPre, fRun);
+        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("With Preprocessing Test", Config.getConfig(BenchmarkTest.class), fPre, fRun);
 
         // Execute the runFromSupplier method
         double time = timer.runFromSupplier(supplier, 10);
@@ -128,7 +131,7 @@ public class BenchmarkTest {
         Consumer<Integer> fPost = i -> assertTrue(i == 100);
 
         // Create an instance of Benchmark_Timer with postprocessing
-        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("With Postprocessing Test", fRun, fPost);
+        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("With Postprocessing Test", Config.getConfig(BenchmarkTest.class), fRun, fPost);
 
         // Execute the runFromSupplier method
         double time = timer.runFromSupplier(supplier, 10);
@@ -155,7 +158,7 @@ public class BenchmarkTest {
         Consumer<Integer> fPost = i -> assertTrue(i == 2500);
 
         // Create an instance of Benchmark_Timer with full pipeline
-        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("Full Pipeline Test", fPre, fRun, fPost);
+        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("Full Pipeline Test", Config.getConfig(BenchmarkTest.class), fPre, fRun, fPost);
 
         // Execute the runFromSupplier method
         double time = timer.runFromSupplier(supplier, 10);
@@ -178,7 +181,7 @@ public class BenchmarkTest {
         };
 
         // Create an instance of Benchmark_Timer
-        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("Zero Iterations Test", fRun);
+        Benchmark_Timer<Integer> timer = new Benchmark_Timer<>("Zero Iterations Test", Config.getConfig(BenchmarkTest.class), fRun);
 
         // Execute the runFromSupplier method with zero iterations
         double time = timer.runFromSupplier(supplier, 0);

@@ -5,6 +5,8 @@ import com.phasmidsoftware.dsaipg.sort.linearithmic.Partition;
 import com.phasmidsoftware.dsaipg.util.config.Config;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.setupConfig;
 import static org.junit.Assert.assertEquals;
 
@@ -15,7 +17,7 @@ public class QuickSelectTest {
     public void testSelectWithIntegers() throws Exception {
         Integer[] a = {34, -2, 45, 0, 11, -9, 22, 89, 33, 45, -100, 67, 89, 23, 0, -2, -9, 11, 34, 56, -100, 76, 45, 89};
         final Config config = setupConfig("false", "false", "0", "0", "", "");
-        Integer[] b = a.clone();
+        Integer[] b = Arrays.copyOf(a, a.length);
         InsertionSort<Integer> sorter = new InsertionSort<Integer>(b.length, config);
         sorter.sort(b, 0, b.length);
         int k = 0;

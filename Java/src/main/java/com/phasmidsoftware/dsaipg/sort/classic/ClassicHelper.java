@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.function.Function;
 
+import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.HELPER;
+
 /**
  * The ClassicHelper class provides an implementation of the NonComparableHelper interface,
  * which in turn implements Helper, and is designed to assist sorting operations
@@ -160,13 +162,14 @@ public class ClassicHelper<X> implements NonComparableHelper<X> {
     }
 
     /**
-     * Increments the lookup count for the associated instrumenter.
-     * This method delegates the operation to the {@code instrumenter} instance's
-     * {@code incrementLookups()} method, which increases the internal count of
-     * lookup operations performed within this helper instance.
+     * Increments the count of lookups performed by the instrumenter by the specified value.
+     * This method is used to track and record the number of lookup operations,
+     * which can be useful for performance measurement or analysis.
+     *
+     * @param n the number of lookups to increment. Must be a non-negative value.
      */
-    public void incrementLookups() {
-        instrumenter.incrementLookups();
+    public void incrementLookups(long n) {
+        instrumenter.incrementLookups(n);
     }
 
     /**
@@ -308,6 +311,19 @@ public class ClassicHelper<X> implements NonComparableHelper<X> {
     }
 
     /**
+     * Performs any necessary post-processing on the provided array of elements.
+     * This implementation does nothing by default and can be overridden as needed.
+     *
+     * @param xs an array of elements of type X to be post-processed
+     */
+    @Override
+    public void postProcess(X[] xs) {
+        NonComparableHelper.super.postProcess(xs);
+        if (checkSorted && !isSorted(xs))
+            throw new NonInstrumentingComparatorHelper.HelperException("ClassicHelper.postProcess: array is not sorted");
+    }
+
+    /**
      * Constructor for explicit random number generator.
      *
      * @param description the description of this Helper (for humans).
@@ -322,6 +338,7 @@ public class ClassicHelper<X> implements NonComparableHelper<X> {
         this.config = config;
         this.comparator = comparator;
         this.instrumenter = new InstrumenterDummy();
+        checkSorted = config.getBoolean(HELPER, "checksorted");
     }
 
     protected X[] randomArray;
@@ -332,4 +349,5 @@ public class ClassicHelper<X> implements NonComparableHelper<X> {
     private final Comparator<X> comparator;
     private int n;
     private final Instrument instrumenter;
+    private final boolean checkSorted;
 }

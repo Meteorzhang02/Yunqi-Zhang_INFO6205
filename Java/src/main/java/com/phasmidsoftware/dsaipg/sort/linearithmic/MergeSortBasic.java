@@ -164,19 +164,19 @@ public class MergeSortBasic<X extends Comparable<X>> extends SortWithComparableH
      *
      * @param aux an auxiliary array used for merging.
      * @param a the array to be merged.
-     * @param lo the starting index of the first subarray.
+     * @param from the starting index of the first subarray.
      * @param mid the ending index of the first subarray and the starting index of the second subarray.
-     * @param hi the ending index of the second subarray.
+     * @param to the ending index of the second subarray (exclusive)
      */
-    private void merge(X[] aux, X[] a, int lo, int mid, int hi) {
+    private void merge(X[] aux, X[] a, int from, int mid, int to) {
         final Helper<X> helper = getHelper();
-        int i = lo;
+        int i = from;
         int j = mid;
-        int k = lo;
-        for (; k < hi; k++)
+        int k = from;
+        for (; k < to; k++)
             if (i >= mid) helper.copy(aux, j++, a, k);
-            else if (j >= hi) helper.copy(aux, i++, a, k);
-            else if (helper.less(aux[j], aux[i])) {
+            else if (j >= to) helper.copy(aux, i++, a, k);
+            else if (helper.inverted(aux, i, j)) {
                 helper.incrementFixes(mid - i);
                 helper.copy(aux, j++, a, k);
             } else helper.copy(aux, i++, a, k);

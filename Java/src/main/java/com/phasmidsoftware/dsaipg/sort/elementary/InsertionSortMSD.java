@@ -11,13 +11,13 @@ public class InsertionSortMSD {
      * The sorting considers the characters starting from index `d` of the strings.
      *
      * @param a  the array of strings to be sorted
-     * @param lo the starting index of the portion to sort (inclusive)
-     * @param hi the ending index of the portion to sort (exclusive)
+     * @param from the starting index of the portion to sort (inclusive)
+     * @param to the ending index of the portion to sort (exclusive)
      * @param d  the character index to start comparing strings
      */
-    public static void sort(String[] a, int lo, int hi, int d) {
-        for (int i = lo; i < hi; i++)
-            for (int j = i; j > lo && less(a[j], a[j - 1], d); j--)
+    public static void sort(String[] a, int from, int to, int d) {
+        for (int i = from; i < to; i++)
+            for (int j = i; j > from && less(a[j], a[j - 1], d); j--)
                 swap(a, j, j - 1);
     }
 

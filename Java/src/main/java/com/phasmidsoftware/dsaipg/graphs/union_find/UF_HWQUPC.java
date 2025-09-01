@@ -92,7 +92,7 @@ public class UF_HWQUPC implements UF {
         validate(p);
         int root = p;
         // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+                throw new RuntimeException("implementation missing");
     }
 
     /**

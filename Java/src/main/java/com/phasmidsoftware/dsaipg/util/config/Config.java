@@ -56,6 +56,23 @@ public class Config {
     }
 
     /**
+     * Retrieves the configuration object based on the specified class.
+     * If the configuration file cannot be found, the method throws a runtime exception.
+     *
+     * @param clazz the Class relative to which the configuration file (e.g., config.ini) should be loaded.
+     *              If null, the method attempts to load the configuration from the root directory.
+     * @return the loaded Config object containing the configuration data.
+     * @throws RuntimeException if there is an IOException during the loading process.
+     */
+    public static Config getConfig(final Class<?> clazz) {
+        try {
+            return Config.load(clazz);
+        } catch (IOException e) {
+            throw new RuntimeException("getConfig", e);
+        }
+    }
+
+    /**
      * A static logger instance used for logging activities in the configuration class.
      * Utilizes the LazyLogger implementation to efficiently log messages.
      * This logger is specifically tied to the {@link Config} class.

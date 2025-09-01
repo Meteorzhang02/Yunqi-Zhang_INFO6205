@@ -455,17 +455,17 @@ public final class StdRandom {
      * Rearranges the elements of the specified subarray in uniformly random order.
      *
      * @param a  the array to shuffle
-     * @param lo the left endpoint (inclusive)
-     * @param hi the right endpoint (exclusive)
+     * @param from the left endpoint (inclusive)
+     * @param to the right endpoint (exclusive)
      * @throws IllegalArgumentException if {@code a} is {@code null}
-     * @throws IllegalArgumentException unless {@code (0 <= lo) && (lo < hi) && (hi <= a.length)}
+     * @throws IllegalArgumentException unless {@code (0 <= from) && (from < to) && (to <= a.length)}
      */
-    public static void shuffle(Object[] a, int lo, int hi) {
+    public static void shuffle(Object[] a, int from, int to) {
         validateNotNull(a);
-        validateSubarrayIndices(lo, hi, a.length);
+        validateSubarrayIndices(from, to, a.length);
 
-        for (int i = lo; i < hi; i++) {
-            int r = i + uniform(hi - i);     // between i and hi-1
+        for (int i = from; i < to; i++) {
+            int r = i + uniform(to - i);     // between i and to-1
             Object temp = a[i];
             a[i] = a[r];
             a[r] = temp;
@@ -476,17 +476,17 @@ public final class StdRandom {
      * Rearranges the elements of the specified subarray in uniformly random order.
      *
      * @param a  the array to shuffle
-     * @param lo the left endpoint (inclusive)
-     * @param hi the right endpoint (exclusive)
+     * @param from the left endpoint (inclusive)
+     * @param to the right endpoint (exclusive)
      * @throws IllegalArgumentException if {@code a} is {@code null}
-     * @throws IllegalArgumentException unless {@code (0 <= lo) && (lo < hi) && (hi <= a.length)}
+     * @throws IllegalArgumentException unless {@code (0 <= from) && (from < to) && (to <= a.length)}
      */
-    public static void shuffle(double[] a, int lo, int hi) {
+    public static void shuffle(double[] a, int from, int to) {
         validateNotNull(a);
-        validateSubarrayIndices(lo, hi, a.length);
+        validateSubarrayIndices(from, to, a.length);
 
-        for (int i = lo; i < hi; i++) {
-            int r = i + uniform(hi - i);     // between i and hi-1
+        for (int i = from; i < to; i++) {
+            int r = i + uniform(to - i);     // between i and to-1
             double temp = a[i];
             a[i] = a[r];
             a[r] = temp;
@@ -497,17 +497,17 @@ public final class StdRandom {
      * Rearranges the elements of the specified subarray in uniformly random order.
      *
      * @param a  the array to shuffle
-     * @param lo the left endpoint (inclusive)
-     * @param hi the right endpoint (exclusive)
+     * @param from the left endpoint (inclusive)
+     * @param to the right endpoint (exclusive)
      * @throws IllegalArgumentException if {@code a} is {@code null}
-     * @throws IllegalArgumentException unless {@code (0 <= lo) && (lo < hi) && (hi <= a.length)}
+     * @throws IllegalArgumentException unless {@code (0 <= from) && (from < to) && (to <= a.length)}
      */
-    public static void shuffle(int[] a, int lo, int hi) {
+    public static void shuffle(int[] a, int from, int to) {
         validateNotNull(a);
-        validateSubarrayIndices(lo, hi, a.length);
+        validateSubarrayIndices(from, to, a.length);
 
-        for (int i = lo; i < hi; i++) {
-            int r = i + uniform(hi - i);     // between i and hi-1
+        for (int i = from; i < to; i++) {
+            int r = i + uniform(to - i);     // between i and to-1
             int temp = a[i];
             a[i] = a[r];
             a[r] = temp;
@@ -565,10 +565,10 @@ public final class StdRandom {
         }
     }
 
-    // throw an exception unless 0 <= lo <= hi <= length
-    private static void validateSubarrayIndices(int lo, int hi, int length) {
-        if (lo < 0 || hi > length || lo > hi) {
-            throw new IllegalArgumentException("subarray indices out of bounds: [" + lo + ", " + hi + ")");
+    // throw an exception unless 0 <= from <= to <= length
+    private static void validateSubarrayIndices(int from, int to, int length) {
+        if (from < 0 || to > length || from > to) {
+            throw new IllegalArgumentException("subarray indices out of bounds: [" + from + ", " + to + ")");
         }
     }
 }

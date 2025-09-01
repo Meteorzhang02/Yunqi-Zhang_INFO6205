@@ -187,6 +187,8 @@ public class ShellSortTest {
         Integer[] xs = {15, 3, -1, 2, 4, 1, 0, 5, 8, 6, 1, 9, 17, 7, 11};
         InstrumentedComparatorHelper<Integer> helper = new InstrumentedComparableHelper<>("ShellSort with instrumentation", xs.length, config);
         ShellSort.doShellSort(3, helper, xs);
+        assertTrue(helper.isSorted(xs));
+        helper.close();
     }
 
     @Test

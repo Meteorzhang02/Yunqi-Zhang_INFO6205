@@ -1,5 +1,6 @@
 package com.phasmidsoftware.dsaipg.util.benchmark;
 
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import com.phasmidsoftware.dsaipg.util.logging.LazyLogger;
 
 import java.util.function.Consumer;
@@ -69,9 +70,17 @@ public class Timer {
      * @return the average milliseconds per repetition.
      */
     public <T, U> double repeat(int n, boolean warmup, Supplier<T> supplier, Function<T, U> function, UnaryOperator<T> preFunction, Consumer<U> postFunction) {
-        // TO BE IMPLEMENTED : note that the timer is running when this method is called and should still be running when it returns.
-         return 0;
-        // END SOLUTION
+        // NOTE that the timer is running when this method is called and should still be running when it returns.
+        pause();
+        doTrace(() -> "repeat: with " + n + " runs"); // NOTE optional
+        doTrace(warmup, () -> "warmup"); // NOTE optional
+        int lastx = -1;
+        for (int i = 0; i < n; i++)
+            lastx = doRepeatForIteration(n, warmup, supplier, function, preFunction, postFunction, lastx, i);
+        final double result = meanLapTime();
+        showProgress.accept("\r");
+        resume();
+        return result;
     }
 
     /**
@@ -167,12 +176,47 @@ public class Timer {
     }
 
     /**
-     * Construct a new Timer and set it running.
+     * Constructs a new Timer instance and initializes it with the given progress display function.
+     * The timer starts running immediately after creation.
+     *
+     * @param showProgress a {@code Consumer<String>} function that consumes progress messages for display or logging purposes.
      */
-    public Timer() {
+    public Timer(Consumer<String> showProgress) {
+        this.showProgress = showProgress;
         Supplier<String> f = () -> "create new timer";
         doTrace(f);
         resume();
+    }
+
+    /**
+     * Constructs a new Timer instance using the specified configuration.
+     * The Timer is initialized with the progress display function derived from the configuration.
+     *
+     * @param config the configuration object that provides the settings used to initialize the Timer.
+     *               Includes whether to show progress via a {@code "timer.showprogress"} boolean key.
+     */
+    public Timer(Config config) {
+        this(progressFunction(config.getBoolean("timer", "showprogress")));
+    }
+
+    /**
+     * Executes a single iteration of a timed operation, optionally performing pre-processing and post-processing
+     * functions, and updates status based on the iteration progress.
+     *
+     * @param n            the total number of iterations to be performed.
+     * @param warmup       indicates if the operation is in the warmup phase (true) or actual execution (false).
+     * @param supplier     a supplier function that provides the initial input value for the operation.
+     * @param function     the main function to be timed, which processes the input value.
+     * @param preFunction  an optional function applied to preprocess the input before timing (may be null).
+     * @param postFunction an optional function applied to post-process the result after timing (may be null).
+     * @param lastx        the previous state value used for status updates.
+     * @param i            the current iteration index, used for progress calculations.
+     * @return the updated lastx value after status update.
+     */
+    private <T, U> int doRepeatForIteration(int n, boolean warmup, Supplier<T> supplier, Function<T, U> function, UnaryOperator<T> preFunction, Consumer<U> postFunction, int lastx, int i) {
+        // TO BE IMPLEMENTED : note that the timer should be paused when this method is invoked. You may use doPrintStatus to show progress (but optional).
+        // END SOLUTION
+        return lastx;
     }
 
     /**
@@ -183,21 +227,33 @@ public class Timer {
      * @param x     the current state or value of x being tracked; must remain constant within this method's execution.
      * @return the updated current value of x.
      */
-    private static int doPrintStatus(int lastx, final int x) {
+    private int doPrintStatus(int lastx, final int x) {
         if (x != lastx) {
             if (x % 10 == 0)
-                System.out.print(10 - x / 10);
+                showProgress.accept("" + (10 - x / 10));
             else
-                System.out.print(".");
+                showProgress.accept(".");
         }
         return x;
     }
 
-    private static <T> void doTrace(final boolean condition, Supplier<String> messageFunction) {
-        if (logger.isTraceEnabled() && condition) logger.trace(messageFunction.get());
+    /**
+     * Logs a trace message if the specified condition is true. The message is generated lazily
+     * using the provided {@code Supplier<String>} function.
+     *
+     * @param condition       a boolean specifying whether to log the trace message.
+     * @param messageFunction a {@code Supplier<String>} that provides the trace message to log.
+     */
+    private void doTrace(final boolean condition, Supplier<String> messageFunction) {
+        if (condition) logger.trace(messageFunction);
     }
 
-    private static void doTrace(Supplier<String> f) {
+    /**
+     * Logs a trace message using the given message supplier (that's to say this method is lazy).
+     *
+     * @param f a {@code Supplier<String>} that provides the string message to be traced.
+     */
+    private void doTrace(Supplier<String> f) {
         doTrace(true, f);
     }
 
@@ -207,33 +263,35 @@ public class Timer {
 
     /**
      * Retrieves the current number of ticks recorded by the Timer.
+     * NOTE: Used by unit tests
      *
      * @return the number of ticks stored in the Timer.
      */
-    // NOTE: Used by unit tests
     private long getTicks() {
         return ticks;
     }
 
     /**
      * Retrieves the current number of laps recorded by the Timer.
+     * NOTE: Used by unit tests
      *
      * @return the number of laps stored in the Timer.
      */
-    // NOTE: Used by unit tests
     private int getLaps() {
         return laps;
     }
 
     /**
      * Determines if the Timer is currently running.
+     * NOTE: Used by unit tests
      *
      * @return true if the Timer is running, false otherwise.
      */
-    // NOTE: Used by unit tests
     private boolean isRunning() {
         return running;
     }
+
+    private final Consumer<String> showProgress;
 
     /**
      * Get the number of ticks from the system clock.
@@ -247,6 +305,11 @@ public class Timer {
         // TO BE IMPLEMENTED 
          return 0;
         // END SOLUTION
+    }
+
+    static Consumer<String> progressFunction(boolean showProgress) {
+        return showProgress ? System.out::print : (s) -> {
+        };
     }
 
     /**

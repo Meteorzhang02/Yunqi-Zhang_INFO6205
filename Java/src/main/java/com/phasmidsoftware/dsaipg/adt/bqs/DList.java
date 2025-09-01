@@ -89,7 +89,7 @@ public class DList<Item> implements Iterable<Item> {
      */
     public void addBeforeElement(Item item, D_Element next) {
         // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+                throw new RuntimeException("implementation missing");
     }
 
     /**
@@ -100,7 +100,7 @@ throw new RuntimeException("implementation missing");
      */
     public void addAfterElement(Item item, D_Element prev) {
         // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+                throw new RuntimeException("implementation missing");
     }
 
     /**
@@ -110,7 +110,7 @@ throw new RuntimeException("implementation missing");
      */
     public void remove(D_Element element) {
         // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+                throw new RuntimeException("implementation missing");
     }
 
     public D_Element findFirst(Item item) {

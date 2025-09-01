@@ -160,7 +160,7 @@ public class InstrumenterDummy implements Instrument {
      * This method is utilized for tracking the number of times a lookup operation is performed.
      * Intended for use in scenarios where instrumentation or statistical monitoring is required.
      */
-    public void incrementLookups() {
+    public void incrementLookups(long n) {
 
     }
 

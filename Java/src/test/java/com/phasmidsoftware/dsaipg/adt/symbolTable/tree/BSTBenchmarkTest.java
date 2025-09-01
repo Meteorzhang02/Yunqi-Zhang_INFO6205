@@ -1,6 +1,6 @@
 package com.phasmidsoftware.dsaipg.adt.symbolTable.tree;
 
-import com.phasmidsoftware.dsaipg.util.benchmark.SortBenchmark;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import com.phasmidsoftware.dsaipg.util.general.Utilities;
 import org.junit.Test;
 
@@ -37,12 +37,10 @@ public class BSTBenchmarkTest {
 
         // Create an instance of BSTBenchmark
         BSTBenchmark<String, Integer> benchmark = new BSTBenchmark<>(
-                String.class,
                 bst,
-                data,
                 10, // Number of runs
-                SortBenchmark.timeLoggersLinearithmic,
-                stats
+                stats,
+                Config.getConfig(BSTBenchmark.class)
         );
 
         // Run the benchmark
@@ -66,12 +64,10 @@ public class BSTBenchmarkTest {
 
         // Create an instance of BSTBenchmark
         BSTBenchmark<String, Integer> benchmark = new BSTBenchmark<>(
-                String.class,
                 bst,
-                data,
                 10, // Number of runs
-                SortBenchmark.timeLoggersLinearithmic,
-                stats
+                stats,
+                Config.getConfig(BSTBenchmark.class)
         );
 
         // Run the benchmark
@@ -96,12 +92,10 @@ public class BSTBenchmarkTest {
 
         // Create an instance of BSTBenchmark
         BSTBenchmark<String, Integer> benchmark = new BSTBenchmark<>(
-                String.class,
                 bst,
-                data,
                 10, // Number of runs
-                SortBenchmark.timeLoggersLinearithmic,
-                stats
+                stats,
+                Config.getConfig(BSTBenchmark.class)
         );
 
         // Run the benchmark
@@ -124,12 +118,10 @@ public class BSTBenchmarkTest {
 
         // Create an instance of BSTBenchmark
         BSTBenchmark<String, Integer> benchmark = new BSTBenchmark<>(
-                String.class,
                 bst,
-                data,
                 10, // Number of runs
-                SortBenchmark.timeLoggersLinearithmic,
-                stats
+                stats,
+                Config.getConfig(BSTBenchmark.class)
         );
 
         // Run the benchmark

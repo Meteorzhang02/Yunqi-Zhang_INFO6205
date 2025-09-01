@@ -7,8 +7,8 @@ import com.phasmidsoftware.dsaipg.sort.linearithmic.Partitioner;
 import com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort_Basic;
 
 import java.util.List;
-import java.util.Random;
 
+import static com.phasmidsoftware.dsaipg.select.Shuffle.shuffle;
 import static com.phasmidsoftware.dsaipg.sort.linearithmic.QuickSort.createPartition;
 
 /**
@@ -60,18 +60,6 @@ public class QuickSelect<X extends Comparable<X>> implements Select<X> {
     int[] partition(Partition<X> partition) {
         List<Partition<X>> partitionList = partitioner.partition(partition);
         return new int[]{partitionList.get(0).to, partitionList.get(1).from};
-    }
-
-    /***
-     * Knuth shuffle
-     * In iteration i, pick integer r between zero and i uniformly at random
-     * Swap a[i] and a[r].
-     *
-     * @param a the array
-     */
-    private static void shuffle(Object[] a) {
-        Random random = new Random();
-        for (int i = 0; i < a.length; i++) swap(a, i, random.nextInt(i + 1));
     }
 
     /**

@@ -43,7 +43,7 @@ public abstract class ClassificationSorter<X, Y> extends SortWithHelper<X> imple
      * @throws SortException if the classifier function is not set
      */
     public int classify(X x, Y y) {
-        helper.incrementLookups();
+        helper.incrementLookups(1);
         if (classifier != null)
             return classifier.apply(x, y);
         throw new SortException("Classifier is not set");

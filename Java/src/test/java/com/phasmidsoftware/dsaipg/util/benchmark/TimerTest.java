@@ -1,6 +1,7 @@
 package com.phasmidsoftware.dsaipg.util.benchmark;
 
 import com.phasmidsoftware.dsaipg.util.PrivateMethodTester;
+import com.phasmidsoftware.dsaipg.util.config.Config;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,11 +16,12 @@ public class TimerTest {
         run = 0;
         post = 0;
         result = 0;
+        config = Config.getConfig(BenchmarkTest.class);
     }
 
     @Test
     public void testStop() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         GoToSleep(TENTH, 0);
         final double time = timer.stop();
         assertEquals(TENTH_DOUBLE, time, 11);
@@ -29,7 +31,7 @@ public class TimerTest {
 
     @Test
     public void testPauseAndLap() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         final PrivateMethodTester privateMethodTester = new PrivateMethodTester(timer);
         GoToSleep(TENTH, 0);
         timer.pauseAndLap();
@@ -41,7 +43,7 @@ public class TimerTest {
 
     @Test
     public void testPauseAndLapResume0() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         final PrivateMethodTester privateMethodTester = new PrivateMethodTester(timer);
         GoToSleep(TENTH, 0);
         timer.pauseAndLap();
@@ -52,7 +54,7 @@ public class TimerTest {
 
     @Test
     public void testPauseAndLapResume1() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         GoToSleep(TENTH, 0);
         timer.pauseAndLap();
         GoToSleep(TENTH, 0);
@@ -65,7 +67,7 @@ public class TimerTest {
 
     @Test
     public void testLap() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         GoToSleep(TENTH, 0);
         timer.lap();
         GoToSleep(TENTH, 0);
@@ -76,7 +78,7 @@ public class TimerTest {
 
     @Test
     public void testPause() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         GoToSleep(TENTH, 0);
         timer.pause();
         GoToSleep(TENTH, 0);
@@ -88,7 +90,7 @@ public class TimerTest {
 
     @Test
     public void testMillisecs() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         GoToSleep(TENTH, 0);
         timer.stop();
         final double time = timer.millisecs();
@@ -98,7 +100,7 @@ public class TimerTest {
 
     @Test
     public void testRepeat1() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         final double mean = timer.repeat(10, () -> {
             GoToSleep(HUNDREDTH, 0);
             return null;
@@ -112,7 +114,7 @@ public class TimerTest {
 
     @Test
     public void testRepeat2() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         final int zzz = 20;
         final double mean = timer.repeat(10, () -> zzz, t -> {
             GoToSleep(t, 0);
@@ -127,7 +129,7 @@ public class TimerTest {
 
     @Test // Slow
     public void testRepeat3() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         final int zzz = 10;
         final double mean = timer.repeat(6, false, () -> zzz, t -> {
             GoToSleep(t, 0);
@@ -145,7 +147,7 @@ public class TimerTest {
 
     @Test // Slow
     public void testRepeat4() {
-        final Timer timer = new Timer();
+        final Timer timer = new Timer(config);
         final int zzz = 20;
         final double mean = timer.repeat(10,
                 false, () -> zzz, // supplier
@@ -186,5 +188,6 @@ public class TimerTest {
     public static final int TENTH = 100;
     public static final double TENTH_DOUBLE = 100;
     public static final int HUNDREDTH = 10;
+    private Config config;
 
 }

@@ -64,10 +64,10 @@ public class BenchmarksLong {
         Supplier<Integer[]> supplier = () -> helper.random(Integer.class, Random::nextInt);
         final Benchmark<Integer[]> benchmark = new Benchmark_Timer<>(
                 description + " for " + N + " Integers",
+                config,
                 (xs) -> Arrays.copyOf(xs, xs.length),
                 sort::mutatingSort,
-                null
-        );
+                null);
         logger.info(Utilities.formatDecimal3Places(benchmark.runFromSupplier(supplier, 100)) + " ms");
     }
 

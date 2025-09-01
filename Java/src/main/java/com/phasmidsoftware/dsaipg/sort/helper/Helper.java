@@ -10,7 +10,6 @@ import java.util.Random;
 import java.util.function.Function;
 
 import static com.phasmidsoftware.dsaipg.util.config.Config_Benchmark.CUTOFF_DEFAULT;
-import static java.util.Arrays.binarySearch;
 
 /**
  * Interface to define all the helper methods (and which does not require the underlying type to be Comparable).
@@ -79,26 +78,28 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
 
     /**
      * Method to perform a general swap, i.e., between xs[i] and xs[j]
+     * It is expected, but not required, that i != j.
      *
-     * @param xs the array of X elements.
      * @param v  the value of xs[i].
+     * @param xs the array of X elements.
      * @param i  the index of the lower of the elements to be swapped.
      * @param j  the index of the higher of the elements to be swapped.
      */
-    default void swap(X[] xs, X v, int i, int j) {
+    default void swapV(X v, X[] xs, int i, int j) {
         xs[i] = xs[j];
         xs[j] = v;
     }
 
     /**
-     * Method to perform a general swap, i.e., between xs[i] and xs[j]
+     * Method to perform a general swap, i.e., between xs[i] and xs[j].
+     * It is expected, but not required, that i != j.
      *
+     * @param w  the value of xs[j].
      * @param xs the array of X elements.
      * @param i  the index of the lower of the elements to be swapped.
      * @param j  the index of the higher of the elements to be swapped.
-     * @param w  the value of xs[j].
      */
-    default void swap(X[] xs, int i, int j, X w) {
+    default void swapW(X w, X[] xs, int i, int j) {
         xs[j] = xs[i];
         xs[i] = w;
     }
@@ -106,13 +107,13 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
     /**
      * Method to perform a general swap, i.e., between xs[i] and xs[j]
      *
-     * @param xs the array of X elements.
      * @param v  the value of xs[i].
      * @param w  the value of xs[j].
+     * @param xs the array of X elements.
      * @param i  the index of the lower of the elements to be swapped.
      * @param j  the index of the higher of the elements to be swapped.
      */
-    default void swap(X[] xs, X v, int i, int j, X w) {
+    default void swapVW(X v, X w, X[] xs, int i, int j) {
         xs[j] = v;
         xs[i] = w;
     }
@@ -183,6 +184,15 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
      */
     default void copyBlock(X[] source, int i, X[] target, int j, int n) {
         System.arraycopy(source, i, target, j, n);
+        // CONSIDER something like the following (which comes from binarySort within TimSort):
+//        switch (n) {
+//            case 2:  a[left + 2] = a[left + 1];
+//            case 1:  a[left + 1] = a[left];
+//                break;
+//            default: System.arraycopy(a, left, a, left + 1, n);
+//        }
+//        a[left] = pivot;
+
     }
 
     /**
@@ -326,56 +336,106 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
     }
 
     /**
-     * Compare values v and w and return true if v is less than w.
+     * Compare values v and w and return true if v is less than w, i.e., not inverted.
+     * TODO remove the "notInverted" methods and replace by calls to "inverted."
      *
      * @param v the first value.
      * @param w the second value.
      * @return true if v is less than w.
      */
-    default boolean less(X v, X w) {
+    default boolean notInverted(X v, X w) {
         return compare(v, w) < 0;
     }
 
     /**
-     * Compare values xs[i] and w and return true if xs[i] is less than w.
+     * Compare values xs[i] and w and return true if xs[i] is less than w, i.e., not inverted.
+     * NOTE: only used by unit tests
      *
      * @param xs the array.
      * @param i  the index of the first value.
      * @param w  the second value.
      * @return true if v is less than w.
      */
-    default boolean less(X[] xs, int i, X w) {
-        return less(xs[i], w);
+    default boolean notInverted(X[] xs, int i, X w) {
+        return notInverted(xs[i], w);
     }
 
     /**
-     * Compare values xs[i] and w and return true if xs[i] is less than w.
+     * Compare values xs[i] and w and return true if xs[i] is less than w, i.e., not inverted.
      *
      * @param xs the array.
      * @param v  the first value.
      * @param j  the index of the second value.
      * @return true if v is less than w.
      */
-    default boolean less(X[] xs, X v, int j) {
-        return less(v, xs[j]);
+    default boolean notInverted(X[] xs, X v, int j) {
+        return notInverted(v, xs[j]);
     }
 
     /**
-     * Compare values xs[i] and xs[j] and return true if xs[i] is less than xs[j].
+     * Compare values xs[i] and xs[j] and return true if xs[i] is less than xs[j], i.e., not inverted.
      *
      * @param xs the array.
      * @param i  the index of the first value.
      * @param j  the index of the second value.
      * @return true if v is less than w.
      */
-    default boolean less(X[] xs, int i, int j) {
-        return less(xs, xs[i], j);
+    default boolean notInverted(X[] xs, int i, int j) {
+        return notInverted(xs, xs[i], j);
+    }
+
+    /**
+     * Compare values xs[i] and xs[j] and return true if xs[i] is more than xs[j], i.e., they are inverted.
+     *
+     * @param xs the array.
+     * @param i  the index of the first value.
+     * @param j  the index of the second value.
+     * @return true if xs[i] is more than xs[j].
+     */
+    default boolean inverted(X[] xs, int i, int j) {
+        return compare(xs, i, j) > 0;
+    }
+
+    /**
+     * Compare values v and xs[j] and return true if v is more than xs[j], i.e., they are inverted.
+     *
+     * @param xs the array.
+     * @param v  the first value.
+     * @param j  the index of the second value.
+     * @return true if v is more than xs[j].
+     */
+    default boolean inverted(X[] xs, X v, int j) {
+        return compare(v, xs[j]) > 0;
+    }
+
+    /**
+     * Compare values xs[i] and w and return true if xs[i] is more than w, i.e., they are inverted.
+     *
+     * @param xs the array.
+     * @param i  the index of the first value.
+     * @param w  the second value
+     * @return true if xs[i] is more than w.
+     */
+    default boolean inverted(X[] xs, int i, X w) {
+        return compare(xs[i], w) > 0;
+    }
+
+    /**
+     * Compare values v and w and return true if v is more than w, i.e., they are inverted.
+     *
+     * @param v the first value.
+     * @param w the second value
+     * @return true if v is more than w.
+     */
+    default boolean inverted(X v, X w) {
+        return compare(v, w) > 0;
     }
 
     /**
      * Method to determine if a pair of adjacent elements of an array is in sequence.
      * Used by sorted method.
      * It is an attempt to optimize the process, although it's questionable if it really does.
+     * NOTE no statistics are affected by this method--it is NOT an equivalent of inverted or compare.
      *
      * @param xs the array of X elements.
      * @param x  the left-hand element (should be smaller or equal).
@@ -412,14 +472,11 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
      */
     default void sortTrio(X[] xs, int from, int to) {
         if (to == from + 3) {
-            X a = get(xs, from);
-            X b = get(xs, from + 1);
-            X c = get(xs, from + 2);
-            boolean swappedAB = swapConditional(xs, a, from, from + 1, b);
-            if (swappedAB) b = a;
-            boolean swappedBC = swapConditional(xs, b, from + 1, from + 2, c);
-            if (!swappedAB && !swappedBC) return;
-            if (swappedBC) swapConditional(xs, from, from + 1, c);
+            boolean swappedXY = swapConditional(xs, from, from + 1);
+            boolean swappedYZ = swapConditional(xs, from + 1, from + 2);
+            if (!swappedXY && !swappedYZ) return; // xyz
+            if (swappedYZ) swapConditional(xs, from, from + 1);
+            else swapConditional(xs, from, from + 2);
         }
     }
 
@@ -475,10 +532,7 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
         if (i == j) return false;
         if (i > j) return swapConditional(xs, w, j, i, v);
         boolean exchange = compare(v, w) > 0;
-        if (exchange) {
-            xs[i] = w;
-            xs[j] = v;
-        }
+        if (exchange) swapVW(v, w, xs, i, j);
         return exchange;
     }
 
@@ -494,30 +548,69 @@ public interface Helper<X> extends AutoCloseable, Comparator<X>, Instrument {
     }
 
     /**
+     * Method to perform a stable swap using half-swaps,
+     * i.e., between xs[i] and xs[j] such that xs[j] is moved to index i,
+     * and xs[i] through xs[j-1] are all moved up one place.
+     * This type of swap is used by InsertionSortOpt.
+     *
+     * @param xs the array of Xs.
+     * @param i  the index of the destination of xs[j].
+     * @param j  the index of the right-most element to be involved in the swap.
+     * @param x  the value of xs[j].
+     */
+    default void swapInto(X[] xs, int i, int j, X x) {
+        if (j > i) {
+            copyBlock(xs, i, xs, i + 1, j - i);
+            xs[i] = x;
+        }
+    }
+
+
+    /**
      * Method to perform a stable swap using half-exchanges,
-     * i.e. between xs[i] and xs[j] such that xs[j] is moved to index i,
-     * and xs[i] thru xs[j-1] are all moved up one.
-     * This type of swap is used by insertion sort.
-     * <p>
-     * TODO this method does not seem to work.
+     * i.e., between xs[i] and xs[j] such that xs[j] is moved to index i,
+     * and xs[i] through xs[j-1] are all moved up one place.
+     * This type of swap is used by InsertionSortOpt.
      *
      * @param xs the array of Xs.
      * @param i  the index of the destination of xs[j].
      * @param j  the index of the right-most element to be involved in the swap.
      */
-    void swapInto(X[] xs, int i, int j);
+    default void swapInto(X[] xs, int i, int j) {
+        swapInto(xs, i, j, get(xs, j));
+    }
 
     /**
      * Method to perform a stable swap using half-exchanges, and binary search, i.e., x[i] is moved leftwards to its proper place, and all elements from the destination of x[i] through x[i-1] are moved up one place.
      * This type of swap is used by insertion sort.
      *
-     * @param xs the array of X elements, whose elements 0 through i-1 MUST be sorted.
-     * @param i  the index of the element to be swapped into the ordered array xs[0...i-1].
+     * @param xs   the array of X elements, whose elements 0 through i-1 MUST be sorted.
+     * @param from the first index of the sorted partition into which we want to insert the element at index i.
+     * @param i    the index of the element to be swapped into the ordered array xs[0...i-1].
      */
-    default void swapIntoSorted(X[] xs, int i) {
-        int j = binarySearch(xs, 0, i, xs[i]);
-        if (j < 0) j = -j - 1;
-        if (j < i) swapInto(xs, j, i);
+    default void swapIntoSorted(X[] xs, int from, int i) {
+        X x = get(xs, i);
+        int j = binarySearch(xs, from, i, x);
+        if (j < from) j = from - j - 1;
+        if (j < i) swapInto(xs, j, i, x);
+    }
+
+    /**
+     * Performs a binary search on a specified sub-array to find the index of the given element.
+     * The array must be sorted prior to making this call.
+     * If the array is not sorted, the results are undefined.
+     *
+     * @param xs   the array to be searched
+     * @param from the index of the first element (inclusive) to be searched
+     * @param to   the index of the last element (exclusive) to be searched
+     * @param x    the value to be searched for
+     * @return the index of the search key, if it is contained in the array within the specified range;
+     * otherwise, (-(insertion point) - 1). The insertion point is defined as the point at which
+     * the key would be inserted into the array: the index of the first element greater than the key,
+     * or toIndex if all elements in the range are less than the specified key.
+     */
+    default int binarySearch(X[] xs, int from, int to, X x) {
+        return Arrays.binarySearch(xs, from, to, x, getComparator());
     }
 
     /**

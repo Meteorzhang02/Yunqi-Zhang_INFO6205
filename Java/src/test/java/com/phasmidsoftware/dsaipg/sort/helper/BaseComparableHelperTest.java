@@ -79,66 +79,72 @@ public class BaseComparableHelperTest {
     }
 
     @Test
-    public void less() {
-        assertTrue(new BaseComparableHelperWithSortedTest<String>().less(xA, xB));
+    public void notInverted() {
+        assertTrue(new BaseComparableHelperWithSortedTest<String>().notInverted(xA, xB));
     }
 
     @Test
     public void compare() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>();
-        assertEquals(-1, helper.compare(xs, 0, 1));
-        assertEquals(0, helper.compare(xs, 0, 0));
-        assertEquals(1, helper.compare(xs, 1, 0));
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>()) {
+            assertEquals(-1, helper.compare(xs, 0, 1));
+            assertEquals(0, helper.compare(xs, 0, 0));
+            assertEquals(1, helper.compare(xs, 1, 0));
+        }
     }
 
     @Test
     public void swap0() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>();
-        helper.swap(xs, 0, 1);
-        assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.swap(xs, 0, 1);
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>()) {
+            helper.swap(xs, 0, 1);
+            assertArrayEquals(new String[]{xB, xA}, xs);
+            helper.swap(xs, 0, 1);
+        }
         assertArrayEquals(new String[]{xA, xB}, xs);
     }
 
     @Test
     public void swap1() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>();
-        helper.swap(xs, xA, 0, 1);
-        assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.swap(xs, xB, 0, 1);
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>()) {
+            helper.swapV(xA, xs, 0, 1);
+            assertArrayEquals(new String[]{xB, xA}, xs);
+            helper.swapV(xB, xs, 0, 1);
+        }
         assertArrayEquals(new String[]{xA, xB}, xs);
     }
 
     @Test
     public void swap2() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>();
-        helper.swap(xs, 0, 1, xB);
-        assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.swap(xs, 0, 1, xA);
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>()) {
+            helper.swapW(xB, xs, 0, 1);
+            assertArrayEquals(new String[]{xB, xA}, xs);
+            helper.swapW(xA, xs, 0, 1);
+        }
         assertArrayEquals(new String[]{xA, xB}, xs);
     }
 
     @Test
     public void swap3() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>();
-        helper.swap(xs, xA, 0, 1, xB);
-        assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.swap(xs, xB, 0, 1, xA);
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>()) {
+            helper.swapVW(xA, xB, xs, 0, 1);
+            assertArrayEquals(new String[]{xB, xA}, xs);
+            helper.swapVW(xB, xA, xs, 0, 1);
+        }
         assertArrayEquals(new String[]{xA, xB}, xs);
     }
 
     @Test
     public void sorted() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>();
-        assertTrue(helper.isSorted(xs));
-        helper.swap(xs, 0, 1);
-        assertEquals(1, helper.findInversion(xs));
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>()) {
+            assertTrue(helper.isSorted(xs));
+            helper.swap(xs, 0, 1);
+            assertEquals(1, helper.findInversion(xs));
+        }
     }
 
     // NOTE it doesn't make sense to try to get inversions from a non-instrumenting Helper.
@@ -155,126 +161,145 @@ public class BaseComparableHelperTest {
     @Test
     public void postProcess1() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>();
-        helper.postProcess(xs);
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>()) {
+            helper.postProcess(xs);
+        }
     }
 
     @Test(expected = HelperException.class)
     public void postProcess2() {
         String[] xs = new String[]{xB, xA};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>();
-        helper.postProcess(xs);
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>()) {
+            helper.postProcess(xs);
+        }
     }
 
     @Test
     public void testRandom() {
         String[] words = new String[]{"Hello", "World"};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>(3, 0L);
-        final String[] strings = helper.random(String.class, r -> words[r.nextInt(2)]);
+        final String[] strings;
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>(3, 0L)) {
+            strings = helper.random(String.class, r -> words[r.nextInt(2)]);
+        }
         assertArrayEquals(new String[]{"World", "World", "Hello"}, strings);
     }
 
     @Test
     public void testOrdered() {
         String[] words = new String[]{"Hello", "World"};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>(3, 0L);
-        final String[] strings = helper.ordered(2, String.class, i -> words[i]);
+        final String[] strings;
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>(3, 0L)) {
+            strings = helper.ordered(2, String.class, i -> words[i]);
+        }
         assertArrayEquals(new String[]{"Hello", "World"}, strings);
     }
 
     @Test
     public void testPartialOrdered() {
         String[] words = new String[]{"Hello", "World"};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>(3, 0L);
-        final String[] strings = helper.partialOrdered(2, String.class, i -> words[i]);
+        final String[] strings;
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>(3, 0L)) {
+            strings = helper.partialOrdered(2, String.class, i -> words[i]);
+        }
         assertArrayEquals(new String[]{"World", "Hello"}, strings);
     }
 
     @Test
     public void testReverse() {
         String[] words = new String[]{"Hello", "World"};
-        final Helper<String> helper = new BaseComparableHelperWithSortedTest<>(3, 0L);
-        final String[] strings = helper.reverse(2, String.class, i -> words[i]);
+        final String[] strings;
+        try (Helper<String> helper = new BaseComparableHelperWithSortedTest<>(3, 0L)) {
+            strings = helper.reverse(2, String.class, i -> words[i]);
+        }
         assertArrayEquals(new String[]{"World", "Hello"}, strings);
     }
 
     @Test
     public void testToString() {
-        final AutoCloseable helper = new NonInstrumentingComparableHelper<>("test", 3, config);
-        assertEquals("Helper for test with 3 elements", helper.toString());
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", 3, config)) {
+            assertEquals("Helper for test with 3 elements", helper.toString());
+        }
     }
 
     @Test
     public void getDescription() {
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", 3, config);
-        assertEquals("test", helper.getDescription());
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", 3, config)) {
+            assertEquals("test", helper.getDescription());
+        }
     }
 
     @Test(expected = RuntimeException.class)
     public void getSetN() {
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", 3, config);
-        assertEquals(3, helper.getN());
-        helper.init(4);
-        assertEquals(4, helper.getN());
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", 3, config)) {
+            assertEquals(3, helper.getN());
+            helper.init(4);
+            assertEquals(4, helper.getN());
+        }
     }
 
     @Test
     public void getSetNBis() {
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
-        assertEquals(0, helper.getN());
-        helper.init(4);
-        assertEquals(4, helper.getN());
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config)) {
+            assertEquals(0, helper.getN());
+            helper.init(4);
+            assertEquals(4, helper.getN());
+        }
     }
 
     @Test
     public void close() throws Exception {
-        final AutoCloseable helper = new NonInstrumentingComparableHelper<>("test", config);
+        // NOTE since we explicitly call close, we don't use the try-with-resources mechanism
+        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
         helper.close();
     }
 
     @Test
     public void swapStable() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
-        helper.swapStable(xs, 1);
-        assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.swapStable(xs, 1);
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config)) {
+            helper.swapStable(xs, 1);
+            assertArrayEquals(new String[]{xB, xA}, xs);
+            helper.swapStable(xs, 1);
+        }
         assertArrayEquals(new String[]{xA, xB}, xs);
     }
 
     @Test
     public void fixInversion1() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
-        helper.fixInversion(xs, 1); // XXX Deprecated
-        assertArrayEquals(new String[]{xA, xB}, xs);
-        helper.swapStable(xs, 1);
-        assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.fixInversion(xs, 1); // XXX Deprecated
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config)) {
+            helper.fixInversion(xs, 1); // XXX Deprecated
+            assertArrayEquals(new String[]{xA, xB}, xs);
+            helper.swapStable(xs, 1);
+            assertArrayEquals(new String[]{xB, xA}, xs);
+            helper.fixInversion(xs, 1); // XXX Deprecated
+        }
         assertArrayEquals(new String[]{xA, xB}, xs);
     }
 
     @Test
     public void testFixInversion2() {
         String[] xs = new String[]{xA, xB};
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
-        helper.fixInversion(xs, 0, 1);
-        assertArrayEquals(new String[]{xA, xB}, xs);
-        helper.swap(xs, 0, 1);
-        assertArrayEquals(new String[]{xB, xA}, xs);
-        helper.fixInversion(xs, 0, 1);
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config)) {
+            helper.fixInversion(xs, 0, 1);
+            assertArrayEquals(new String[]{xA, xB}, xs);
+            helper.swap(xs, 0, 1);
+            assertArrayEquals(new String[]{xB, xA}, xs);
+            helper.fixInversion(xs, 0, 1);
+        }
         assertArrayEquals(new String[]{xA, xB}, xs);
     }
 
     @Test
     public void testSwapInto() {
         String[] xs = new String[]{xA, xB, "c"};
-        final NonComparableHelper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
-        helper.swapInto(xs, 0, 2);
-        assertArrayEquals(new String[]{"c", xA, xB}, xs);
-        helper.swapInto(xs, 0, 1);
-        assertArrayEquals(new String[]{xA, "c", xB}, xs);
-        helper.swapInto(xs, 0, 0);
+        try (NonComparableHelper<String> helper = new NonInstrumentingComparableHelper<>("test", config)) {
+            helper.swapInto(xs, 0, 2);
+            assertArrayEquals(new String[]{"c", xA, xB}, xs);
+            helper.swapInto(xs, 0, 1);
+            assertArrayEquals(new String[]{xA, "c", xB}, xs);
+            helper.swapInto(xs, 0, 0);
+        }
         assertArrayEquals(new String[]{xA, "c", xB}, xs);
     }
 
@@ -282,32 +307,36 @@ public class BaseComparableHelperTest {
     @Test
     public void testSwapIntoSorted0() {
         String[] xs = new String[]{xA, xB, "c"};
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
-        helper.swapIntoSorted(xs, 2);
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config)) {
+            helper.swapIntoSorted(xs, 0, 2);
+        }
         assertArrayEquals(new String[]{xA, xB, "c"}, xs);
     }
 
     @Test
     public void testSwapIntoSorted1() {
         String[] xs = new String[]{xA, "c", xB};
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
-        helper.swapIntoSorted(xs, 2);
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config)) {
+            helper.swapIntoSorted(xs, 0, 2);
+        }
         assertArrayEquals(new String[]{xA, xB, "c"}, xs);
     }
 
     @Test
     public void testSwapIntoSorted2() {
         String[] xs = new String[]{xA, "c", xB};
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
-        helper.swapIntoSorted(xs, 1);
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config)) {
+            helper.swapIntoSorted(xs, 0, 1);
+        }
         assertArrayEquals(new String[]{xA, "c", xB}, xs);
     }
 
     @Test
     public void testSwapIntoSorted3() {
         String[] xs = new String[]{xA, "c", xB};
-        final Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config);
-        helper.swapIntoSorted(xs, 0);
+        try (Helper<String> helper = new NonInstrumentingComparableHelper<>("test", config)) {
+            helper.swapIntoSorted(xs, 0, 0);
+        }
         assertArrayEquals(new String[]{xA, "c", xB}, xs);
     }
 

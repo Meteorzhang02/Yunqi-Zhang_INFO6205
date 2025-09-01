@@ -102,10 +102,10 @@ public class QuickSort_3way<X extends Comparable<X>> extends QuickSort<X> {
                     else {
                         int cmp = helper.compare(xi, v); // one compare
                         if (cmp < 0) {
-                            helper.swap(xs, xlt, lt++, i++, xi); // one swap
+                            helper.swapVW(xlt, xi, xs, lt++, i++); // one swap
                             xlt = helper.get(xs, lt); // one hit
                         } else if (cmp > 0) {
-                            helper.swap(xs, xi, i, gt--, xgt); // one swap
+                            helper.swapVW(xi, xgt, xs, i, gt--); // one swap
                             xgt = helper.get(xs, gt); // one hit
                         } else i++; // no statistics affected
                     }

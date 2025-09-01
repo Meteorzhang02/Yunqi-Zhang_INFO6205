@@ -135,11 +135,11 @@ public class PQBenchmark {
             random[i] = ran.nextInt(n);
         }
         Benchmark<Boolean> bm = new Benchmark_Timer<>(
-                "testPQwithFloydoff",
+                "testPQwithFloydOff",
+                config,
                 null,
                 b -> insertArray(random, floyd),
-                null
-        );
+                null);
         return bm.run(true, m);
 
     }
@@ -155,13 +155,12 @@ public class PQBenchmark {
     }
 
     // CONSIDER: to be eliminated soon.
-    private static Benchmark<LocalDateTime[]> benchmarkFactory(String description, Consumer<LocalDateTime[]> sorter, Consumer<LocalDateTime[]> checker) {
+    private Benchmark<LocalDateTime[]> benchmarkFactory(String description, Consumer<LocalDateTime[]> sorter, Consumer<LocalDateTime[]> checker) {
         return new Benchmark_Timer<>(
-                description,
+                description, config,
                 (xs) -> Arrays.copyOf(xs, xs.length),
                 sorter,
-                checker
-        );
+                checker);
     }
 
     private static final double LgE = Utilities.lg(Math.E);

@@ -117,12 +117,12 @@ public class QuickSort_DualPivot<X extends Comparable<X>> extends QuickSort<X> {
                 while (i <= gt) {
                     // Each time around the loop, we invoke: 2, 1, or 1 hits; 1, 2, or 2 lookups
                     if (helper.compare(x, v1) < 0) { // no hits, one lookup
-                        helper.swap(xs, xlt, lt++, i++, x); // no hits or lookups
+                        helper.swapVW(xlt, x, xs, lt++, i++); // no hits or lookups
                         x = helper.get(xs, i); // one hit
                         xlt = helper.get(xs, lt); // one hit (CONSIDER is this correct?)
                         if (i == gt) xgt = x;
                     } else if (helper.compare(x, v2) > 0) { // no hits, one lookup (but it's already in cache)
-                        helper.swap(xs, x, i, gt--, xgt); // no hits or lookups
+                        helper.swapVW(x, xgt, xs, i, gt--); // no hits or lookups
                         if (i == lt) xlt = xgt;
                         x = xgt;
                         xgt = helper.get(xs, gt); // one hit
@@ -131,8 +131,8 @@ public class QuickSort_DualPivot<X extends Comparable<X>> extends QuickSort<X> {
                         x = helper.get(xs, i); // one hit
                     }
                 }
-                helper.swap(xs, p1, --lt);
-                helper.swap(xs, p2, ++gt);
+                if (p1 != lt - 1) helper.swap(xs, p1, --lt);
+                if (p2 != gt + 1) helper.swap(xs, p2, ++gt);
             } else {
                 while (i <= gt) {
                     X x = xs[i];

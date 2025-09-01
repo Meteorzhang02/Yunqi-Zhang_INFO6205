@@ -1,5 +1,6 @@
 package com.phasmidsoftware.dsaipg.select;
 
+import com.phasmidsoftware.dsaipg.adt.threesum.ThreeSumBenchmark;
 import com.phasmidsoftware.dsaipg.sort.helper.Helper;
 import com.phasmidsoftware.dsaipg.sort.helper.NonInstrumentingComparableHelper;
 import com.phasmidsoftware.dsaipg.util.benchmark.Benchmark;
@@ -15,6 +16,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Supplier;
+
+import static com.phasmidsoftware.dsaipg.util.config.Config.getConfig;
 
 /**
  * Class for benchmarking the performance of different selection algorithms.
@@ -35,6 +38,7 @@ public class SelectBenchmark {
         this.runs = runs;
         this.safetyFactor = 10;
         this.n = n;
+        config = getConfig(ThreeSumBenchmark.class);
     }
 
     /**
@@ -80,17 +84,17 @@ public class SelectBenchmark {
         StringBuilder sb = new StringBuilder();
 
         combineResults(sb,
-                resultMessage(quickSelector + "," + "random", doBenchmark(quickSelector, quickSelect, k, () -> helper.random(Integer.class, Random::nextInt), runs), N),
-                resultMessage(slowSelector + "," + "random", doBenchmark(slowSelector, slowSelect, k, () -> helper.random(Integer.class, Random::nextInt), runs), N));
+                resultMessage(quickSelector + "," + "random", doBenchmark(quickSelector, config, quickSelect, k, () -> helper.random(Integer.class, Random::nextInt), runs), N),
+                resultMessage(slowSelector + "," + "random", doBenchmark(slowSelector, config, slowSelect, k, () -> helper.random(Integer.class, Random::nextInt), runs), N));
         combineResults(sb,
-                resultMessage(quickSelector + "," + "ordered", doBenchmark(quickSelector, quickSelect, k, () -> helper.ordered(N, Integer.class, i1 -> i1), runs), N),
-                resultMessage(slowSelector + "," + "ordered", doBenchmark(slowSelector, slowSelect, k, () -> helper.ordered(N, Integer.class, i2 -> i2), runs), N));
+                resultMessage(quickSelector + "," + "ordered", doBenchmark(quickSelector, config, quickSelect, k, () -> helper.ordered(N, Integer.class, i1 -> i1), runs), N),
+                resultMessage(slowSelector + "," + "ordered", doBenchmark(slowSelector, config, slowSelect, k, () -> helper.ordered(N, Integer.class, i2 -> i2), runs), N));
         combineResults(sb,
-                resultMessage(quickSelector + "," + "partially-ordered", doBenchmark(quickSelector, quickSelect, k, () -> helper.partialOrdered(N, Integer.class, i1 -> i1), runs), N),
-                resultMessage(slowSelector + "," + "partially-ordered", doBenchmark(slowSelector, slowSelect, k, () -> helper.partialOrdered(N, Integer.class, i2 -> i2), runs), N));
+                resultMessage(quickSelector + "," + "partially-ordered", doBenchmark(quickSelector, config, quickSelect, k, () -> helper.partialOrdered(N, Integer.class, i1 -> i1), runs), N),
+                resultMessage(slowSelector + "," + "partially-ordered", doBenchmark(slowSelector, config, slowSelect, k, () -> helper.partialOrdered(N, Integer.class, i2 -> i2), runs), N));
         combineResults(sb,
-                resultMessage(quickSelector + "," + "reverse-ordered", doBenchmark(quickSelector, quickSelect, k, () -> helper.reverse(N, Integer.class, i -> i), runs), N),
-                resultMessage(slowSelector + "," + "reverse-ordered", doBenchmark(slowSelector, slowSelect, k, () -> helper.reverse(N, Integer.class, i1 -> i1), runs), N));
+                resultMessage(quickSelector + "," + "reverse-ordered", doBenchmark(quickSelector, config, quickSelect, k, () -> helper.reverse(N, Integer.class, i -> i), runs), N),
+                resultMessage(slowSelector + "," + "reverse-ordered", doBenchmark(slowSelector, config, slowSelect, k, () -> helper.reverse(N, Integer.class, i1 -> i1), runs), N));
 
         return sb.toString();
     }
@@ -124,19 +128,20 @@ public class SelectBenchmark {
      * Executes a benchmark for a selection algorithm and computes the average execution time.
      *
      * @param description a brief description of the benchmark or the algorithm being tested.
-     * @param select the selection algorithm that implements the Select interface, used to find the k-th smallest element.
-     * @param k the index (0-based) of the k-th smallest element to find in the arrays generated during benchmarking.
-     * @param supplier a supplier that generates input arrays for the benchmark.
-     * @param runs the number of times the benchmark will execute to compute the average time.
+     * @param config
+     * @param select      the selection algorithm that implements the Select interface, used to find the k-th smallest element.
+     * @param k           the index (0-based) of the k-th smallest element to find in the arrays generated during benchmarking.
+     * @param supplier    a supplier that generates input arrays for the benchmark.
+     * @param runs        the number of times the benchmark will execute to compute the average time.
      * @return the average execution time of the benchmark in milliseconds.
      */
-    private static double doBenchmark(String description, Select<Integer> select, int k, Supplier<Integer[]> supplier, final int runs) {
+    private static double doBenchmark(String description, Config config, Select<Integer> select, int k, Supplier<Integer[]> supplier, final int runs) {
         final Benchmark<Integer[]> benchmark = new Benchmark_Timer<>(
                 description,
+                config,
                 (xs) -> Arrays.copyOf(xs, xs.length),
                 (xs) -> select.select(xs, k),
-                null
-        );
+                null);
         return benchmark.runFromSupplier(supplier, runs);
     }
 
@@ -192,5 +197,6 @@ public class SelectBenchmark {
     private final int runs;
     private final int n;
     private final int safetyFactor;
+    private final Config config;
 
 }

@@ -100,7 +100,7 @@ public abstract class QuickSort<X extends Comparable<X>> extends SortWithCompara
         }
         // NOTE: we reduce the cutoff by 1 so that we can use 1 to disable cutoff (because 0 gives the default of 7).
         int cutoff = Math.max(getHelper().cutoff() - 1, 3); // NOTE it makes no sense to partition an array smaller than 3 elements, regardless of cutoff.
-        if (n > getHelper().cutoff()) return false;
+        if (n > cutoff) return false;
         insertionSort.sort(xs, from, to);
         return true;
     }
