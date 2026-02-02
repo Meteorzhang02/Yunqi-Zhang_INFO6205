@@ -4,26 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d17409b-bf42-45d6-9a38-a1889192297d" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phasmidsoftware/dsaipg/adt/threesum/DebugUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phasmidsoftware/dsaipg/adt/threesum/Source.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phasmidsoftware/dsaipg/adt/threesum/ThreeSum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phasmidsoftware/dsaipg/adt/threesum/ThreeSumCubic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phasmidsoftware/dsaipg/adt/threesum/ThreeSumQuadratic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phasmidsoftware/dsaipg/adt/threesum/ThreeSumQuadrithmic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phasmidsoftware/dsaipg/adt/threesum/Triple.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/phasmidsoftware/dsaipg/adt/threesum/PerformanceAnalysis.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/phasmidsoftware/dsaipg/adt/threesum/ThreeSumFuncTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/phasmidsoftware/dsaipg/adt/threesum/ThreeSumQuadraticTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/phasmidsoftware/dsaipg/adt/threesum/ThreeSumQuadrithmicTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/phasmidsoftware/dsaipg/adt/threesum/ThreeSumTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="0d17409b-bf42-45d6-9a38-a1889192297d" name="更改" comment="Completed 3-SUM assignment new" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -160,11 +141,24 @@
       <option name="presentableId" value="Default" />
       <updated>1770039781479</updated>
       <workItem from="1770039782418" duration="5462000" />
-      <workItem from="1770062893102" duration="322000" />
+      <workItem from="1770062893102" duration="635000" />
     </task>
+    <task id="LOCAL-00001" summary="Completed 3-SUM assignment new">
+      <option name="closed" value="true" />
+      <created>1770063435902</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1770063435902</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Completed 3-SUM assignment new" />
+    <option name="LAST_COMMIT_MESSAGE" value="Completed 3-SUM assignment new" />
   </component>
 </project>
