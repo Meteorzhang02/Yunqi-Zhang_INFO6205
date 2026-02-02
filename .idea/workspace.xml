@@ -50,7 +50,7 @@
     &quot;应用程序.PerformanceTest.executor&quot;: &quot;Run&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.PerformanceAnalysis">
+  <component name="RunManager" selected="JUnit.ThreeSumProject中的所有">
     <configuration name="PerformanceAnalysis" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.phasmidsoftware.dsaipg.adt.threesum.PerformanceAnalysis" />
       <module name="ThreeSumProject" />
