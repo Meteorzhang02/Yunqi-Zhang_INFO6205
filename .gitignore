@@ -1,0 +1,18 @@
+# Maven / IntelliJ
+target/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# Logs and temp files
+logs/
+*.log
+
+# Compiled class files
+*.class
+
+# Other common ignores
+.DS_Store
+Thumbs.db
